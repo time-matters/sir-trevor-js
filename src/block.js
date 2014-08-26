@@ -44,7 +44,7 @@ SirTrevor.Block = (function(){
 
   _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
 
-    bound: ["_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
+    bound: ["_checkDoubleReturn", "_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
             "clearInsertedStyles", "getSelectionForFormatter", "onBlockRender"],
 
     className: 'st-block st-icon--add',
@@ -317,12 +317,11 @@ SirTrevor.Block = (function(){
     },
 
     _previousKeyUpWasReturn: false,
-    _checkDoubleReturn: function(e) {
-      if (e !== undefined && e.keyCode === 13) {
+    _checkDoubleReturn: function(ev) {
+      var target = ev.target;
+      if (ev !== undefined && ev.keyCode === 13) {
         if (this._previousSelection) {
-          _.defer(function() {
-            SirTrevor.EventBus.trigger('block:split');
-          });
+          _.defer(this.onDoubleReturn.bind(this, ev, target), 0);
           this._previousSelection = false;
           return;
         }
@@ -332,8 +331,18 @@ SirTrevor.Block = (function(){
       }
     },
 
+    onDoubleReturn: function(event, target) {
+      var instance = SirTrevor.getInstance(this.instanceID);
+      var currentPosition = instance.getBlockPosition(this.$el);
+
+      var block = instance.createBlock(this.type);
+      instance.changeBlockPosition(block.$el, currentPosition + 2);
+
+      block.focus();
+    },
+
     getSelectionForFormatter: function() {
-      _.defer(function(){
+      _.defer(function() {
         var selection = window.getSelection(),
            selectionStr = selection.toString().trim();
 

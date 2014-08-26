@@ -1461,7 +1461,7 @@
   
     _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
   
-      bound: ["_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
+      bound: ["_checkDoubleReturn", "_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
               "clearInsertedStyles", "getSelectionForFormatter", "onBlockRender"],
   
       className: 'st-block st-icon--add',
