@@ -48,9 +48,11 @@ SirTrevor.Editor = (function(){
       this._bindFunctions();
 
       this.store("create");
-      this.build();
 
       SirTrevor.instances.push(this);
+
+      this.build();
+
       SirTrevor.bindFormSubmit(this.$form);
     },
 
@@ -72,14 +74,14 @@ SirTrevor.Editor = (function(){
       this._setEvents();
 
       SirTrevor.EventBus.on(this.ID + ":blocks:change_position", this.changeBlockPosition);
-      SirTrevor.EventBus.on("formatter:positon", this.formatBar.renderBySelection);
+      SirTrevor.EventBus.on("formatter:position", this.formatBar.renderBySelection);
       SirTrevor.EventBus.on("formatter:hide", this.formatBar.hide);
 
       this.$wrapper.prepend(this.fl_block_controls.render().$el);
       $(document.body).append(this.formatBar.render().$el);
       this.$outer.append(this.block_controls.render().$el);
 
-      $(window).bind('click', this.hideAllTheThings);
+      $(window).bind('click.sirtrevor', this.hideAllTheThings);
 
       var store = this.store("read");
 
@@ -211,8 +213,10 @@ SirTrevor.Editor = (function(){
     },
 
     onNewBlockCreated: function(block) {
-      this.hideBlockControls();
-      this.scrollTo(block.$el);
+      if (block.instanceID === this.ID) {
+        this.hideBlockControls();
+        this.scrollTo(block.$el);
+      }
     },
 
     scrollTo: function(element) {
@@ -317,7 +321,7 @@ SirTrevor.Editor = (function(){
 
       block.remove();
 
-      SirTrevor.EventBus.trigger("block:remove");
+      SirTrevor.EventBus.trigger("block:remove", block);
       this.triggerBlockCountUpdate();
 
       this.$wrapper.toggleClass('st--block-limit-reached', this._blockLimitReached());
