@@ -333,12 +333,41 @@ SirTrevor.Block = (function(){
 
     onDoubleReturn: function(event, target) {
       var instance = SirTrevor.getInstance(this.instanceID);
-      var currentPosition = instance.getBlockPosition(this.$el);
+      var marker = '<i id="split-marker"></i>';
+      var emptyBlock, remainderBlock;
 
-      var block = instance.createBlock(this.type);
-      instance.changeBlockPosition(block.$el, currentPosition + 2);
+      (function pasteHtmlAtCaret(html) {
+        var selection, range, element, fragment, node, lastNode;
+        if (window.getSelection) {
+          selection = window.getSelection();
+          if (selection.getRangeAt && selection.rangeCount) {
+            range = selection.getRangeAt(0);
+            range.deleteContents();
+            element = document.createElement("div");
+            element.innerHTML = html;
+            fragment = document.createDocumentFragment();
+            while ((node = element.firstChild)) {
+              lastNode = fragment.appendChild(node);
+            }
+            range.insertNode(fragment);
+          }
+        } else if (document.selection && document.selection.type != "Control") {
+          document.selection.createRange().pasteHTML(html);
+        }
+      }(marker));
 
-      block.focus();
+      try {
+
+        emptyBlock = instance.createBlock(this.type);
+        instance.changeBlockPosition(emptyBlock.$el, instance.getBlockPosition(this.$el) + 1);
+
+        remainderBlock = instance.createBlock(this.type);
+        instance.changeBlockPosition(remainderBlock.$el, instance.getBlockPosition(this.$el) + 2);
+        emptyBlock.focus();
+
+      } finally {
+        $('#split-marker').remove();
+      }
     },
 
     getSelectionForFormatter: function() {
