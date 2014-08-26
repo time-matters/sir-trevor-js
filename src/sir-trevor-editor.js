@@ -206,6 +206,8 @@ SirTrevor.Editor = (function(){
 
       this.$wrapper.toggleClass('st--block-limit-reached', this._blockLimitReached());
       this.triggerBlockCountUpdate();
+
+      return block;
     },
 
     onNewBlockCreated: function(block) {
