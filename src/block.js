@@ -361,12 +361,22 @@ SirTrevor.Block = (function(){
         emptyBlock = instance.createBlock(this.type);
         instance.changeBlockPosition(emptyBlock.$el, instance.getBlockPosition(this.$el) + 1);
 
-        remainderBlock = instance.createBlock(this.type);
-        instance.changeBlockPosition(remainderBlock.$el, instance.getBlockPosition(this.$el) + 2);
-        emptyBlock.focus();
+        var remainders = $('.st-text-block div:has(> #split-marker) ~');
+        if (remainders.length > 0) {
+
+          // create remainder block
+          remainderBlock = instance.createBlock(this.type);
+          instance.changeBlockPosition(remainderBlock.$el, instance.getBlockPosition(this.$el) + 2);
+
+          // insert remainder content
+          remainderBlock.$editor.append(remainders);
+
+          remainderBlock.$editor.find('div:empty').remove();
+        }
 
       } finally {
         $('#split-marker').remove();
+        emptyBlock.focus();
       }
     },
 
