@@ -310,9 +310,26 @@ SirTrevor.Block = (function(){
     _initTextBlocks: function() {
       this.getTextBlock()
         .bind('paste', this._handleContentPaste)
+        .bind('keyup', this._checkDoubleReturn)
         .bind('keyup', this.getSelectionForFormatter)
         .bind('mouseup', this.getSelectionForFormatter)
         .bind('DOMNodeInserted', this.clearInsertedStyles);
+    },
+
+    _previousKeyUpWasReturn: false,
+    _checkDoubleReturn: function(e) {
+      if (e !== undefined && e.keyCode === 13) {
+        if (this._previousSelection) {
+          _.defer(function() {
+            SirTrevor.EventBus.trigger('block:split');
+          });
+          this._previousSelection = false;
+          return;
+        }
+        this._previousSelection = true;
+      } else {
+        this._previousSelection = false;
+      }
     },
 
     getSelectionForFormatter: function() {
