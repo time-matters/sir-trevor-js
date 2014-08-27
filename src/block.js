@@ -44,7 +44,7 @@ SirTrevor.Block = (function(){
 
   _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
 
-    bound: ["_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
+    bound: ["_checkDoubleReturn", "_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
             "clearInsertedStyles", "getSelectionForFormatter", "onBlockRender"],
 
     className: 'st-block st-icon--add',
@@ -310,13 +310,99 @@ SirTrevor.Block = (function(){
     _initTextBlocks: function() {
       this.getTextBlock()
         .bind('paste', this._handleContentPaste)
+        .bind('keyup', this._checkDoubleReturn)
         .bind('keyup', this.getSelectionForFormatter)
         .bind('mouseup', this.getSelectionForFormatter)
         .bind('DOMNodeInserted', this.clearInsertedStyles);
     },
 
+    _previousKeyUpWasReturn: false,
+    _checkDoubleReturn: function(ev) {
+      var target = ev.target;
+      if (ev !== undefined && ev.keyCode === 13) {
+        if (this._previousSelection) {
+          _.defer(this.onDoubleReturn.bind(this, ev, target), 0);
+          this._previousSelection = false;
+          return;
+        }
+        this._previousSelection = true;
+      } else {
+        this._previousSelection = false;
+      }
+    },
+
+    insertSplitMarker: function(html) {
+      var marker = '<i id="split-marker"></i>';
+      var selection, range, element, fragment, node, lastNode;
+      if (window.getSelection) {
+        selection = window.getSelection();
+        if (selection.getRangeAt && selection.rangeCount) {
+          range = selection.getRangeAt(0);
+          range.deleteContents();
+          element = document.createElement("div");
+          element.innerHTML = marker;
+          fragment = document.createDocumentFragment();
+          while ((node = element.firstChild)) {
+            lastNode = fragment.appendChild(node);
+          }
+          range.insertNode(fragment);
+        }
+      } else if (document.selection && document.selection.type != "Control") {
+        document.selection.createRange().pasteHTML(marker);
+      }
+    },
+
+    removeSplitMarker: function() {
+      $('#split-marker').remove();
+    },
+
+    removeTrailingReturns: function(block) {
+      var node, returns, selector = "div:last-child:has( > br )";
+      if (block === undefined) {
+        block = this;
+      }
+      node = block.$editor;
+
+      returns = node.find(selector);
+      while (returns.length > 0) {
+        returns.remove();
+        returns = node.find(selector);
+      }
+    },
+
+    onDoubleReturn: function(event, target) {
+      var instance = SirTrevor.getInstance(this.instanceID);
+      var emptyBlock, remainderBlock;
+
+      this.insertSplitMarker();
+
+      try {
+
+        emptyBlock = instance.createBlock(this.type);
+        instance.changeBlockPosition(emptyBlock.$el, instance.getBlockPosition(this.$el) + 1);
+
+        var remainders = $('.st-text-block div:has(> #split-marker) ~');
+        if (remainders.length > 0) {
+
+          // create remainder block
+          remainderBlock = instance.createBlock(this.type);
+          instance.changeBlockPosition(remainderBlock.$el, instance.getBlockPosition(this.$el) + 2);
+
+          // insert remainder content
+          remainderBlock.$editor.append(remainders);
+
+          remainderBlock.$editor.find('div:empty').remove();
+        }
+
+      } finally {
+        this.removeSplitMarker();
+        this.removeTrailingReturns();
+        emptyBlock.focus();
+      }
+    },
+
     getSelectionForFormatter: function() {
-      _.defer(function(block){
+      _.defer(function(block) {
         var selection = window.getSelection(),
            selectionStr = selection.toString().trim(),
            eventType = (selectionStr === '') ? 'hide' : 'position';

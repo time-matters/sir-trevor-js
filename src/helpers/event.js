@@ -35,18 +35,24 @@
     return this;
   };
 
-  $.fn.caretToEnd = function(){
-    var range,selection;
+  function setCaret(collapseToStart) {
+    return function() {
+      var range, selection;
 
-    range = document.createRange();
-    range.selectNodeContents(this[0]);
-    range.collapse(false);
+      range = document.createRange();
+      range.selectNodeContents(this[0]);
+      range.collapse(collapseToStart);
 
-    selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+      selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
 
-    return this;
-  };
+      return this;
+    };
+  }
+
+  $.fn.caretToEnd = setCaret(false);
+
+  $.fn.caretToStart = setCaret(true);
 
 })(jQuery);
