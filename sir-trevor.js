@@ -1784,8 +1784,8 @@
         $('#split-marker').remove();
       },
   
-      removeTrailingReturns: function(block) {
-        var node, returns, selector = "div:last-child:has( > br )";
+      removeStartingReturns: function(block) {
+        var node, returns, selector = "> div:first-child > br:first-child, > br:first-child";
         if (block === undefined) {
           block = this;
         }
@@ -1795,37 +1795,85 @@
         while (returns.length > 0) {
           returns.remove();
           returns = node.find(selector);
+          node.find('div:empty').remove();
+        }
+      },
+  
+      removeTrailingReturns: function(block) {
+        var node, returns, selector = "div:last-child br:last-child";
+        if (block === undefined) {
+          block = this;
+        }
+        node = block.$editor;
+  
+        node.find('div:empty').remove();
+        returns = node.find(selector);
+  
+        while (returns.length > 0) {
+          returns.remove();
+          node.find('div:empty').remove();
+          returns = node.find(selector);
         }
       },
   
       onDoubleReturn: function(event, target) {
         var instance = SirTrevor.getInstance(this.instanceID);
-        var emptyBlock, remainderBlock;
+        var newBlock;
   
         this.insertSplitMarker();
   
         try {
   
-          emptyBlock = instance.createBlock(this.type);
-          instance.changeBlockPosition(emptyBlock.$el, instance.getBlockPosition(this.$el) + 1);
+          newBlock = instance.createBlock(this.type);
+          instance.changeBlockPosition(newBlock.$el, instance.getBlockPosition(this.$el) + 1);
   
-          var remainders = $('.st-text-block div:has(#split-marker) ~, .st-text-block div:has(#split-marker)');
+          var i;
+          var remainingDivs = $('.st-text-block div:has(#split-marker) ~ div');
+          var split = $('.st-text-block div:has(#split-marker)');
+  
+          if (split.length === 0) {
+            split = $('div.st-text-block:has(#split-marker)');
+          }
+  
+          var contents = split.find("#split-marker").addBack().contents();
+          var afterSplit = false;
+  
+          var remainders = $("<div></div>");
+  
+          for (i=0; i<contents.length; i++) {
+            if (contents[i].id === "split-marker") {
+              afterSplit = true;
+              continue;
+            } else if (afterSplit) {
+              remainders = remainders.append(contents[i]);
+            }
+          }
+  
+          if (remainders.children().length >= 0) {
+            remainders = $().add(remainders);
+          } else {
+            remainders = $();
+          }
+  
+          remainders = remainders.add(remainingDivs);
+  
           if (remainders.length > 0) {
   
-            // create remainder block
-            remainderBlock = instance.createBlock(this.type);
-            instance.changeBlockPosition(remainderBlock.$el, instance.getBlockPosition(this.$el) + 2);
-  
             // insert remainder content
-            remainderBlock.$editor.append(remainders);
-  
-            remainderBlock.$editor.find('div:empty').remove();
+            newBlock.$editor.append(remainders);
+            newBlock.$editor.find('div:empty').remove();
           }
   
         } finally {
+  
           this.removeSplitMarker();
-          this.removeTrailingReturns();
-          emptyBlock.focus();
+  
+          // this.removeTrailingReturns();
+          // this.removeStartingReturns(newBlock);
+  
+          _.defer(function() {
+            newBlock.focus();
+          });
         }
       },
   
