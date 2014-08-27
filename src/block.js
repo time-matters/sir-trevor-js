@@ -372,7 +372,7 @@ SirTrevor.Block = (function(){
     },
 
     removeTrailingReturns: function(block) {
-      var node, returns, selector = "div:last-child br:last-child";
+      var node, returns, selector = "div:last-child br:last-child, br:last-child";
       if (block === undefined) {
         block = this;
       }
@@ -391,6 +391,10 @@ SirTrevor.Block = (function(){
     onDoubleReturn: function(event, target) {
       var instance = SirTrevor.getInstance(this.instanceID);
       var newBlock;
+
+      // break out of formatting.
+      window.getSelection().modify("extend", "left", "character");
+      document.execCommand("removeFormat", false);
 
       this.insertSplitMarker();
 
@@ -421,18 +425,16 @@ SirTrevor.Block = (function(){
           }
         }
 
-        if (remainders.children().length >= 0) {
-          remainders = $().add(remainders);
-        } else {
-          remainders = $();
-        }
-
-        remainders = remainders.add(remainingDivs);
-
         if (remainders.length > 0) {
 
-          // insert remainder content
+          // insert remaining inline content
           newBlock.$editor.append(remainders);
+          newBlock.$editor.find('div:empty').remove();
+        }
+
+        if (remainingDivs.length > 0) {
+          // insert remaining divs
+          newBlock.$editor.append(remainingDivs);
           newBlock.$editor.find('div:empty').remove();
         }
 
@@ -440,11 +442,12 @@ SirTrevor.Block = (function(){
 
         this.removeSplitMarker();
 
-        this.removeTrailingReturns();
-        this.removeStartingReturns(newBlock);
+        // this.removeTrailingReturns();
+        // this.removeStartingReturns(newBlock);
 
         _.defer(function() {
           newBlock.focus();
+          newBlock.$editor.caretToStart();
         });
       }
     },
