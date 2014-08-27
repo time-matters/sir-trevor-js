@@ -44,8 +44,10 @@ SirTrevor.Block = (function(){
 
   _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
 
-    bound: ["_checkDoubleReturn", "_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
-            "clearInsertedStyles", "getSelectionForFormatter", "onBlockRender"],
+    bound: ["_checkDoubleReturn", "_checkBackspaceAtStartKeyDown",
+            "_checkBackspaceAtStartKeyUp", "_handleContentPaste", "_onFocus",
+            "_onBlur", "onDrop", "onDeleteClick", "clearInsertedStyles",
+            "getSelectionForFormatter", "onBlockRender"],
 
     className: 'st-block st-icon--add',
 
@@ -311,6 +313,8 @@ SirTrevor.Block = (function(){
       this.getTextBlock()
         .bind('paste', this._handleContentPaste)
         .bind('keyup', this._checkDoubleReturn)
+        .bind('keydown', this._checkBackspaceAtStartKeyDown)
+        .bind('keyup', this._checkBackspaceAtStartKeyUp)
         .bind('keyup', this.getSelectionForFormatter)
         .bind('mouseup', this.getSelectionForFormatter)
         .bind('DOMNodeInserted', this.clearInsertedStyles);
@@ -329,6 +333,27 @@ SirTrevor.Block = (function(){
       } else {
         this._previousSelection = false;
       }
+    },
+
+    _previousContent: null,
+    _checkBackspaceAtStartKeyUp: function(ev) {
+      var currentContent;
+      var target = ev.target;
+      if (ev !== undefined && ev.keyCode === 8) {
+        currentContent = this.$editor[0].innerHTML;
+        if (currentContent === this._previousContent) {
+          _.defer(this.onBackspaceAtStart.bind(this, ev, target), 0);
+        }
+      }
+    },
+    _checkBackspaceAtStartKeyDown: function(ev) {
+      if (ev !== undefined && ev.keyCode === 8) {
+        this._previousContent = this.$editor[0].innerHTML;
+      }
+    },
+
+    onBackspaceAtStart: function(event, target) {
+      // nop
     },
 
     insertSplitMarker: function(html) {
