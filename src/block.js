@@ -453,7 +453,7 @@ SirTrevor.Block = (function(){
 
       try {
 
-        newBlock = instance.createBlock(this.type);
+        newBlock = instance.createBlock("text"); // or this.type, if not always text.
         instance.changeBlockPosition(newBlock.$el, instance.getBlockPosition(this.$el) + 1);
 
         var i;
