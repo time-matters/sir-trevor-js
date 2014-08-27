@@ -1809,7 +1809,7 @@
           emptyBlock = instance.createBlock(this.type);
           instance.changeBlockPosition(emptyBlock.$el, instance.getBlockPosition(this.$el) + 1);
   
-          var remainders = $('.st-text-block div:has(> #split-marker) ~');
+          var remainders = $('.st-text-block div:has(#split-marker) ~, .st-text-block div:has(#split-marker)');
           if (remainders.length > 0) {
   
             // create remainder block
