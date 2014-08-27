@@ -331,30 +331,50 @@ SirTrevor.Block = (function(){
       }
     },
 
+    insertSplitMarker: function(html) {
+      var marker = '<i id="split-marker"></i>';
+      var selection, range, element, fragment, node, lastNode;
+      if (window.getSelection) {
+        selection = window.getSelection();
+        if (selection.getRangeAt && selection.rangeCount) {
+          range = selection.getRangeAt(0);
+          range.deleteContents();
+          element = document.createElement("div");
+          element.innerHTML = marker;
+          fragment = document.createDocumentFragment();
+          while ((node = element.firstChild)) {
+            lastNode = fragment.appendChild(node);
+          }
+          range.insertNode(fragment);
+        }
+      } else if (document.selection && document.selection.type != "Control") {
+        document.selection.createRange().pasteHTML(marker);
+      }
+    },
+
+    removeSplitMarker: function() {
+      $('#split-marker').remove();
+    },
+
+    removeTrailingReturns: function(block) {
+      var node, returns, selector = "div:last-child:has( > br )";
+      if (block === undefined) {
+        block = this;
+      }
+      node = block.$editor;
+
+      returns = node.find(selector);
+      while (returns.length > 0) {
+        returns.remove();
+        returns = node.find(selector);
+      }
+    },
+
     onDoubleReturn: function(event, target) {
       var instance = SirTrevor.getInstance(this.instanceID);
-      var marker = '<i id="split-marker"></i>';
       var emptyBlock, remainderBlock;
 
-      (function pasteHtmlAtCaret(html) {
-        var selection, range, element, fragment, node, lastNode;
-        if (window.getSelection) {
-          selection = window.getSelection();
-          if (selection.getRangeAt && selection.rangeCount) {
-            range = selection.getRangeAt(0);
-            range.deleteContents();
-            element = document.createElement("div");
-            element.innerHTML = html;
-            fragment = document.createDocumentFragment();
-            while ((node = element.firstChild)) {
-              lastNode = fragment.appendChild(node);
-            }
-            range.insertNode(fragment);
-          }
-        } else if (document.selection && document.selection.type != "Control") {
-          document.selection.createRange().pasteHTML(html);
-        }
-      }(marker));
+      this.insertSplitMarker();
 
       try {
 
@@ -375,7 +395,8 @@ SirTrevor.Block = (function(){
         }
 
       } finally {
-        $('#split-marker').remove();
+        this.removeSplitMarker();
+        this.removeTrailingReturns();
         emptyBlock.focus();
       }
     },
