@@ -1,6 +1,7 @@
 {
   "name": "sir-trevor-js",
   "version": "0.3.2",
+  "main": "sir-trevor.js",
   "ignore": [
     "**/.*",
     "node_modules",
