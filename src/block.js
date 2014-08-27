@@ -353,7 +353,35 @@ SirTrevor.Block = (function(){
     },
 
     onBackspaceAtStart: function(event, target) {
-      // nop
+
+      var instance = SirTrevor.getInstance(this.instanceID);
+      var currentBlock = this;
+      var currentPosition = instance.getBlockPosition(this.$el);
+
+      // guard block being the first.
+      if (currentPosition < 1) {
+        console.log("Can't merge with previous block: no previous block.");
+        return;
+      }
+
+      var previousBlock = instance.blocks[currentPosition - 1];
+
+      // guard previous block not being text.
+      if (previousBlock.type !== "text") {
+        console.log("Can't merge with previous block: not a text block.");
+        return;
+      }
+
+      // cursor management
+      previousBlock.focus();
+      previousBlock.$editor.caretToEnd();
+
+      // append content and remove block
+      previousBlock.$editor.append(this.$editor.contents());
+      instance.removeBlock(this.blockID);
+
+      // further cursor management
+      window.getSelection().modify("move", "right", "character");
     },
 
     insertSplitMarker: function(html) {

@@ -1472,8 +1472,10 @@
   
     _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
   
-      bound: ["_checkDoubleReturn", "_handleContentPaste", "_onFocus", "_onBlur", "onDrop", "onDeleteClick",
-              "clearInsertedStyles", "getSelectionForFormatter", "onBlockRender"],
+      bound: ["_checkDoubleReturn", "_checkBackspaceAtStartKeyDown",
+              "_checkBackspaceAtStartKeyUp", "_handleContentPaste", "_onFocus",
+              "_onBlur", "onDrop", "onDeleteClick", "clearInsertedStyles",
+              "getSelectionForFormatter", "onBlockRender"],
   
       className: 'st-block st-icon--add',
   
@@ -1739,6 +1741,8 @@
         this.getTextBlock()
           .bind('paste', this._handleContentPaste)
           .bind('keyup', this._checkDoubleReturn)
+          .bind('keydown', this._checkBackspaceAtStartKeyDown)
+          .bind('keyup', this._checkBackspaceAtStartKeyUp)
           .bind('keyup', this.getSelectionForFormatter)
           .bind('mouseup', this.getSelectionForFormatter)
           .bind('DOMNodeInserted', this.clearInsertedStyles);
@@ -1757,6 +1761,55 @@
         } else {
           this._previousSelection = false;
         }
+      },
+  
+      _previousContent: null,
+      _checkBackspaceAtStartKeyUp: function(ev) {
+        var currentContent;
+        var target = ev.target;
+        if (ev !== undefined && ev.keyCode === 8) {
+          currentContent = this.$editor[0].innerHTML;
+          if (currentContent === this._previousContent) {
+            _.defer(this.onBackspaceAtStart.bind(this, ev, target), 0);
+          }
+        }
+      },
+      _checkBackspaceAtStartKeyDown: function(ev) {
+        if (ev !== undefined && ev.keyCode === 8) {
+          this._previousContent = this.$editor[0].innerHTML;
+        }
+      },
+  
+      onBackspaceAtStart: function(event, target) {
+  
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var currentBlock = this;
+        var currentPosition = instance.getBlockPosition(this.$el);
+  
+        // guard block being the first.
+        if (currentPosition < 1) {
+          console.log("Can't merge with previous block: no previous block.");
+          return;
+        }
+  
+        var previousBlock = instance.blocks[currentPosition - 1];
+  
+        // guard previous block not being text.
+        if (previousBlock.type !== "text") {
+          console.log("Can't merge with previous block: not a text block.");
+          return;
+        }
+  
+        // cursor management
+        previousBlock.focus();
+        previousBlock.$editor.caretToEnd();
+  
+        // append content and remove block
+        previousBlock.$editor.append(this.$editor.contents());
+        instance.removeBlock(this.blockID);
+  
+        // further cursor management
+        window.getSelection().modify("move", "right", "character");
       },
   
       insertSplitMarker: function(html) {
