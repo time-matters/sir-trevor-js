@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-08-26
+ * 2014-08-27
  */
 
 (function ($, _){
@@ -178,19 +178,25 @@
       return this;
     };
   
-    $.fn.caretToEnd = function(){
-      var range,selection;
+    function setCaret(collapseToStart) {
+      return function() {
+        var range, selection;
   
-      range = document.createRange();
-      range.selectNodeContents(this[0]);
-      range.collapse(false);
+        range = document.createRange();
+        range.selectNodeContents(this[0]);
+        range.collapse(collapseToStart);
   
-      selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
   
-      return this;
-    };
+        return this;
+      };
+    }
+  
+    $.fn.caretToEnd = setCaret(false);
+  
+    $.fn.caretToStart = setCaret(true);
   
   })(jQuery);
   /*
@@ -1753,14 +1759,74 @@
         }
       },
   
+      insertSplitMarker: function(html) {
+        var marker = '<i id="split-marker"></i>';
+        var selection, range, element, fragment, node, lastNode;
+        if (window.getSelection) {
+          selection = window.getSelection();
+          if (selection.getRangeAt && selection.rangeCount) {
+            range = selection.getRangeAt(0);
+            range.deleteContents();
+            element = document.createElement("div");
+            element.innerHTML = marker;
+            fragment = document.createDocumentFragment();
+            while ((node = element.firstChild)) {
+              lastNode = fragment.appendChild(node);
+            }
+            range.insertNode(fragment);
+          }
+        } else if (document.selection && document.selection.type != "Control") {
+          document.selection.createRange().pasteHTML(marker);
+        }
+      },
+  
+      removeSplitMarker: function() {
+        $('#split-marker').remove();
+      },
+  
+      removeTrailingReturns: function(block) {
+        var node, returns, selector = "div:last-child:has( > br )";
+        if (block === undefined) {
+          block = this;
+        }
+        node = block.$editor;
+  
+        returns = node.find(selector);
+        while (returns.length > 0) {
+          returns.remove();
+          returns = node.find(selector);
+        }
+      },
+  
       onDoubleReturn: function(event, target) {
         var instance = SirTrevor.getInstance(this.instanceID);
-        var currentPosition = instance.getBlockPosition(this.$el);
+        var emptyBlock, remainderBlock;
   
-        var block = instance.createBlock(this.type);
-        instance.changeBlockPosition(block.$el, currentPosition + 2);
+        this.insertSplitMarker();
   
-        block.focus();
+        try {
+  
+          emptyBlock = instance.createBlock(this.type);
+          instance.changeBlockPosition(emptyBlock.$el, instance.getBlockPosition(this.$el) + 1);
+  
+          var remainders = $('.st-text-block div:has(> #split-marker) ~');
+          if (remainders.length > 0) {
+  
+            // create remainder block
+            remainderBlock = instance.createBlock(this.type);
+            instance.changeBlockPosition(remainderBlock.$el, instance.getBlockPosition(this.$el) + 2);
+  
+            // insert remainder content
+            remainderBlock.$editor.append(remainders);
+  
+            remainderBlock.$editor.find('div:empty').remove();
+          }
+  
+        } finally {
+          this.removeSplitMarker();
+          this.removeTrailingReturns();
+          emptyBlock.focus();
+        }
       },
   
       getSelectionForFormatter: function() {
