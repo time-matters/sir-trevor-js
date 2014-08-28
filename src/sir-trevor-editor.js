@@ -220,7 +220,7 @@ SirTrevor.Editor = (function(){
     },
 
     scrollTo: function(element) {
-      $('html, body').animate({ scrollTop: element.position().top }, 300, "linear");
+      // $('html, body').animate({ scrollTop: element.position().top }, 300, "linear");
     },
 
     blockFocus: function(block) {
