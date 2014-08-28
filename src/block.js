@@ -346,6 +346,11 @@ SirTrevor.Block = (function(){
 
     onBackspaceAtStart: function(event, target) {
 
+      if ($.inArray(this.type, ["text"]) === -1) {
+        // disallow split inside blocks other than headings and text.
+        return;
+      }
+
       var instance = SirTrevor.getInstance(this.instanceID);
       var currentBlock = this;
       var currentPosition = instance.getBlockPosition(this.$el);
@@ -457,6 +462,12 @@ SirTrevor.Block = (function(){
     },
 
     onReturn: function(event, target) {
+
+      if ($.inArray(this.type, ["Heading", "text"]) === -1) {
+        // disallow split inside blocks other than headings and text.
+        return;
+      }
+
       var instance = SirTrevor.getInstance(this.instanceID);
       var newBlock;
 
