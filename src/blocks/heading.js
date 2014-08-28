@@ -10,6 +10,7 @@ SirTrevor.Blocks.Heading = SirTrevor.Block.extend({
   editorHTML: '<div class="st-required st-text-block st-text-block--heading" contenteditable="true"></div>',
 
   icon_name: 'heading',
+  changeable: ['text', 'quote'],
 
   loadData: function(data){
     this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
