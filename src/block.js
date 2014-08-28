@@ -469,7 +469,12 @@ SirTrevor.Block = (function(){
       try {
 
         newBlock = instance.createBlock("text"); // or this.type, if not always text.
-        instance.changeBlockPosition(newBlock.$el, instance.getBlockPosition(this.$el) + 1);
+
+        var currentPosition = instance.getBlockPosition(this.$el);
+        var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
+        if ((nextBlockPosition - currentPosition) !== 1) {
+          instance.changeBlockPosition(newBlock.$el, currentPosition + 1);
+        }
 
         var i;
         var remainingDivs = $('.st-text-block div:has(#split-marker) ~ div');
