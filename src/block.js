@@ -323,7 +323,7 @@ SirTrevor.Block = (function(){
     _checkReturn: function(ev) {
       var target = ev.target;
       if (ev !== undefined && ev.keyCode === 13) {
-        _.defer(this.onDoubleReturn.bind(this, ev, target), 0);
+        _.defer(this.onReturn.bind(this, ev, target), 0);
       }
     },
 
@@ -381,7 +381,7 @@ SirTrevor.Block = (function(){
       instance.removeBlock(this.blockID);
 
       // further cursor management
-      window.getSelection().modify("move", "right", "character");
+      // window.getSelection().modify("move", "right", "character");
     },
 
     insertSplitMarker: function(html) {
@@ -441,7 +441,22 @@ SirTrevor.Block = (function(){
       }
     },
 
-    onDoubleReturn: function(event, target) {
+    cleanupNestedDivs: function(block) {
+      var node, returns, selector = "div div";
+      if (block === undefined) {
+        block = this;
+      }
+      node = block.$editor;
+
+      node.find(selector).each(function(i, el) {
+        var element = $(el);
+        element.replaceWith(element.contents());
+      });
+
+      node.find('div:empty').remove();
+    },
+
+    onReturn: function(event, target) {
       var instance = SirTrevor.getInstance(this.instanceID);
       var newBlock;
 
@@ -467,14 +482,15 @@ SirTrevor.Block = (function(){
         var contents = split.find("#split-marker").addBack().contents();
         var afterSplit = false;
 
-        var remainders = $("<div></div>");
+        // var remainders = $("<div></div>");
+        var remainders = $();
 
         for (i=0; i<contents.length; i++) {
           if (contents[i].id === "split-marker") {
             afterSplit = true;
             continue;
           } else if (afterSplit) {
-            remainders = remainders.append(contents[i]);
+            remainders = remainders.add(contents[i]);
           }
         }
 
@@ -493,7 +509,11 @@ SirTrevor.Block = (function(){
 
       } finally {
 
+        // this.cleanupNestedDivs();
+        this.cleanupNestedDivs(newBlock);
+
         this.removeSplitMarker();
+
 
         // this.removeTrailingReturns();
         // this.removeStartingReturns(newBlock);
