@@ -288,6 +288,12 @@ SirTrevor.Block = (function(){
         new SirTrevor.BlockReorder(this.$el)
       );
 
+      var typeChange = new SirTrevor.BlockTypeChange(this.$el, this.instanceID);
+
+      this._withUIComponent(
+        typeChange, '.st-block-ui-btn--type-typechange', typeChange.trigger
+      );
+
       this._withUIComponent(
         new SirTrevor.BlockDeletion(), '.st-block-ui-btn--delete', this.onDeleteClick
       );
