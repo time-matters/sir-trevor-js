@@ -1,10 +1,10 @@
 SirTrevor.BlockTypeChange = (function(){
 
-  var BlockTypeChange = function(block_element, instance_id, block_type, changeable) {
+  var BlockTypeChange = function(block_element, instance_id, block) {
     this.$block = block_element;
     this.instanceID = instance_id;
-    this.block_type = block_type;
-    this.changeable = changeable;
+    this.block = block;
+    this.changeable = block.changeable;
 
     this._ensureElement();
     this._bindFunctions();
@@ -19,8 +19,17 @@ SirTrevor.BlockTypeChange = (function(){
     className: 'st-block-typechange-wrapper',
     visibleClass: 'st-block-typechange--is-visible',
 
-    trigger: function() {
-      // nop
+    changeType: function(toType) {
+
+      // nop.
+    },
+
+    prepareTypeChange: function(toType) {
+      var typeCache = toType;
+      var self = this;
+      return function() {
+        self.changeType(typeCache);
+      };
     },
 
     initialize: function() {
@@ -40,6 +49,8 @@ SirTrevor.BlockTypeChange = (function(){
           change.toLowerCase(),
           '</a>'
         ].join("\n"));
+
+        a.on('click', null, this.prepareTypeChange(change));
 
         this.$el.append(a);
       }

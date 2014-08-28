@@ -288,10 +288,10 @@ SirTrevor.Block = (function(){
         new SirTrevor.BlockReorder(this.$el)
       );
 
-      var typeChange = new SirTrevor.BlockTypeChange(this.$el, this.instanceID, this.type, this.changeable);
+      var typeChange = new SirTrevor.BlockTypeChange(this.$el, this.instanceID, this);
 
       this._withUIComponent(
-        typeChange, '.st-block-ui-btn--type-typechange', typeChange.trigger
+        typeChange, '.st-block-ui-btn--type-typechange'
       );
 
       this._withUIComponent(
