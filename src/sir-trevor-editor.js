@@ -243,14 +243,16 @@ SirTrevor.Editor = (function(){
       SirTrevor.EventBus.trigger(this.ID + ":blocks:count_update", this.blocks.length);
     },
 
-    changeBlockPosition: function($block, selectedPosition) {
+    changeBlockPosition: function($block, selectedPosition, where) {
       selectedPosition = selectedPosition - 1;
 
       var blockPosition = this.getBlockPosition($block);
       var $blockBy = this.$wrapper.find('.st-block').eq(selectedPosition);
       var blockByPosition = this.getBlockPosition($blockBy);
 
-      var where = (blockPosition > selectedPosition) ? "Before" : "After";
+      if (where === undefined) {
+        where = (blockPosition > selectedPosition) ? "Before" : "After";
+      }
 
       if($blockBy && $blockBy.attr('id') !== $block.attr('id')) {
         this.hideAllTheThings();

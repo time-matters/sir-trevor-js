@@ -484,7 +484,7 @@ SirTrevor.Block = (function(){
         var currentPosition = instance.getBlockPosition(this.$el);
         var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
         if ((nextBlockPosition - currentPosition) !== 1) {
-          instance.changeBlockPosition(newBlock.$el, currentPosition + 1);
+          instance.changeBlockPosition(newBlock.$el, currentPosition + 1, "After");
         }
 
         var i;
