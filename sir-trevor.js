@@ -979,9 +979,11 @@
   };
   SirTrevor.BlockTypeChange = (function(){
   
-    var BlockTypeChange = function(block_element, instance_id) {
+    var BlockTypeChange = function(block_element, instance_id, block_type, changeable) {
       this.$block = block_element;
       this.instanceID = instance_id;
+      this.block_type = block_type;
+      this.changeable = changeable;
   
       this._ensureElement();
       this._bindFunctions();
@@ -993,23 +995,33 @@
   
       bound: [],
   
-      tagName: 'a',
-      className: 'st-block-ui-btn st-block-ui-btn--type-typechange st-icon',
-  
-      attributes: {
-        html: 'typechange',
-        'data-icon': 'text'
-      },
-  
-      // className: 'st-block-typechange',
+      className: 'st-block-typechange-wrapper',
       visibleClass: 'st-block-typechange--is-visible',
   
       trigger: function() {
-        console.log('BlockTypeChange trigger');
+        // nop
       },
   
       initialize: function() {
-        console.log('BlockTypeChange initialize');
+  
+        var i, a, change;
+  
+        if (this.changeable === undefined) {
+          return; // nop.
+        }
+  
+        for (i=0; i<this.changeable.length; i++) {
+  
+          change = this.changeable[i];
+  
+          a = $([
+            '<a class="st-block-ui-btn st-icon">',
+            change.toLowerCase(),
+            '</a>'
+          ].join("\n"));
+  
+          this.$el.append(a);
+        }
       },
   
     });
@@ -1756,7 +1768,7 @@
           new SirTrevor.BlockReorder(this.$el)
         );
   
-        var typeChange = new SirTrevor.BlockTypeChange(this.$el, this.instanceID);
+        var typeChange = new SirTrevor.BlockTypeChange(this.$el, this.instanceID, this.type, this.changeable);
   
         this._withUIComponent(
           typeChange, '.st-block-ui-btn--type-typechange', typeChange.trigger
@@ -2140,6 +2152,7 @@
       title: function(){ return i18n.t('blocks:quote:title'); },
   
       icon_name: 'quote',
+      changeable: ['Heading', 'text'],
   
       editorHTML: function() {
         return template(this);
@@ -2169,6 +2182,7 @@
     editorHTML: '<div class="st-required st-text-block st-text-block--heading" contenteditable="true"></div>',
   
     icon_name: 'heading',
+    changeable: ['text', 'quote'],
   
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
@@ -2238,6 +2252,7 @@
     editorHTML: '<div class="st-required st-text-block" contenteditable="true"></div>',
   
     icon_name: 'text',
+    changeable: ['Heading', 'quote'],
   
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));

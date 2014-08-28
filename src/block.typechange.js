@@ -1,8 +1,10 @@
 SirTrevor.BlockTypeChange = (function(){
 
-  var BlockTypeChange = function(block_element, instance_id) {
+  var BlockTypeChange = function(block_element, instance_id, block_type, changeable) {
     this.$block = block_element;
     this.instanceID = instance_id;
+    this.block_type = block_type;
+    this.changeable = changeable;
 
     this._ensureElement();
     this._bindFunctions();
@@ -14,23 +16,33 @@ SirTrevor.BlockTypeChange = (function(){
 
     bound: [],
 
-    tagName: 'a',
-    className: 'st-block-ui-btn st-block-ui-btn--type-typechange st-icon',
-
-    attributes: {
-      html: 'typechange',
-      'data-icon': 'text'
-    },
-
-    // className: 'st-block-typechange',
+    className: 'st-block-typechange-wrapper',
     visibleClass: 'st-block-typechange--is-visible',
 
     trigger: function() {
-      console.log('BlockTypeChange trigger');
+      // nop
     },
 
     initialize: function() {
-      console.log('BlockTypeChange initialize');
+
+      var i, a, change;
+
+      if (this.changeable === undefined) {
+        return; // nop.
+      }
+
+      for (i=0; i<this.changeable.length; i++) {
+
+        change = this.changeable[i];
+
+        a = $([
+          '<a class="st-block-ui-btn st-icon">',
+          change.toLowerCase(),
+          '</a>'
+        ].join("\n"));
+
+        this.$el.append(a);
+      }
     },
 
   });

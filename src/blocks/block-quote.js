@@ -18,6 +18,7 @@ SirTrevor.Blocks.Quote = (function(){
     title: function(){ return i18n.t('blocks:quote:title'); },
 
     icon_name: 'quote',
+    changeable: ['Heading', 'text'],
 
     editorHTML: function() {
       return template(this);
