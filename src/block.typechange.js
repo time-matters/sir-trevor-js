@@ -36,6 +36,9 @@ SirTrevor.BlockTypeChange = (function(){
 
       // remove current block.
       instance.removeBlock(this.block.blockID);
+
+      // focus the replacement.
+      replacement.focus();
     },
 
     prepareTypeChange: function(toType) {

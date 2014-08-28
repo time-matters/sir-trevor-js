@@ -215,7 +215,7 @@ SirTrevor.Editor = (function(){
     onNewBlockCreated: function(block) {
       if (block.instanceID === this.ID) {
         this.hideBlockControls();
-        this.scrollTo(block.$el);
+        // this.scrollTo(block.$el);
       }
     },
 
@@ -257,7 +257,7 @@ SirTrevor.Editor = (function(){
       if($blockBy && $blockBy.attr('id') !== $block.attr('id')) {
         this.hideAllTheThings();
         $block["insert" + where]($blockBy);
-        this.scrollTo($block);
+        // this.scrollTo($block);
       }
     },
 
