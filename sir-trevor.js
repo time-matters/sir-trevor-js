@@ -1774,6 +1774,11 @@
   
       onBackspaceAtStart: function(event, target) {
   
+        if ($.inArray(this.type, ["text"]) === -1) {
+          // disallow split inside blocks other than headings and text.
+          return;
+        }
+  
         var instance = SirTrevor.getInstance(this.instanceID);
         var currentBlock = this;
         var currentPosition = instance.getBlockPosition(this.$el);
@@ -1885,6 +1890,12 @@
       },
   
       onReturn: function(event, target) {
+  
+        if ($.inArray(this.type, ["Heading", "text"]) === -1) {
+          // disallow split inside blocks other than headings and text.
+          return;
+        }
+  
         var instance = SirTrevor.getInstance(this.instanceID);
         var newBlock;
   
@@ -1897,7 +1908,12 @@
         try {
   
           newBlock = instance.createBlock("text"); // or this.type, if not always text.
-          instance.changeBlockPosition(newBlock.$el, instance.getBlockPosition(this.$el) + 1);
+  
+          var currentPosition = instance.getBlockPosition(this.$el);
+          var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
+          if ((nextBlockPosition - currentPosition) !== 1) {
+            instance.changeBlockPosition(newBlock.$el, currentPosition + 1);
+          }
   
           var i;
           var remainingDivs = $('.st-text-block div:has(#split-marker) ~ div');
