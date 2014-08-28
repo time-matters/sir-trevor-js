@@ -356,7 +356,15 @@ SirTrevor.Block = (function(){
         return;
       }
 
-      var previousBlock = instance.blocks[currentPosition - 1];
+      var previousBlock = instance.blocks.filter(function(block) {
+        return instance.getBlockPosition(block.$el) === (currentPosition - 1);
+      })[0];
+
+      // guard previous block not being retrievable via position.
+      if (previousBlock === undefined) {
+        console.log("Can't merge with previous block: can't find by position");
+        return;
+      }
 
       // guard previous block not being text.
       if (previousBlock.type !== "text") {
