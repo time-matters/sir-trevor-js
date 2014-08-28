@@ -44,7 +44,7 @@ SirTrevor.Block = (function(){
 
   _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
 
-    bound: ["_checkDoubleReturn", "_checkBackspaceAtStartKeyDown",
+    bound: ["_checkReturn", "_checkBackspaceAtStartKeyDown",
             "_checkBackspaceAtStartKeyUp", "_handleContentPaste", "_onFocus",
             "_onBlur", "onDrop", "onDeleteClick", "clearInsertedStyles",
             "getSelectionForFormatter", "onBlockRender"],
@@ -312,7 +312,7 @@ SirTrevor.Block = (function(){
     _initTextBlocks: function() {
       this.getTextBlock()
         .bind('paste', this._handleContentPaste)
-        .bind('keyup', this._checkDoubleReturn)
+        .bind('keyup', this._checkReturn)
         .bind('keydown', this._checkBackspaceAtStartKeyDown)
         .bind('keyup', this._checkBackspaceAtStartKeyUp)
         .bind('keyup', this.getSelectionForFormatter)
@@ -320,18 +320,10 @@ SirTrevor.Block = (function(){
         .bind('DOMNodeInserted', this.clearInsertedStyles);
     },
 
-    _previousKeyUpWasReturn: false,
-    _checkDoubleReturn: function(ev) {
+    _checkReturn: function(ev) {
       var target = ev.target;
       if (ev !== undefined && ev.keyCode === 13) {
-        if (this._previousSelection) {
-          _.defer(this.onDoubleReturn.bind(this, ev, target), 0);
-          this._previousSelection = false;
-          return;
-        }
-        this._previousSelection = true;
-      } else {
-        this._previousSelection = false;
+        _.defer(this.onDoubleReturn.bind(this, ev, target), 0);
       }
     },
 
