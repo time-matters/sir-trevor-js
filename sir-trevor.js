@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-08-27
+ * 2014-08-28
  */
 
 (function ($, _){
@@ -1472,7 +1472,7 @@
   
     _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
   
-      bound: ["_checkDoubleReturn", "_checkBackspaceAtStartKeyDown",
+      bound: ["_checkReturn", "_checkBackspaceAtStartKeyDown",
               "_checkBackspaceAtStartKeyUp", "_handleContentPaste", "_onFocus",
               "_onBlur", "onDrop", "onDeleteClick", "clearInsertedStyles",
               "getSelectionForFormatter", "onBlockRender"],
@@ -1740,7 +1740,7 @@
       _initTextBlocks: function() {
         this.getTextBlock()
           .bind('paste', this._handleContentPaste)
-          .bind('keyup', this._checkDoubleReturn)
+          .bind('keyup', this._checkReturn)
           .bind('keydown', this._checkBackspaceAtStartKeyDown)
           .bind('keyup', this._checkBackspaceAtStartKeyUp)
           .bind('keyup', this.getSelectionForFormatter)
@@ -1748,18 +1748,10 @@
           .bind('DOMNodeInserted', this.clearInsertedStyles);
       },
   
-      _previousKeyUpWasReturn: false,
-      _checkDoubleReturn: function(ev) {
+      _checkReturn: function(ev) {
         var target = ev.target;
         if (ev !== undefined && ev.keyCode === 13) {
-          if (this._previousSelection) {
-            _.defer(this.onDoubleReturn.bind(this, ev, target), 0);
-            this._previousSelection = false;
-            return;
-          }
-          this._previousSelection = true;
-        } else {
-          this._previousSelection = false;
+          _.defer(this.onReturn.bind(this, ev, target), 0);
         }
       },
   
@@ -1792,7 +1784,15 @@
           return;
         }
   
-        var previousBlock = instance.blocks[currentPosition - 1];
+        var previousBlock = instance.blocks.filter(function(block) {
+          return instance.getBlockPosition(block.$el) === (currentPosition - 1);
+        })[0];
+  
+        // guard previous block not being retrievable via position.
+        if (previousBlock === undefined) {
+          console.log("Can't merge with previous block: can't find by position");
+          return;
+        }
   
         // guard previous block not being text.
         if (previousBlock.type !== "text") {
@@ -1809,7 +1809,7 @@
         instance.removeBlock(this.blockID);
   
         // further cursor management
-        window.getSelection().modify("move", "right", "character");
+        // window.getSelection().modify("move", "right", "character");
       },
   
       insertSplitMarker: function(html) {
@@ -1869,7 +1869,22 @@
         }
       },
   
-      onDoubleReturn: function(event, target) {
+      cleanupNestedDivs: function(block) {
+        var node, returns, selector = "div div";
+        if (block === undefined) {
+          block = this;
+        }
+        node = block.$editor;
+  
+        node.find(selector).each(function(i, el) {
+          var element = $(el);
+          element.replaceWith(element.contents());
+        });
+  
+        node.find('div:empty').remove();
+      },
+  
+      onReturn: function(event, target) {
         var instance = SirTrevor.getInstance(this.instanceID);
         var newBlock;
   
@@ -1895,14 +1910,15 @@
           var contents = split.find("#split-marker").addBack().contents();
           var afterSplit = false;
   
-          var remainders = $("<div></div>");
+          // var remainders = $("<div></div>");
+          var remainders = $();
   
           for (i=0; i<contents.length; i++) {
             if (contents[i].id === "split-marker") {
               afterSplit = true;
               continue;
             } else if (afterSplit) {
-              remainders = remainders.append(contents[i]);
+              remainders = remainders.add(contents[i]);
             }
           }
   
@@ -1921,7 +1937,11 @@
   
         } finally {
   
+          // this.cleanupNestedDivs();
+          this.cleanupNestedDivs(newBlock);
+  
           this.removeSplitMarker();
+  
   
           // this.removeTrailingReturns();
           // this.removeStartingReturns(newBlock);
