@@ -16,7 +16,7 @@ SirTrevor.Editor = (function(){
 
     bound: ['onFormSubmit', 'showBlockControls', 'hideAllTheThings', 'hideBlockControls',
             'onNewBlockCreated', 'changeBlockPosition', 'onBlockDragStart', 'onBlockDragEnd',
-            'removeBlockDragOver', 'onBlockDropped', 'createBlock'],
+            'removeBlockDragOver', 'onBlockDropped', 'createBlock', 'restoreDefaultType'],
 
     events: {
       'block:reorder:down':       'hideBlockControls',
@@ -76,6 +76,7 @@ SirTrevor.Editor = (function(){
       SirTrevor.EventBus.on(this.ID + ":blocks:change_position", this.changeBlockPosition);
       SirTrevor.EventBus.on("formatter:position", this.formatBar.renderBySelection);
       SirTrevor.EventBus.on("formatter:hide", this.formatBar.hide);
+      SirTrevor.EventBus.on(this.ID + ":blocks:count_update", this.restoreDefaultType);
 
       this.$wrapper.prepend(this.fl_block_controls.render().$el);
       $(document.body).append(this.formatBar.render().$el);
@@ -91,13 +92,19 @@ SirTrevor.Editor = (function(){
           this.createBlock(block.type, block.data);
         }, this);
       } else if (this.options.defaultType !== false) {
-        this.createBlock(this.options.defaultType, {});
+        this.restoreDefaultType();
       }
 
       this.$wrapper.addClass('st-ready');
 
       if(!_.isUndefined(this.onEditorRender)) {
         this.onEditorRender();
+      }
+    },
+
+    restoreDefaultType: function(count) {
+      if (count === undefined || count === 0) {
+        this.createBlock(this.options.defaultType, {});
       }
     },
 
