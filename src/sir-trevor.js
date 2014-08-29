@@ -132,7 +132,7 @@
   //= blocks/block-quote.js
   //= blocks/heading.js
   //= blocks/image.js
-  //= blocks/creditable-image.js
+  //= blocks/extended-image.js
   //= blocks/text.js
   //= blocks/tweet.js
   //= blocks/unordered-list.js

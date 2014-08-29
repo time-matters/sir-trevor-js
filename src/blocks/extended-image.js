@@ -1,11 +1,11 @@
 /*
-  Creditable Image Block
+  Extended Image Block
 */
 
-SirTrevor.Blocks.CreditableImage = SirTrevor.Blocks.Image.extend({
+SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
 
-  type: "creditable_image",
-  title: function() { return i18n.t('blocks:creditable_image:title'); },
+  type: "extended_image",
+  title: function() { return i18n.t('blocks:extended_image:title'); },
 
   droppable: true,
   uploadable: true,
@@ -24,26 +24,26 @@ SirTrevor.Blocks.CreditableImage = SirTrevor.Blocks.Image.extend({
 
     var figcaption = $("<figcaption class='captioned__text'></figcaption>");
 
-    var credit = $([
-      "<label class='st-input-label'>" + i18n.t('blocks:creditable_image:credit_field') +
+    var copyright = $([
+      "<label class='st-input-label'>" + i18n.t('blocks:extended_image:copyright_field') +
       "</label>",
-      "<input type='text' maxlength='140' name='credit' class='st-input-string st-required js-credit-input'",
-      "placeholder='" + i18n.t("blocks:creditable_image:credit_placeholder") + "'></input>"
+      "<input type='text' maxlength='140' name='copyright' class='st-input-string st-required js-copyright-input'",
+      "placeholder='" + i18n.t("blocks:extended_image:copyright_placeholder") + "'></input>"
     ].join("\n"));
-    figure.append(credit);
+    figure.append(copyright);
 
     var caption = $([
-      "<label class='st-input-label'>" + i18n.t('blocks:creditable_image:caption_field') +
+      "<label class='st-input-label'>" + i18n.t('blocks:extended_image:caption_field') +
       "</label>",
-      "<input type='text' maxlength='140' name='caption' class='st-input-string st-required js-caption-input'",
-      "placeholder='" + i18n.t("blocks:creditable_image:caption_placeholder") + "'></input>"
+      "<input type='text' name='caption' class='st-input-string st-required js-caption-input'",
+      "placeholder='" + i18n.t("blocks:extended_image:caption_placeholder") + "'></input>"
     ].join("\n"));
     figure.append(caption);
 
     editor.html("").show();
     editor.append(figure);
 
-    this.$('.js-credit-input').val(data.credit);
+    this.$('.js-copyright-input').val(data.copyright);
     this.$('.js-caption-input').val(data.caption);
   },
 
@@ -62,7 +62,7 @@ SirTrevor.Blocks.CreditableImage = SirTrevor.Blocks.Image.extend({
 
   // we have to override onUploadError to change the error message.
   onUploadError : function(jqXHR, status, errorThrown){
-    this.addMessage(i18n.t('blocks:creditable_image:upload_error'));
+    this.addMessage(i18n.t('blocks:extended_image:upload_error'));
     this.ready();
   },
 
