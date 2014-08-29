@@ -31,6 +31,10 @@ SirTrevor.Locales = {
       },
       creditable_image: {
         'title': "Image with Credits",
+        'caption_field': "Caption",
+        'caption_placeholder': "Caption",
+        'credit_field': "Credit",
+        'credit_placeholder': "Image source",
         'upload_error': "There was a problem with your upload"
       },
       image: {
