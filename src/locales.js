@@ -29,6 +29,14 @@ SirTrevor.Locales = {
         'title': "Quote",
         'credit_field': "Credit"
       },
+      extended_image: {
+        'title': "Image",
+        'caption_field': "Caption",
+        'caption_placeholder': "Caption",
+        'copyright_field': "Copyright",
+        'copyright_placeholder': "Copyright",
+        'upload_error': "There was a problem with your upload"
+      },
       image: {
         'title': "Image",
         'upload_error': "There was a problem with your upload"

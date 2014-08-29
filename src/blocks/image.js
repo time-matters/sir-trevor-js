@@ -12,12 +12,12 @@ SirTrevor.Blocks.Image = SirTrevor.Block.extend({
 
   icon_name: 'image',
 
-  loadData: function(data){
+  loadData: function(data) {
     // Create our image tag
     this.$editor.html($('<img>', { src: data.file.url }));
   },
 
-  onBlockRender: function(){
+  onBlockRender: function() {
     /* Setup the upload button */
     this.$inputs.find('button').bind('click', function(ev){ ev.preventDefault(); });
     this.$inputs.find('input').on('change', _.bind(function(ev){
