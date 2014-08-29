@@ -2320,6 +2320,9 @@
   
       editor.html("").show();
       editor.append(figure);
+  
+      this.$('.js-credit-input').val(data.credit);
+      this.$('.js-caption-input').val(data.caption);
     },
   
     onBlockRender: function(){
