@@ -261,7 +261,7 @@ SirTrevor.Editor = (function(){
       var $blockBy = this.$wrapper.find('.st-block').eq(selectedPosition);
       var blockByPosition = this.getBlockPosition($blockBy);
 
-      if (where === undefined) {
+      if ($.inArray(where, ["Before", "After"]) === -1) {
         where = (blockPosition > selectedPosition) ? "Before" : "After";
       }
 
