@@ -103,8 +103,12 @@ SirTrevor.Editor = (function(){
     },
 
     restoreDefaultType: function(count) {
+      var instance = this;
       if (count === undefined || count === 0) {
-        this.createBlock(this.options.defaultType, {});
+        var container = instance.block_controls.current_container;
+        instance.block_controls.current_container = undefined;
+        instance.createBlock(instance.options.defaultType);
+        instance.block_controls.current_container = container;
       }
     },
 
