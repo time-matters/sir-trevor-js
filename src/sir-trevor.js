@@ -129,13 +129,23 @@
   //= formatter.js
 
   /* Default Blocks */
-  //= blocks
+  //= blocks/block-quote.js
+  //= blocks/heading.js
+  //= blocks/image.js
+  //= blocks/creditable-image.js
+  //= blocks/text.js
+  //= blocks/tweet.js
+  //= blocks/unordered-list.js
+  //= blocks/video.js
+
   /* Default Formatters */
   //= formatters
+
   /* Marker */
   //= block-control.js
   //= block-controls.js
   //= floating-block-controls.js
+
   /* FormatBar */
   //= format-bar.js
   //= sir-trevor-editor.js

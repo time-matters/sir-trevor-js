@@ -29,6 +29,10 @@ SirTrevor.Locales = {
         'title': "Quote",
         'credit_field': "Credit"
       },
+      creditable_image: {
+        'title': "Image with Credits",
+        'upload_error': "There was a problem with your upload"
+      },
       image: {
         'title': "Image",
         'upload_error': "There was a problem with your upload"
