@@ -381,6 +381,10 @@ ul.st-text-block {
   display: inline-block;
   float: left; }
 
+.st-block-notes-wrapper {
+  display: inline-block;
+  float: left; }
+
 .st-block__ui,
 .st-block__ui-delete-controls {
   position: absolute;
