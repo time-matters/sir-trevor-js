@@ -119,6 +119,7 @@
   /* Block Mixins */
   //= block_mixins
   //= block.typechange.js
+  //= block.notes.js
   //= block.positioner.js
   //= block.reorder.js
   //= block.deletion.js

@@ -294,6 +294,12 @@ SirTrevor.Block = (function(){
         typeChange, '.st-block-ui-btn--type-typechange'
       );
 
+      var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
+
+      this._withUIComponent(
+        notes, '.st-block-ui-btn--type-notes'
+      );
+
       this._withUIComponent(
         new SirTrevor.BlockDeletion(), '.st-block-ui-btn--delete', this.onDeleteClick
       );
@@ -577,6 +583,9 @@ SirTrevor.Block = (function(){
     isEmpty: function() {
       var data = jQuery.extend(true, {}, this.saveAndGetData());
       delete data.uuid;
+      //TODO this has to come from block.notes.js
+      delete data.note;
+      delete data["note-ui"];
       return _.isEmpty(data);
     }
 

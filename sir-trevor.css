@@ -381,6 +381,34 @@ ul.st-text-block {
   display: inline-block;
   float: left; }
 
+.st-block-notes-wrapper {
+  display: inline-block;
+  float: left; }
+
+.st-block.st-block-is-note .st-block__inner {
+  -o-transform: rotate(-1deg);
+  -webkit-transform: rotate(-1deg);
+  -moz-transform: rotate(-1deg);
+  position: relative;
+  top: 5px;
+  margin: 40px;
+  background: #ffc;
+  padding: 20px;
+  margin-top: -50px;
+  -moz-box-shadow: 5px 5px 7px #212121;
+  -webkit-box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
+  box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7); }
+
+.st-block.st-block-is-note:nth-of-type(even) .st-block__inner {
+  -o-transform: rotate(1deg);
+  -webkit-transform: rotate(1deg);
+  -moz-transform: rotate(1deg); }
+
+.st-block.st-block-is-note:nth-of-type(3n) .st-block__inner {
+  -o-transform: rotate(-2deg);
+  -webkit-transform: rotate(-2deg);
+  -moz-transform: rotate(-2deg); }
+
 .st-block__ui,
 .st-block__ui-delete-controls {
   position: absolute;
