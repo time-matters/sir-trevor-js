@@ -1473,9 +1473,8 @@
       },
   
       _initUUID: function() {
-        console.log("appending a uuid");
   
-        var uuid = (function () {
+        var uuid = this.getData().uuid || (function () {
           return 'aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa'.
             replace(/[ab]/g, function(c) {
               var random = (Math.random()*16)%16 | 0;
@@ -1488,7 +1487,6 @@
           $("<input class='st-input-string js-uuid-input' name='uuid' type='hidden' value='" + uuid + "'></input>")
         );
       },
-  
   
       _withUIComponent: function(component, className, callback) {
         this.$ui.append(component.render().$el);
@@ -2110,7 +2108,9 @@
       },
   
       isEmpty: function() {
-        return _.isEmpty(this.saveAndGetData());
+        var data = jQuery.extend(true, {}, this.saveAndGetData());
+        delete data.uuid;
+        return _.isEmpty(data);
       }
   
     });

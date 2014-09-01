@@ -575,7 +575,9 @@ SirTrevor.Block = (function(){
     },
 
     isEmpty: function() {
-      return _.isEmpty(this.saveAndGetData());
+      var data = jQuery.extend(true, {}, this.saveAndGetData());
+      delete data.uuid;
+      return _.isEmpty(data);
     }
 
   });

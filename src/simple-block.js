@@ -86,9 +86,8 @@ SirTrevor.SimpleBlock = (function(){
     },
 
     _initUUID: function() {
-      console.log("appending a uuid");
 
-      var uuid = (function () {
+      var uuid = this.getData().uuid || (function () {
         return 'aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa'.
           replace(/[ab]/g, function(c) {
             var random = (Math.random()*16)%16 | 0;
@@ -101,7 +100,6 @@ SirTrevor.SimpleBlock = (function(){
         $("<input class='st-input-string js-uuid-input' name='uuid' type='hidden' value='" + uuid + "'></input>")
       );
     },
-
 
     _withUIComponent: function(component, className, callback) {
       this.$ui.append(component.render().$el);
