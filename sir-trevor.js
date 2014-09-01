@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-08-29
+ * 2014-09-01
  */
 
 (function ($, _){
@@ -1466,10 +1466,29 @@
   
         this.checkAndLoadData();
   
+        this._initUUID();
         this.$el.addClass('st-item-ready');
         this.on("onRender", this.onBlockRender);
         this.save();
       },
+  
+      _initUUID: function() {
+        console.log("appending a uuid");
+  
+        var uuid = (function () {
+          return 'aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa'.
+            replace(/[ab]/g, function(c) {
+              var random = (Math.random()*16)%16 | 0;
+              if (c === 'b') random = random & 0x7 | 0x8; // rfc4122 4.1.1. Variant
+              return random.toString(16);
+            });
+        }());
+  
+        this.$el.append(
+          $("<input class='st-input-string js-uuid-input' name='uuid' type='hidden' value='" + uuid + "'></input>")
+        );
+      },
+  
   
       _withUIComponent: function(component, className, callback) {
         this.$ui.append(component.render().$el);
