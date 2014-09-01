@@ -585,6 +585,7 @@ SirTrevor.Block = (function(){
       delete data.uuid;
       //TODO this has to come from block.notes.js
       delete data.note;
+      delete data["note-ui"];
       return _.isEmpty(data);
     }
 
