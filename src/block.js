@@ -352,7 +352,7 @@ SirTrevor.Block = (function(){
 
     onBackspaceAtStart: function(event, target) {
 
-      if ($.inArray(this.type, ["text"]) === -1) {
+      if ($.inArray(this.type, ["Heading", "text"]) === -1) {
         // disallow split inside blocks other than headings and text.
         return;
       }
@@ -378,7 +378,7 @@ SirTrevor.Block = (function(){
       }
 
       // guard previous block not being text.
-      if (previousBlock.type !== "text") {
+      if ($.inArray(previousBlock.type, ["Heading", "text"]) === -1) {
         console.log("Can't merge with previous block: not a text block.");
         return;
       }
