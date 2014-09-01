@@ -1926,7 +1926,11 @@
   
       _checkReturn: function(ev) {
         var target = ev.target;
-        if (ev !== undefined && ev.keyCode === 13) {
+  
+        // only trigger when return was hit, but not alt.
+        if (ev !== undefined &&
+            !ev.altKey &&
+            ev.keyCode === 13) {
           _.defer(this.onReturn.bind(this, ev, target), 0);
         }
       },
