@@ -2772,12 +2772,10 @@
   
     var Heading = SirTrevor.Formatter.extend({
       title: "heading",
-      cmd: "bold",
-      iconName: "heading",
+      iconName: "Heading",
       text : "H1",
   
-      getCurrentBlock: function() {
-  
+      prepare: function() {
         var selection = window.getSelection();
   
         if (selection.rangeCount === 0) {
@@ -2791,22 +2789,27 @@
                    .parents(".st-block")
                    .first();
   
-        var instance = SirTrevor.getInstance(node.attr('data-instance'));
-        var block = instance.getBlocksByIDs( [node.attr('id')] ) [0];
+        this._instance = SirTrevor.getInstance(node.attr('data-instance'));
+        this._block = this._instance.getBlocksByIDs( [node.attr('id')] ) [0];
+      },
   
-        return block;
+      getCurrentBlock: function() {
+        return this._block;
+      },
   
+      getCurrentInstance: function() {
+        return this._instance;
       },
   
       onClick: function() {
-  
+        var instance = this.getCurrentInstance();
         var block = this.getCurrentBlock();
-        console.log("transform to heading");
+        instance.changeBlockType(block, block.type === "Heading" ? "text" : "Heading");
       },
   
       isActive: function() {
-        var block = this.getCurrentBlock();
-        return block.type === "Heading";
+        this.prepare();
+        return this.getCurrentBlock().type === "Heading";
       }
   
     });
