@@ -21,24 +21,7 @@ SirTrevor.BlockTypeChange = (function(){
 
     changeType: function(toType) {
       var instance = SirTrevor.getInstance(this.instanceID);
-
-      // create the replacement first.
-      var replacement = instance.createBlock(toType);
-
-      // get the current block's position.
-      var currentPosition = instance.getBlockPosition(this.block.$el);
-
-      // move the replacement block after the current one.
-      instance.changeBlockPosition(replacement.$el, currentPosition + 1, "After");
-
-      // move editor contents to the replacement.
-      replacement.$editor.append(this.block.$editor.contents());
-
-      // remove current block.
-      instance.removeBlock(this.block.blockID);
-
-      // focus the replacement.
-      replacement.focus();
+      instance.changeBlockType(this.block, toType);
     },
 
     prepareTypeChange: function(toType) {
