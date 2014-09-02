@@ -377,10 +377,6 @@ ul.st-text-block {
   z-index: 2;
   padding: 0.3em 0.5em; }
 
-.st-block-typechange-wrapper {
-  display: inline-block;
-  float: left; }
-
 .st-block-notes-wrapper {
   display: inline-block;
   float: left; }
