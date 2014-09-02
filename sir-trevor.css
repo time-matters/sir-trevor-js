@@ -390,7 +390,6 @@ ul.st-text-block {
   margin: 40px;
   background: #ffc;
   padding: 20px;
-  margin-top: -50px;
   -moz-box-shadow: 5px 5px 7px #212121;
   -webkit-box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
   box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7); }
@@ -418,9 +417,18 @@ ul.st-text-block {
   left: 0;
   opacity: 0; }
 
+.st-block__inner div:focus ~ .st-block__ui,
+.st-block__inner div:focus ~ .st-block__control-ui,
 .st-block__inner:hover .st-block__ui,
 .st-block__inner:hover .st-block__control-ui {
   opacity: 1; }
+
+.st-block__inner:not(:hover) div:focus ~ .st-block__ui,
+.st-block__inner:not(:hover) div:focus ~ .st-block__control-ui {
+  margin-bottom: -2px;
+  margin-right: -2px;
+  border-bottom: 2px solid #34e0c2;
+  border-right: 2px solid #34e0c2; }
 
 .st-block-ui-btn, .st-block-control-ui-btn {
   display: block;

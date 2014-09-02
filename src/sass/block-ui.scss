@@ -11,9 +11,20 @@
   opacity: 0;
 }
 
+.st-block__inner div:focus ~ .st-block__ui,
+.st-block__inner div:focus ~ .st-block__control-ui,
 .st-block__inner:hover .st-block__ui,
 .st-block__inner:hover .st-block__control-ui {
   opacity: 1;
+}
+
+.st-block__inner:not(:hover) div:focus ~ .st-block__ui,
+.st-block__inner:not(:hover) div:focus ~ .st-block__control-ui {
+  margin-bottom: -2px;
+  margin-right:  -2px;
+  border-bottom: 2px solid $accent-color;
+  border-right:  2px solid $accent-color;
+
 }
 
 .st-block-ui-btn {
