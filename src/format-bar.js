@@ -22,7 +22,9 @@ SirTrevor.FormatBar = (function(){
     bound: ["onFormatButtonClick", "renderBySelection", "hide"],
 
     initialize: function() {
+      console.log("initializing new formatBar");
       var formatName, format, btn;
+      var formatters = SirTrevor.Formatters;
       this.$btns = [];
 
       for (formatName in SirTrevor.Formatters) {

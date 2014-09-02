@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-01
+ * 2014-09-02
  */
 
 (function ($, _){
@@ -985,86 +985,6 @@
     }
   
   };
-  SirTrevor.BlockTypeChange = (function(){
-  
-    var BlockTypeChange = function(block_element, instance_id, block) {
-      this.$block = block_element;
-      this.instanceID = instance_id;
-      this.block = block;
-      this.changeable = block.changeable;
-  
-      this._ensureElement();
-      this._bindFunctions();
-  
-      this.initialize();
-    };
-  
-    _.extend(BlockTypeChange.prototype, FunctionBind, Renderable, {
-  
-      bound: [],
-  
-      className: 'st-block-typechange-wrapper',
-      visibleClass: 'st-block-typechange--is-visible',
-  
-      changeType: function(toType) {
-        var instance = SirTrevor.getInstance(this.instanceID);
-  
-        // create the replacement first.
-        var replacement = instance.createBlock(toType);
-  
-        // get the current block's position.
-        var currentPosition = instance.getBlockPosition(this.block.$el);
-  
-        // move the replacement block after the current one.
-        instance.changeBlockPosition(replacement.$el, currentPosition + 1, "After");
-  
-        // move editor contents to the replacement.
-        replacement.$editor.append(this.block.$editor.contents());
-  
-        // remove current block.
-        instance.removeBlock(this.block.blockID);
-  
-        // focus the replacement.
-        replacement.focus();
-      },
-  
-      prepareTypeChange: function(toType) {
-        var typeCache = toType;
-        var self = this;
-        return function() {
-          self.changeType(typeCache);
-        };
-      },
-  
-      initialize: function() {
-  
-        var i, a, change;
-  
-        if (this.changeable === undefined) {
-          return; // nop.
-        }
-  
-        for (i=0; i<this.changeable.length; i++) {
-  
-          change = this.changeable[i];
-  
-          a = $([
-            '<a class="st-block-ui-btn st-icon">',
-            change.toLowerCase(),
-            '</a>'
-          ].join("\n"));
-  
-          a.on('click', null, this.prepareTypeChange(change));
-  
-          this.$el.append(a);
-        }
-      },
-  
-    });
-  
-    return BlockTypeChange;
-  
-  })();
   SirTrevor.BlockNotes = (function(){
   
     var BlockNotes = function(block_element, instance_id, block) {
@@ -1878,12 +1798,6 @@
   
         this._withUIComponent(
           new SirTrevor.BlockReorder(this.$el)
-        );
-  
-        var typeChange = new SirTrevor.BlockTypeChange(this.$el, this.instanceID, this);
-  
-        this._withUIComponent(
-          typeChange, '.st-block-ui-btn--type-typechange'
         );
   
         var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
@@ -2779,6 +2693,106 @@
     SirTrevor.Formatters.Unlink = new UnLink();
   
   })();
+  /* Our base formatters */
+  (function(){
+  
+    //TODO This one will be included even if there is no Heading block
+    // enabled in this instance. This is due to my inability to figure an
+    // instance out at the point in the initialization where the FormatBar
+    // creates the Formatters.
+  
+    var Heading = SirTrevor.Formatter.extend({
+      title: "heading",
+      iconName: "Heading",
+      text : "H1",
+  
+      prepare: function() {
+        var selection = window.getSelection();
+  
+        if (selection.rangeCount === 0) {
+          SirTrevor.log("Can't get current selection from formatter!");
+          return;
+        }
+  
+        var node = $(selection.getRangeAt(0)
+                     .startContainer
+                     .parentNode)
+                   .parents(".st-block")
+                   .first();
+  
+        this._instance = SirTrevor.getInstance(node.attr('data-instance'));
+        this._block = this._instance.getBlocksByIDs( [node.attr('id')] ) [0];
+      },
+  
+      getCurrentBlock: function() {
+        return this._block;
+      },
+  
+      getCurrentInstance: function() {
+        return this._instance;
+      },
+  
+      onClick: function() {
+        var instance = this.getCurrentInstance();
+        var block = this.getCurrentBlock();
+        instance.changeBlockType(block, block.type === "Heading" ? "text" : "Heading");
+      },
+  
+      isActive: function() {
+        this.prepare();
+        return this.getCurrentBlock().type === "Heading";
+      }
+  
+    });
+  
+    var Quote = SirTrevor.Formatter.extend({
+      title: "quote",
+      iconName: "quote",
+      text : "“",
+  
+      prepare: function() {
+        var selection = window.getSelection();
+  
+        if (selection.rangeCount === 0) {
+          SirTrevor.log("Can't get current selection from formatter!");
+          return;
+        }
+  
+        var node = $(selection.getRangeAt(0)
+                     .startContainer
+                     .parentNode)
+                   .parents(".st-block")
+                   .first();
+  
+        this._instance = SirTrevor.getInstance(node.attr('data-instance'));
+        this._block = this._instance.getBlocksByIDs( [node.attr('id')] ) [0];
+      },
+  
+      getCurrentBlock: function() {
+        return this._block;
+      },
+  
+      getCurrentInstance: function() {
+        return this._instance;
+      },
+  
+      onClick: function() {
+        var instance = this.getCurrentInstance();
+        var block = this.getCurrentBlock();
+        instance.changeBlockType(block, block.type === "quote" ? "text" : "quote");
+      },
+  
+      isActive: function() {
+        this.prepare();
+        return this.getCurrentBlock().type === "quote";
+      }
+  
+    });
+  
+    SirTrevor.Formatters.Heading = new Heading();
+    SirTrevor.Formatters.Quote = new Quote();
+  
+  })();
 
   /* Marker */
   SirTrevor.BlockControl = (function(){
@@ -2987,7 +3001,9 @@
       bound: ["onFormatButtonClick", "renderBySelection", "hide"],
   
       initialize: function() {
+        console.log("initializing new formatBar");
         var formatName, format, btn;
+        var formatters = SirTrevor.Formatters;
         this.$btns = [];
   
         for (formatName in SirTrevor.Formatters) {
@@ -3323,6 +3339,27 @@
   
       triggerBlockCountUpdate: function() {
         SirTrevor.EventBus.trigger(this.ID + ":blocks:count_update", this.blocks.length);
+      },
+  
+      changeBlockType: function(block, type) {
+  
+        // create the replacement first.
+        var replacement = this.createBlock(type);
+  
+        // get the current block's position.
+        var currentPosition = this.getBlockPosition(block.$el);
+  
+        // move the replacement block after the current one.
+        this.changeBlockPosition(replacement.$el, currentPosition + 1, "After");
+  
+        // move editor contents to the replacement.
+        replacement.$editor.append(block.$editor.contents());
+  
+        // remove current block.
+        this.removeBlock(block.blockID);
+  
+        // focus the replacement.
+        replacement.focus();
       },
   
       changeBlockPosition: function($block, selectedPosition, where) {

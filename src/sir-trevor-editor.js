@@ -254,6 +254,27 @@ SirTrevor.Editor = (function(){
       SirTrevor.EventBus.trigger(this.ID + ":blocks:count_update", this.blocks.length);
     },
 
+    changeBlockType: function(block, type) {
+
+      // create the replacement first.
+      var replacement = this.createBlock(type);
+
+      // get the current block's position.
+      var currentPosition = this.getBlockPosition(block.$el);
+
+      // move the replacement block after the current one.
+      this.changeBlockPosition(replacement.$el, currentPosition + 1, "After");
+
+      // move editor contents to the replacement.
+      replacement.$editor.append(block.$editor.contents());
+
+      // remove current block.
+      this.removeBlock(block.blockID);
+
+      // focus the replacement.
+      replacement.focus();
+    },
+
     changeBlockPosition: function($block, selectedPosition, where) {
       selectedPosition = selectedPosition - 1;
 
