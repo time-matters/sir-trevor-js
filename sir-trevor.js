@@ -2126,6 +2126,13 @@
 
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+    },
+    onBlockRender: function() {
+      var is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     }
   });
   /*
@@ -2153,6 +2160,11 @@
       this.$inputs.find('input').on('change', _.bind(function(ev){
         this.onDrop(ev.currentTarget);
       }, this));
+      var is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     },
 
     onUploadSuccess : function(data) {
@@ -2235,6 +2247,11 @@
       this.$inputs.find('input').on('change', _.bind(function(ev){
         this.onDrop(ev.currentTarget);
       }, this));
+      var is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     },
 
     onUploadSuccess : function(data) {
@@ -2280,6 +2297,14 @@
 
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+    },
+
+    onBlockRender: function() {
+      var is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     }
   });
   SirTrevor.Blocks.Tweet = (function(){
@@ -2382,6 +2407,14 @@
       onDrop: function(transferData){
         var url = transferData.getData('text/plain');
         this.handleTwitterDropPaste(url);
+      },
+
+      onBlockRender: function() {
+        var is_note = this.getData().note;
+        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+        if (is_note === "yes")  {
+          this.$el.addClass('st-block-is-note')
+        }
       }
     });
 
@@ -2413,6 +2446,12 @@
       onBlockRender: function() {
         this.checkForList = _.bind(this.checkForList, this);
         this.getTextBlock().on('click keyup', this.checkForList);
+
+        var is_note = this.getData().note;
+        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+        if (is_note === "yes")  {
+          this.$el.addClass('st-block-is-note')
+        }
       },
 
       checkForList: function() {
@@ -2517,6 +2556,14 @@
       onDrop: function(transferData){
         var url = transferData.getData('text/plain');
         this.handleDropPaste(url);
+      },
+
+      onBlockRender: function() {
+        is_note = this.getData().note;
+        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+        if (is_note === "yes")  {
+          this.$el.addClass('st-block-is-note')
+        }
       }
     });
 
@@ -2727,16 +2774,12 @@
         var state, hiddenInput, data;
 
         hiddenInput = block.$el.find('input.js-note-input[type="hidden"]');
-        data = block.getData();
-        state = data.note ? this.ON_STATE : this.OFF_STATE;
-
-        if (hiddenInput.length === 0)  {
-          hiddenInput = $("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + state + "'></input>");
-          block.$el.append(hiddenInput);
-        }
+        data = hiddenInput.val();
+        state = data == "yes" ? this.OFF_STATE : this.ON_STATE;
 
         block.$el.toggleClass(this.notesClassName);
-        return this.hiddenInput.val(state);
+        hiddenInput.val(state);
+        return state
       },
 
       onClick: function() {
@@ -2744,8 +2787,10 @@
       },
 
       isActive: function() {
+        var hiddenInput;
         this.prepare();
-        return this.getCurrentBlock().type === "quote";
+        hiddenInput = this._block.$el.find('input.js-note-input[type="hidden"]');
+        return hiddenInput.val() == "yes";
       }
 
     });
