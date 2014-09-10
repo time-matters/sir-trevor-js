@@ -48,11 +48,18 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
   },
 
   onBlockRender: function(){
+    var is_note;
     /* Setup the upload button */
     this.$inputs.find('button').bind('click', function(ev){ ev.preventDefault(); });
     this.$inputs.find('input').on('change', _.bind(function(ev){
       this.onDrop(ev.currentTarget);
     }, this));
+
+    is_note = this.getData().note;
+    this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+    if (is_note === "yes")  {
+      this.$el.addClass('st-block-is-note')
+    }
   },
 
   onUploadSuccess : function(data) {

@@ -23,8 +23,15 @@ SirTrevor.Blocks.List = (function() {
     },
 
     onBlockRender: function() {
+      var is_note;
       this.checkForList = _.bind(this.checkForList, this);
       this.getTextBlock().on('click keyup', this.checkForList);
+
+      is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     },
 
     checkForList: function() {

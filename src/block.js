@@ -278,24 +278,16 @@ SirTrevor.Block = (function(){
 
     _initUIComponents: function() {
 
-      var positioner = new SirTrevor.BlockPositioner(this.$el, this.instanceID);
-
       this._withUIComponent(
-        positioner, '.st-block-ui-btn--reorder', positioner.toggle
+        new SirTrevor.BlockReorder(this.$el, this.instanceID)
       );
 
       this._withUIComponent(
-        new SirTrevor.BlockReorder(this.$el)
-      );
-
-      var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
-
-      this._withUIComponent(
-        notes, '.st-block-ui-btn--type-notes'
+        new SirTrevor.BlockDeletion(), this.onDeleteClick
       );
 
       this._withUIComponent(
-        new SirTrevor.BlockDeletion(), '.st-block-ui-btn--delete', this.onDeleteClick
+        new SirTrevor.BlockAdd(this.$el)
       );
 
       this.onFocus();

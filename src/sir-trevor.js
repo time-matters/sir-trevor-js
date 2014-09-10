@@ -119,8 +119,8 @@
   /* Block Mixins */
   //= block_mixins
   //= block.notes.js
-  //= block.positioner.js
   //= block.reorder.js
+  //= block.add.js
   //= block.deletion.js
   //= block.validations.js
   //= block.store.js

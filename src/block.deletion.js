@@ -8,11 +8,10 @@ SirTrevor.BlockDeletion = (function(){
   _.extend(BlockDeletion.prototype, FunctionBind, Renderable, {
 
     tagName: 'a',
-    className: 'st-block-ui-btn st-block-ui-btn--delete st-icon',
+    className: 'btn--editor-panel',
 
     attributes: {
-      html: 'delete',
-      'data-icon': 'bin'
+      html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">Element Löschen</span>'
     }
 
   });

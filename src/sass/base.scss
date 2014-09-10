@@ -1,6 +1,3 @@
-.st-outer {
-  font-size: 16px;
-}
 
 @mixin sir-trevor-icons() {
   font-family: 'ST-Icons';
@@ -35,20 +32,6 @@
 
 [data-icon=bin]:hover:before {
   content: "binopen";
-}
-
-.st-block__inner {
-
-  ::-moz-selection {
-      background: $accent-color;
-      text-shadow: none;
-  }
-
-  ::selection {
-      background: $accent-color;
-      text-shadow: none;
-  }
-
 }
 
 .st-spinner {

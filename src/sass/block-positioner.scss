@@ -1,13 +1,11 @@
 .st-block-positioner {
-  border: 0.125em solid $accent-color;
+  border: 0.125em solid;
   position: absolute;
   z-index: 2;
   left: -5.5em; bottom: 0.4em;
   background: #fff;
 
   visibility: hidden;
-  opacity: 0;
-  @include transition(opacity 0.2s ease-in-out);
 }
 
 .st-block-positioner--is-visible {
@@ -29,12 +27,11 @@
 }
 
 .st-block-positioner__title {
-  color: $accent-color;
   font-size: 0.7em;
   font-style: italic;
   font-weight: normal;
   margin: 0;
-  border-bottom: 1px solid $accent-color;
+  border-bottom: 1px solid;
   padding: 0.5em;
   text-align: center;
 }

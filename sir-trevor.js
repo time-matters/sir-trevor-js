@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-02
+ * 2014-09-11
  */
 
 (function ($, _){
@@ -987,146 +987,69 @@
   };
   SirTrevor.BlockNotes = (function(){
   
-    var BlockNotes = function(block_element, instance_id, block) {
-      this.$block = block_element;
-      this.instanceID = instance_id;
-      this.block = block;
-      this.changeable = block.changeable;
+      var BlockNotes = function(block_element, instance_id, block) {
+        this.$block = block_element;
+        this.instanceID = instance_id;
+        this.block = block;
+        this.changeable = block.changeable;
   
-      this._ensureElement();
-      this._bindFunctions();
+        this._ensureElement();
+        this._bindFunctions();
   
-      this.initialize();
-    };
+        this.initialize();
+      };
   
-    _.extend(BlockNotes.prototype, FunctionBind, Renderable, {
+      _.extend(BlockNotes.prototype, FunctionBind, Renderable, {
   
-      bound: ["toggle"],
+        bound: ["toggle"],
   
-      notesClassName: 'st-block-is-note',
-      className: 'st-block-notes-wrapper',
-      visibleClass: 'st-block-notes--is-visible',
+        notesClassName: 'st-block-is-note',
+        className: 'st-block-notes-wrapper',
+        visibleClass: 'st-block-notes--is-visible',
   
-      OFF_STATE: "no",
-      ON_STATE: "yes",
+        OFF_STATE: "no",
+        ON_STATE: "yes",
   
-      toggle: function() {
-        var state = this.uiInput[0].checked ?
-          this.ON_STATE :
-          this.OFF_STATE;
-        this.$block.toggleClass(this.notesClassName);
-        return this.hiddenInput.val(state);
-      },
+        toggle: function() {
+          var state = this.uiInput[0].checked ?
+            this.ON_STATE :
+            this.OFF_STATE;
+          this.$block.toggleClass(this.notesClassName);
+          return this.hiddenInput.val(state);
+        },
   
-      initialize: function() {
-        var data = this.block.getData();
+        initialize: function() {
+          var data = this.block.getData();
   
-        // default state is off.
-        this.hiddenInput = $("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + this.OFF_STATE + "'></input>");
-        this.block.$el.append(this.hiddenInput);
+          // default state is off.
+          this.hiddenInput = $("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + this.OFF_STATE + "'></input>");
+          this.block.$el.append(this.hiddenInput);
   
-        this.uiInput = $("<input name='note-ui' type='checkbox' value='note'>");
-        var a = $('<a class="st-block-ui-btn st-icon">');
+          this.uiInput = $("<input name='note-ui' type='checkbox' value='note'>");
+          var a = $('<a class="st-block-ui-btn st-icon">');
   
-        this.uiInput.on('click', this, this.toggle);
+          this.uiInput.on('click', this, this.toggle);
   
-        // if current state is on, toggle.
-        if (data.note === this.ON_STATE) {
-          this.uiInput.attr({'checked': 'checked'});
-          this.toggle();
-        }
+          // if current state is on, toggle.
+          if (data.note === this.ON_STATE) {
+            this.uiInput.attr({'checked': 'checked'});
+            this.toggle();
+          }
   
-        this.$el.append(a.append(this.uiInput));
-      },
+          this.$el.append(a.append(this.uiInput));
+        },
   
-    });
+      });
   
-    return BlockNotes;
+      return BlockNotes;
   
-  })();
-  SirTrevor.BlockPositioner = (function(){
-  
-    var template = [
-      "<div class='st-block-positioner__inner'>",
-      "<span class='st-block-positioner__selected-value'></span>",
-      "<select class='st-block-positioner__select'></select>",
-      "</div>"
-    ].join("\n");
-  
-    var BlockPositioner = function(block_element, instance_id) {
-      this.$block = block_element;
-      this.instanceID = instance_id;
-      this.total_blocks = 0;
-  
-      this._ensureElement();
-      this._bindFunctions();
-  
-      this.initialize();
-    };
-  
-    _.extend(BlockPositioner.prototype, FunctionBind, Renderable, {
-  
-      bound: ['onBlockCountChange', 'onSelectChange', 'toggle', 'show', 'hide'],
-  
-      className: 'st-block-positioner',
-      visibleClass: 'st-block-positioner--is-visible',
-  
-      initialize: function(){
-        this.$el.append(template);
-        this.$select = this.$('.st-block-positioner__select');
-  
-        this.$select.on('change', this.onSelectChange);
-  
-        SirTrevor.EventBus.on(this.instanceID + ":blocks:count_update", this.onBlockCountChange);
-      },
-  
-      onBlockCountChange: function(new_count) {
-        if (new_count != this.total_blocks) {
-          this.total_blocks = new_count;
-          this.renderPositionList();
-        }
-      },
-  
-      onSelectChange: function() {
-        var val = this.$select.val();
-        if (val !== 0) {
-          SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position",
-                                     this.$block, val, (val == 1 ? 'before' : 'after'));
-          this.toggle();
-        }
-      },
-  
-      renderPositionList: function() {
-        var inner = "<option value='0'>" + i18n.t("general:position") + "</option>";
-        for(var i = 1; i <= this.total_blocks; i++) {
-          inner += "<option value="+i+">"+i+"</option>";
-        }
-        this.$select.html(inner);
-      },
-  
-      toggle: function() {
-        this.$select.val(0);
-        this.$el.toggleClass(this.visibleClass);
-      },
-  
-      show: function(){
-        this.$el.addClass(this.visibleClass);
-      },
-  
-      hide: function(){
-        this.$el.removeClass(this.visibleClass);
-      }
-  
-    });
-  
-    return BlockPositioner;
-  
-  })();
+    })();
   SirTrevor.BlockReorder = (function(){
   
-    var BlockReorder = function(block_element) {
+    var BlockReorder = function(block_element, instance_id) {
       this.$block = block_element;
       this.blockID = this.$block.attr('id');
+      this.instanceID = instance_id;
   
       this._ensureElement();
       this._bindFunctions();
@@ -1138,14 +1061,13 @@
   
       bound: ['onMouseDown', 'onClick', 'onDragStart', 'onDragEnd', 'onDrag', 'onDrop'],
   
-      className: 'st-block-ui-btn st-block-ui-btn--reorder st-icon',
-      tagName: 'a',
+      className: 'btn--editor-panel btn--with-rocker',
+      tagName: 'div',
   
       attributes: function() {
         return {
-          'html': 'reorder',
-          'draggable': 'true',
-          'data-icon': 'move'
+          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">Reihenfolge Ändern</span>',
+          'draggable': 'true'
         };
       },
   
@@ -1198,7 +1120,19 @@
   
       onDrag: function(ev){},
   
-      onClick: function() {
+      onClick: function(event) {
+        var $target, idx;
+        event.preventDefault();
+  
+        $target = $(event.target).closest('button');
+        idx  = this.$block.index('.st-block');
+  
+        if ($target.hasClass('btn--rocker__up')) {
+          SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx, ('before'));
+        }
+        else if ($target.hasClass('btn--rocker__down')) {
+          SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx + 2, ('before'));
+        }
       },
   
       render: function() {
@@ -1207,7 +1141,40 @@
   
     });
   
-    return BlockReorder;
+      return BlockReorder;
+  
+    })();
+  SirTrevor.BlockAdd = (function(){
+  
+    var BlockAdd = function(block_element) {
+      this.$block = block_element;
+      this._ensureElement();
+      this._bindFunctions();
+  
+      this.initialize();
+    };
+  
+    _.extend(BlockAdd.prototype, FunctionBind, Renderable, SirTrevor.Events, {
+  
+      tagName: 'a',
+      className: 'btn--editor-panel',
+      attributes: {
+        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">Weitere Inhalt</span>'
+      },
+  
+      bound: ['create'],
+  
+      create: function(e)  {
+        SirTrevor.EventBus.trigger('showBlockControls', this.$block);
+      },
+  
+      initialize: function() {
+        this.$el.on('click', this, this.create);
+      }
+  
+    });
+  
+    return BlockAdd;
   
   })();
   SirTrevor.BlockDeletion = (function(){
@@ -1220,11 +1187,10 @@
     _.extend(BlockDeletion.prototype, FunctionBind, Renderable, {
   
       tagName: 'a',
-      className: 'st-block-ui-btn st-block-ui-btn--delete st-icon',
+      className: 'btn--editor-panel',
   
       attributes: {
-        html: 'delete',
-        'data-icon': 'bin'
+        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">Element Löschen</span>'
       }
   
     });
@@ -1790,24 +1756,16 @@
   
       _initUIComponents: function() {
   
-        var positioner = new SirTrevor.BlockPositioner(this.$el, this.instanceID);
-  
         this._withUIComponent(
-          positioner, '.st-block-ui-btn--reorder', positioner.toggle
+          new SirTrevor.BlockReorder(this.$el, this.instanceID)
         );
   
         this._withUIComponent(
-          new SirTrevor.BlockReorder(this.$el)
-        );
-  
-        var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
-  
-        this._withUIComponent(
-          notes, '.st-block-ui-btn--type-notes'
+          new SirTrevor.BlockDeletion(), this.onDeleteClick
         );
   
         this._withUIComponent(
-          new SirTrevor.BlockDeletion(), '.st-block-ui-btn--delete', this.onDeleteClick
+          new SirTrevor.BlockAdd(this.$el)
         );
   
         this.onFocus();
@@ -2227,6 +2185,13 @@
   
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+    },
+    onBlockRender: function() {
+      var is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     }
   });
   /*
@@ -2249,11 +2214,18 @@
     },
   
     onBlockRender: function() {
+      var is_note;
       /* Setup the upload button */
       this.$inputs.find('button').bind('click', function(ev){ ev.preventDefault(); });
       this.$inputs.find('input').on('change', _.bind(function(ev){
         this.onDrop(ev.currentTarget);
       }, this));
+  
+      is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     },
   
     onUploadSuccess : function(data) {
@@ -2331,11 +2303,18 @@
     },
   
     onBlockRender: function(){
+      var is_note;
       /* Setup the upload button */
       this.$inputs.find('button').bind('click', function(ev){ ev.preventDefault(); });
       this.$inputs.find('input').on('change', _.bind(function(ev){
         this.onDrop(ev.currentTarget);
       }, this));
+  
+      is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     },
   
     onUploadSuccess : function(data) {
@@ -2381,6 +2360,13 @@
   
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+    },
+    onBlockRender: function() {
+      var is_note = this.getData().note;
+      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+      if (is_note === "yes")  {
+        this.$el.addClass('st-block-is-note')
+      }
     }
   });
   SirTrevor.Blocks.Tweet = (function(){
@@ -2483,6 +2469,13 @@
       onDrop: function(transferData){
         var url = transferData.getData('text/plain');
         this.handleTwitterDropPaste(url);
+      },
+      onBlockRender: function() {
+        var is_note = this.getData().note;
+        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+        if (is_note === "yes")  {
+          this.$el.addClass('st-block-is-note')
+        }
       }
     });
   
@@ -2512,8 +2505,15 @@
       },
   
       onBlockRender: function() {
+        var is_note;
         this.checkForList = _.bind(this.checkForList, this);
         this.getTextBlock().on('click keyup', this.checkForList);
+  
+        is_note = this.getData().note;
+        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+        if (is_note === "yes")  {
+          this.$el.addClass('st-block-is-note')
+        }
       },
   
       checkForList: function() {
@@ -2618,6 +2618,13 @@
       onDrop: function(transferData){
         var url = transferData.getData('text/plain');
         this.handleDropPaste(url);
+      },
+      onBlockRender: function() {
+        var is_note = this.getData().note;
+        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
+        if (is_note === "yes")  {
+          this.$el.addClass('st-block-is-note')
+        }
       }
     });
   
@@ -2789,8 +2796,69 @@
   
     });
   
+    var Annotation = SirTrevor.Formatter.extend({
+      title: "Annotate",
+      iconName: "annotate",
+      text : "*",
+  
+      OFF_STATE: "no",
+      ON_STATE: "yes",
+      notesClassName: 'st-block-is-note',
+  
+      prepare: function() {
+        var selection = window.getSelection();
+  
+        if (selection.rangeCount === 0) {
+          SirTrevor.log("Can't get current selection from formatter!");
+          return;
+        }
+  
+        var node = $(selection.getRangeAt(0)
+                     .startContainer
+                     .parentNode)
+                   .parents(".st-block")
+                   .first();
+  
+        this._instance = SirTrevor.getInstance(node.attr('data-instance'));
+        this._block = this._instance.getBlocksByIDs( [node.attr('id')] ) [0];
+      },
+  
+      getCurrentBlock: function() {
+        return this._block;
+      },
+  
+      getCurrentInstance: function() {
+        return this._instance;
+      },
+  
+      toggle: function(block) {
+        var state, hiddenInput, data;
+  
+        hiddenInput = block.$el.find('input.js-note-input[type="hidden"]');
+        data = hiddenInput.val();
+        state = data == "yes" ? this.OFF_STATE : this.ON_STATE;
+  
+        block.$el.toggleClass(this.notesClassName);
+        hiddenInput.val(state);
+        return state
+      },
+  
+      onClick: function() {
+        this.toggle(this.getCurrentBlock())
+      },
+  
+      isActive: function() {
+        var hiddenInput;
+        this.prepare();
+        hiddenInput = this._block.$el.find('input.js-note-input[type="hidden"]');
+        return hiddenInput.val() == "yes";
+      }
+  
+    });
+  
     SirTrevor.Formatters.Heading = new Heading();
     SirTrevor.Formatters.Quote = new Quote();
+    SirTrevor.Formatters.Annotation = new Annotation();
   
   })();
 
@@ -3157,6 +3225,7 @@
   
         this.listenTo(this.block_controls, 'createBlock', this.createBlock);
         this.listenTo(this.fl_block_controls, 'showBlockControls', this.showBlockControls);
+        SirTrevor.EventBus.on('showBlockControls', this.showBlockControls);
   
         this._setEvents();
   

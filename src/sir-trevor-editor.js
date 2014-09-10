@@ -70,6 +70,7 @@ SirTrevor.Editor = (function(){
 
       this.listenTo(this.block_controls, 'createBlock', this.createBlock);
       this.listenTo(this.fl_block_controls, 'showBlockControls', this.showBlockControls);
+      SirTrevor.EventBus.on('showBlockControls', this.showBlockControls);
 
       this._setEvents();
 

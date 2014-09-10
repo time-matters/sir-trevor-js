@@ -1,8 +1,9 @@
 SirTrevor.BlockReorder = (function(){
 
-  var BlockReorder = function(block_element) {
+  var BlockReorder = function(block_element, instance_id) {
     this.$block = block_element;
     this.blockID = this.$block.attr('id');
+    this.instanceID = instance_id;
 
     this._ensureElement();
     this._bindFunctions();
@@ -14,14 +15,13 @@ SirTrevor.BlockReorder = (function(){
 
     bound: ['onMouseDown', 'onClick', 'onDragStart', 'onDragEnd', 'onDrag', 'onDrop'],
 
-    className: 'st-block-ui-btn st-block-ui-btn--reorder st-icon',
-    tagName: 'a',
+    className: 'btn--editor-panel btn--with-rocker',
+    tagName: 'div',
 
     attributes: function() {
       return {
-        'html': 'reorder',
-        'draggable': 'true',
-        'data-icon': 'move'
+        'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">Reihenfolge Ändern</span>',
+        'draggable': 'true'
       };
     },
 
@@ -74,7 +74,19 @@ SirTrevor.BlockReorder = (function(){
 
     onDrag: function(ev){},
 
-    onClick: function() {
+    onClick: function(event) {
+      var $target, idx;
+      event.preventDefault();
+
+      $target = $(event.target).closest('button');
+      idx  = this.$block.index('.st-block');
+
+      if ($target.hasClass('btn--rocker__up')) {
+        SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx, ('before'));
+      }
+      else if ($target.hasClass('btn--rocker__down')) {
+        SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx + 2, ('before'));
+      }
     },
 
     render: function() {
@@ -83,6 +95,6 @@ SirTrevor.BlockReorder = (function(){
 
   });
 
-  return BlockReorder;
+    return BlockReorder;
 
-})();
+  })();

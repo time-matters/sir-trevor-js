@@ -4,43 +4,16 @@
 }
 
 .st-block__inner {
-  padding: 1.875em 1.875em 2.8em;
-  border: 2px solid #fff;
   position: relative;
 }
 
-.st-block__inner:hover {
-  border-color: $accent-color;
-}
-
-.st-block--with-errors .st-block__inner,
-.st-block--delete-active .st-block__inner  {
-  border-color: $error-color;
-}
-
-.st-block--with-plus:after,
 .st-icon--add:after {
-  display: block;
-  position: relative; z-index: 1;
-  bottom: 0;
+  display: none;
 }
 
 .st--block-limit-reached .st-block--with-plus:after,
 .st--block-limit-reached .st-icon--add:after {
   display: none;
-}
-
-.st-icon--add:after {
-  text-align: center;
-  font-size: 1.875em;
-  padding: 0.3em 0;
-  line-height: 0.9;
-  border-radius: 0.2em;
-}
-
-.st-block--with-plus:after {
-  background: $blocks-control-bg-color;
-  color: $accent-color;
 }
 
 .with-st-controls:after,
@@ -49,30 +22,11 @@
 }
 
 .st-outer--is-reordering .st-block.st-drag-over:after,
-.st-outer--is-reordering .st-block.st-drag-over:last-child:after,
-.st-outer--is-reordering .st-block-controls__top.st-drag-over:before {
+.st-outer--is-reordering .st-block.st-drag-over:last-child:after{
   font-family:inherit;
   content: "Drop block here";
   text-align: center;
   padding: 0.7em 0;
-  font-size: 1.125em;
-  font-weight: 700;
-  border: 2px dashed #d4d4d4;
-  background: transparent;
-  color: #d4d4d4;
-}
-
-.st-text-block {
-  min-height: 3em;
-  font-size: $text-block-font-size;
-  line-height: 1.45;
-}
-
-.st-text-block--heading {
-  line-height: 1.1;
-  font-size: 2.2em;
-  min-height: 0;
-  font-weight: 700;
 }
 
 ul.st-text-block {
@@ -82,7 +36,6 @@ ul.st-text-block {
 .st-block__inputs {
   padding: 1.6em 0 1em;
   border-radius: 0.2em;
-  background: $blocks-control-bg-color;
   border-top: 0.125em solid transparent;
 }
 
@@ -126,10 +79,6 @@ ul.st-text-block {
   color: #fff;
   position: relative;
   z-index: 10;
-}
-
-.st-block__upload-container:hover .st-upload-btn {
-  background:$accent-color;
 }
 
 .st-block__editor--with-square-media {
@@ -178,19 +127,11 @@ ul.st-text-block {
 .st-block__messages {
   display: none;
   position: relative;
-  top: -1.9em; left: -1.9em;
-  padding: .3em .5em;
-  border: 2px solid $accent-color;
-  border-left: none; border-top: none;
   max-width: 80%;
 }
 
 .st-block__messages--is-visible {
   display: block;
-}
-
-.st-block--with-errors .st-block__messages {
-  border-color: $error-color;
 }
 
 .st-block__messages span {
