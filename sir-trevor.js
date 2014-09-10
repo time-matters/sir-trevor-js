@@ -985,89 +985,12 @@
     }
 
   };
-  SirTrevor.BlockPositioner = (function(){
-
-    var template = [
-      "<div class='st-block-positioner__inner'>",
-      "<span class='st-block-positioner__selected-value'></span>",
-      "<select class='st-block-positioner__select'></select>",
-      "</div>"
-    ].join("\n");
-
-    var BlockPositioner = function(block_element, instance_id) {
-      this.$block = block_element;
-      this.instanceID = instance_id;
-      this.total_blocks = 0;
-
-      this._ensureElement();
-      this._bindFunctions();
-
-      this.initialize();
-    };
-
-    _.extend(BlockPositioner.prototype, FunctionBind, Renderable, {
-
-      bound: ['onBlockCountChange', 'onSelectChange', 'toggle', 'show', 'hide'],
-
-      className: 'st-block-positioner',
-      visibleClass: 'st-block-positioner--is-visible',
-
-      initialize: function(){
-        this.$el.append(template);
-        this.$select = this.$('.st-block-positioner__select');
-
-        this.$select.on('change', this.onSelectChange);
-
-        SirTrevor.EventBus.on(this.instanceID + ":blocks:count_update", this.onBlockCountChange);
-      },
-
-      onBlockCountChange: function(new_count) {
-        if (new_count != this.total_blocks) {
-          this.total_blocks = new_count;
-          this.renderPositionList();
-        }
-      },
-
-      onSelectChange: function() {
-        var val = this.$select.val();
-        if (val !== 0) {
-          SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position",
-                                     this.$block, val, (val == 1 ? 'before' : 'after'));
-          this.toggle();
-        }
-      },
-
-      renderPositionList: function() {
-        var inner = "<option value='0'>" + i18n.t("general:position") + "</option>";
-        for(var i = 1; i <= this.total_blocks; i++) {
-          inner += "<option value="+i+">"+i+"</option>";
-        }
-        this.$select.html(inner);
-      },
-
-      toggle: function() {
-        this.$select.val(0);
-        this.$el.toggleClass(this.visibleClass);
-      },
-
-      show: function(){
-        this.$el.addClass(this.visibleClass);
-      },
-
-      hide: function(){
-        this.$el.removeClass(this.visibleClass);
-      }
-
-    });
-
-    return BlockPositioner;
-
-  })();
   SirTrevor.BlockReorder = (function(){
 
-    var BlockReorder = function(block_element) {
+    var BlockReorder = function(block_element, instance_id) {
       this.$block = block_element;
       this.blockID = this.$block.attr('id');
+      this.instanceID = instance_id;
 
       this._ensureElement();
       this._bindFunctions();
@@ -1079,14 +1002,13 @@
 
       bound: ['onMouseDown', 'onClick', 'onDragStart', 'onDragEnd', 'onDrag', 'onDrop'],
 
-      className: 'st-block-ui-btn st-block-ui-btn--reorder st-icon',
-      tagName: 'a',
+      className: 'btn--editor-panel btn--with-rocker',
+      tagName: 'div',
 
       attributes: function() {
         return {
-          'html': 'reorder',
-          'draggable': 'true',
-          'data-icon': 'move'
+          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">Reihenfolge Ändern</span>',
+          'draggable': 'true'
         };
       },
 
@@ -1139,7 +1061,19 @@
 
       onDrag: function(ev){},
 
-      onClick: function() {
+      onClick: function(event) {
+        var $target, idx;
+        event.preventDefault();
+
+        $target = $(event.target).closest('button');
+        idx  = this.$block.index('.st-block');
+
+        if ($target.hasClass('btn--rocker__up')) {
+          SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx, ('before'));
+        }
+        else if ($target.hasClass('btn--rocker__down')) {
+          SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx + 2, ('before'));
+        }
       },
 
       render: function() {
@@ -1161,11 +1095,10 @@
     _.extend(BlockDeletion.prototype, FunctionBind, Renderable, {
 
       tagName: 'a',
-      className: 'st-block-ui-btn st-block-ui-btn--delete st-icon',
+      className: 'btn--editor-panel',
 
       attributes: {
-        html: 'Delete',
-        'data-icon': 'bin'
+        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">Element Löschen</span>'
       }
 
     });
@@ -1186,10 +1119,9 @@
     _.extend(BlockAdd.prototype, FunctionBind, Renderable, SirTrevor.Events, {
 
       tagName: 'a',
-      className: 'st-block-ui-btn st-block-ui-btn--add st-icon',
+      className: 'btn--editor-panel',
       attributes: {
-        html: 'Add',
-        'data-icon': 'add'
+        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">Weitere Inhalt</span>'
       },
 
       bound: ['create'],
@@ -1765,23 +1697,16 @@
 
       _initUIComponents: function() {
 
-        var positioner = new SirTrevor.BlockPositioner(this.$el, this.instanceID);
-
         this._withUIComponent(
-          positioner, '.st-block-ui-btn--reorder', positioner.toggle
+          new SirTrevor.BlockReorder(this.$el, this.instanceID)
         );
 
         this._withUIComponent(
-          new SirTrevor.BlockReorder(this.$el)
-        );
-
-
-        this._withUIComponent(
-          new SirTrevor.BlockAdd(this.$el), '.st-block-ui-btn--add'
+          new SirTrevor.BlockDeletion(), this.onDeleteClick
         );
 
         this._withUIComponent(
-          new SirTrevor.BlockDeletion(), '.st-block-ui-btn--delete', this.onDeleteClick
+          new SirTrevor.BlockAdd(this.$el)
         );
 
         this.onFocus();
