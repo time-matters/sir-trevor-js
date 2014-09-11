@@ -13,6 +13,7 @@
 
 .st-block__inner div:focus ~ .st-block__ui,
 .st-block__inner div:focus ~ .st-block__control-ui,
+.st-block__inner:hover .st-block__ui,
 .st-block__inner:hover .st-block__control-ui {
   opacity: 1;
 }
@@ -36,4 +37,15 @@
   background: #fff;
   color: $error-color;
   padding: 0.4em 0;
+}
+
+.st-block__ui-delete-controls .btn--editor-panel--delete {
+  width: 50%;
+  min-height:40px;
+  line-height: 45px;
+  display: block;
+  box-sizing: border-box;
+  background: #fff;
+  border:2px solid;
+  float:left;
 }

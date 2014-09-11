@@ -9,8 +9,8 @@ SirTrevor.Block = (function(){
       "<label class='st-block__delete-label'>",
       "<%= i18n.t('general:delete') %>",
       "</label>",
-      "<a class='st-block-ui-btn st-block-ui-btn--confirm-delete st-icon' data-icon='tick'></a>",
-      "<a class='st-block-ui-btn st-block-ui-btn--deny-delete st-icon' data-icon='close'></a>",
+      "<a class='btn--confirm-delete st-icon' data-icon='tick'></a>",
+      "<a class='btn--deny-delete st-icon' data-icon='close'></a>",
     "</div>"
   ].join("\n");
 
@@ -234,9 +234,9 @@ SirTrevor.Block = (function(){
 
       var $delete_el = this.$inner.find('.st-block__ui-delete-controls');
 
-      this.$inner.on('click', '.st-block-ui-btn--confirm-delete',
+      this.$inner.on('click', '.btn--confirm-delete',
                       _.bind(onDeleteConfirm, this))
-                 .on('click', '.st-block-ui-btn--deny-delete',
+                 .on('click', '.btn--deny-delete',
                       _.bind(onDeleteDeny, this));
     },
 
@@ -283,7 +283,7 @@ SirTrevor.Block = (function(){
       );
 
       this._withUIComponent(
-        new SirTrevor.BlockDeletion(), this.onDeleteClick
+        new SirTrevor.BlockDeletion(), '.btn--editor-panel--delete', this.onDeleteClick
       );
 
       this._withUIComponent(

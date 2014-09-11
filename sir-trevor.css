@@ -313,6 +313,7 @@ ul.st-text-block {
 
 .st-block__inner div:focus ~ .st-block__ui,
 .st-block__inner div:focus ~ .st-block__control-ui,
+.st-block__inner:hover .st-block__ui,
 .st-block__inner:hover .st-block__control-ui {
   opacity: 1; }
 
@@ -333,6 +334,16 @@ ul.st-text-block {
   background: #fff;
   color: #d70014;
   padding: 0.4em 0; }
+
+.st-block__ui-delete-controls .btn--editor-panel--delete {
+  width: 50%;
+  min-height: 40px;
+  line-height: 45px;
+  display: block;
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid;
+  float: left; }
 
 .st-format-bar {
   position: absolute;
