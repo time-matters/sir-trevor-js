@@ -46,6 +46,7 @@ SirTrevor.Editor = (function(){
       this._setRequired();
       this._setBlocksTypes();
       this._bindFunctions();
+      this._setupActiveClass();
 
       this.store("create");
 
@@ -54,6 +55,29 @@ SirTrevor.Editor = (function(){
       this.build();
 
       SirTrevor.bindFormSubmit(this.$form);
+    },
+
+    _setupActiveClass: function() {
+      var root = $('#' + this.ID);
+      var className = 'st-active-block';
+      var focus;
+
+      root.delegate('.st-block', 'focus', function(e) {
+        focus = $(this);
+        root.find('.st-block').removeClass(className);
+        focus.addClass(className);
+      });
+
+      root.delegate('.st-block', 'mouseout', function(e) {
+        root.find('.st-block').removeClass(className);
+        focus.addClass(className);
+      });
+
+      root.delegate('.st-block', 'mouseover', function(e) {
+        root.find('.st-block').removeClass(className);
+        $(this).addClass(className);
+        e.stopPropagation();
+      });
     },
 
     /*

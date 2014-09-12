@@ -1393,7 +1393,7 @@
         );
   
         this.$inner = this.$el.find('.st-block__inner');
-        this.$inner.bind('click mouseover', function(e){ e.stopPropagation(); });
+        this.$inner.bind('click', function(e){ e.stopPropagation(); });
       },
   
       render: function() {
@@ -1668,7 +1668,12 @@
         this.getTextBlock().blur();
       },
   
+      onHover: function() {
+        debugger;
+      },
+  
       onFocus: function() {
+        console.log('registering focus on', this);
         this.getTextBlock().bind('focus', this._onFocus);
       },
   
@@ -3097,6 +3102,7 @@
         this._setRequired();
         this._setBlocksTypes();
         this._bindFunctions();
+        this._setupActiveClass();
   
         this.store("create");
   
@@ -3105,6 +3111,29 @@
         this.build();
   
         SirTrevor.bindFormSubmit(this.$form);
+      },
+  
+      _setupActiveClass: function() {
+        var root = $('#' + this.ID);
+        var className = 'st-active-block';
+        var focus;
+  
+        root.delegate('.st-block', 'focus', function(e) {
+          focus = $(this);
+          root.find('.st-block').removeClass(className);
+          focus.addClass(className);
+        });
+  
+        root.delegate('.st-block', 'mouseout', function(e) {
+          root.find('.st-block').removeClass(className);
+          focus.addClass(className);
+        });
+  
+        root.delegate('.st-block', 'mouseover', function(e) {
+          root.find('.st-block').removeClass(className);
+          $(this).addClass(className);
+          e.stopPropagation();
+        });
       },
   
       /*
