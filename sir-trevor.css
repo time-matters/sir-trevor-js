@@ -311,10 +311,8 @@ ul.st-text-block {
   left: 0;
   opacity: 0; }
 
-.st-block__inner div:focus ~ .st-block__ui,
-.st-block__inner div:focus ~ .st-block__control-ui,
-.st-block__inner:hover .st-block__ui,
-.st-block__inner:hover .st-block__control-ui {
+.st-active-block .st-block__ui,
+.st-active-block .st-block__control-ui {
   opacity: 1; }
 
 .st-block__inner:not(:hover) div:focus ~ .st-block__ui,
