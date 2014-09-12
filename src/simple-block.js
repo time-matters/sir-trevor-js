@@ -61,7 +61,7 @@ SirTrevor.SimpleBlock = (function(){
       );
 
       this.$inner = this.$el.find('.st-block__inner');
-      this.$inner.bind('click mouseover', function(e){ e.stopPropagation(); });
+      this.$inner.bind('click', function(e){ e.stopPropagation(); });
     },
 
     render: function() {
