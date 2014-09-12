@@ -491,7 +491,7 @@ SirTrevor.Block = (function(){
 
       try {
 
-        newBlock = instance.createBlock("text"); // or this.type, if not always text.
+        newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
 
         var currentPosition = instance.getBlockPosition(this.$el);
         var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
@@ -537,19 +537,11 @@ SirTrevor.Block = (function(){
 
       } finally {
 
-        // this.cleanupNestedDivs();
         this.cleanupNestedDivs(newBlock);
-
         this.removeSplitMarker();
 
-
-        // this.removeTrailingReturns();
-        // this.removeStartingReturns(newBlock);
-
-        _.defer(function() {
-          newBlock.focus();
-          newBlock.$editor.caretToStart();
-        });
+        newBlock.focus();
+        newBlock.$editor.caretToStart();
       }
     },
 

@@ -1673,7 +1673,6 @@
       },
   
       onFocus: function() {
-        console.log('registering focus on', this);
         this.getTextBlock().bind('focus', this._onFocus);
       },
   
@@ -1970,7 +1969,7 @@
   
         try {
   
-          newBlock = instance.createBlock("text"); // or this.type, if not always text.
+          newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
   
           var currentPosition = instance.getBlockPosition(this.$el);
           var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
@@ -2016,19 +2015,11 @@
   
         } finally {
   
-          // this.cleanupNestedDivs();
           this.cleanupNestedDivs(newBlock);
-  
           this.removeSplitMarker();
   
-  
-          // this.removeTrailingReturns();
-          // this.removeStartingReturns(newBlock);
-  
-          _.defer(function() {
-            newBlock.focus();
-            newBlock.$editor.caretToStart();
-          });
+          newBlock.focus();
+          newBlock.$editor.caretToStart();
         }
       },
   
@@ -3276,7 +3267,7 @@
         A block will have a reference to an Editor instance & the parent BlockType.
         We also have to remember to store static counts for how many blocks we have, and keep a nice array of all the blocks available.
       */
-      createBlock: function(type, data, render_at) {
+      createBlock: function(type, data, render_at, focus) {
         type = _.classify(type);
   
         if(this._blockLimitReached()) {
@@ -3304,7 +3295,9 @@
         this.blocks.push(block);
         this._incrementBlockTypeCount(type);
   
-        block.focus();
+        if (focus !== false) {
+          block.focus();
+        }
   
         SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);
         SirTrevor.log("Block created of type " + type);
