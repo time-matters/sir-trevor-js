@@ -3116,23 +3116,35 @@
       _setupActiveClass: function() {
         var root = $('#' + this.ID);
         var className = 'st-active-block';
-        var focus;
+        var focus, current, timeout;
+  
+        var resetActive = function() {
+          window.clearTimeout(timeout);
+          timeout = window.setTimeout(function() {
+            root.find('.st-block').removeClass(className);
+            current.addClass(className);
+          }, 200);
+        };
   
         root.delegate('.st-block', 'focus', function(e) {
           focus = $(this);
-          root.find('.st-block').removeClass(className);
-          focus.addClass(className);
+          current = focus;
+          resetActive();
         });
   
         root.delegate('.st-block', 'mouseout', function(e) {
-          root.find('.st-block').removeClass(className);
-          focus.addClass(className);
+          // current = focus;
+          // resetActive();
         });
   
         root.delegate('.st-block', 'mouseover', function(e) {
-          root.find('.st-block').removeClass(className);
-          $(this).addClass(className);
           e.stopPropagation();
+          if ($(e.target).hasClass('st-block__ui') ||
+              $(e.target).parents('.st-block__ui').length > 0) {
+            return false;
+          }
+          current = $(this);
+          resetActive();
         });
       },
   
