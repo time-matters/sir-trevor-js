@@ -282,6 +282,12 @@ SirTrevor.Block = (function(){
         new SirTrevor.BlockReorder(this.$el, this.instanceID)
       );
 
+      var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
+
+      this._withUIComponent(
+        notes, '.st-block-ui-btn--type-notes'
+      );
+
       this._withUIComponent(
         new SirTrevor.BlockDeletion(), '.btn--editor-panel--delete', this.onDeleteClick
       );
