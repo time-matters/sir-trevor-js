@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-12
+ * 2014-09-15
  */
 
 (function ($, _){
@@ -1484,11 +1484,11 @@
   
     var delete_template = [
       "<div class='st-block__ui-delete-controls'>",
+        "<a class='btn--confirm-delete st-icon' data-icon='tick'></a>",
+        "<a class='btn--deny-delete st-icon' data-icon='close'></a>",
         "<label class='st-block__delete-label'>",
         "<%= i18n.t('general:delete') %>",
         "</label>",
-        "<a class='btn--confirm-delete st-icon' data-icon='tick'></a>",
-        "<a class='btn--deny-delete st-icon' data-icon='close'></a>",
       "</div>"
     ].join("\n");
   
@@ -1711,7 +1711,7 @@
           return;
         }
   
-        this.$inner.append(_.template(delete_template));
+        this.$inner.find('.btn--editor-panel--delete').append(_.template(delete_template));
         this.$el.addClass('st-block--delete-active');
   
         var $delete_el = this.$inner.find('.st-block__ui-delete-controls');
