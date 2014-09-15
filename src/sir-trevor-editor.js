@@ -46,6 +46,7 @@ SirTrevor.Editor = (function(){
       this._setRequired();
       this._setBlocksTypes();
       this._bindFunctions();
+      this._setupActiveClass();
 
       this.store("create");
 
@@ -54,6 +55,41 @@ SirTrevor.Editor = (function(){
       this.build();
 
       SirTrevor.bindFormSubmit(this.$form);
+    },
+
+    _setupActiveClass: function() {
+      var root = $('#' + this.ID);
+      var className = 'st-active-block';
+      var focus, current, timeout;
+
+      var resetActive = function() {
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(function() {
+          root.find('.st-block').removeClass(className);
+          current.addClass(className);
+        }, 200);
+      };
+
+      root.delegate('.st-block', 'focus', function(e) {
+        focus = $(this);
+        current = focus;
+        resetActive();
+      });
+
+      root.delegate('.st-block', 'mouseout', function(e) {
+        // current = focus;
+        // resetActive();
+      });
+
+      root.delegate('.st-block', 'mouseover', function(e) {
+        e.stopPropagation();
+        if ($(e.target).hasClass('st-block__ui') ||
+            $(e.target).parents('.st-block__ui').length > 0) {
+          return false;
+        }
+        current = $(this);
+        resetActive();
+      });
     },
 
     /*
@@ -184,7 +220,7 @@ SirTrevor.Editor = (function(){
       A block will have a reference to an Editor instance & the parent BlockType.
       We also have to remember to store static counts for how many blocks we have, and keep a nice array of all the blocks available.
     */
-    createBlock: function(type, data, render_at) {
+    createBlock: function(type, data, render_at, focus) {
       type = _.classify(type);
 
       if(this._blockLimitReached()) {
@@ -212,7 +248,9 @@ SirTrevor.Editor = (function(){
       this.blocks.push(block);
       this._incrementBlockTypeCount(type);
 
-      block.focus();
+      if (focus !== false) {
+        block.focus();
+      }
 
       SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);
       SirTrevor.log("Block created of type " + type);

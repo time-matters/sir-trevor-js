@@ -190,6 +190,10 @@ SirTrevor.Block = (function(){
       this.getTextBlock().blur();
     },
 
+    onHover: function() {
+      debugger;
+    },
+
     onFocus: function() {
       this.getTextBlock().bind('focus', this._onFocus);
     },
@@ -280,6 +284,12 @@ SirTrevor.Block = (function(){
 
       this._withUIComponent(
         new SirTrevor.BlockReorder(this.$el, this.instanceID)
+      );
+
+      var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
+
+      this._withUIComponent(
+        notes, '.st-block-ui-btn--type-notes'
       );
 
       this._withUIComponent(
@@ -481,7 +491,7 @@ SirTrevor.Block = (function(){
 
       try {
 
-        newBlock = instance.createBlock("text"); // or this.type, if not always text.
+        newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
 
         var currentPosition = instance.getBlockPosition(this.$el);
         var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
@@ -527,19 +537,11 @@ SirTrevor.Block = (function(){
 
       } finally {
 
-        // this.cleanupNestedDivs();
         this.cleanupNestedDivs(newBlock);
-
         this.removeSplitMarker();
 
-
-        // this.removeTrailingReturns();
-        // this.removeStartingReturns(newBlock);
-
-        _.defer(function() {
-          newBlock.focus();
-          newBlock.$editor.caretToStart();
-        });
+        newBlock.focus();
+        newBlock.$editor.caretToStart();
       }
     },
 

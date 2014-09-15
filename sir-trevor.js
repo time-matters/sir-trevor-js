@@ -987,63 +987,63 @@
   };
   SirTrevor.BlockNotes = (function(){
   
-      var BlockNotes = function(block_element, instance_id, block) {
-        this.$block = block_element;
-        this.instanceID = instance_id;
-        this.block = block;
-        this.changeable = block.changeable;
+    var BlockNotes = function(block_element, instance_id, block) {
+      this.$block = block_element;
+      this.instanceID = instance_id;
+      this.block = block;
+      this.changeable = block.changeable;
   
-        this._ensureElement();
-        this._bindFunctions();
+      this._ensureElement();
+      this._bindFunctions();
   
-        this.initialize();
-      };
+      this.initialize();
+    };
   
-      _.extend(BlockNotes.prototype, FunctionBind, Renderable, {
+    _.extend(BlockNotes.prototype, FunctionBind, Renderable, {
   
-        bound: ["toggle"],
+      bound: ["toggle"],
   
-        notesClassName: 'st-block-is-note',
-        className: 'st-block-notes-wrapper',
-        visibleClass: 'st-block-notes--is-visible',
+      notesClassName: 'st-block-is-note',
+      className: 'btn--editor-panel',
+      visibleClass: 'st-block-notes--is-visible',
   
-        OFF_STATE: "no",
-        ON_STATE: "yes",
+      attributes: {
+        html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">Notiz</span>'
+      },
   
-        toggle: function() {
-          var state = this.uiInput[0].checked ?
-            this.ON_STATE :
-            this.OFF_STATE;
-          this.$block.toggleClass(this.notesClassName);
-          return this.hiddenInput.val(state);
-        },
+      OFF_STATE: "no",
+      ON_STATE: "yes",
   
-        initialize: function() {
-          var data = this.block.getData();
+      toggle: function() {
+        var val = this.hiddenInput.val();
+        this.$block.toggleClass(this.notesClassName);
+        return this.hiddenInput.val(val === this.ON_STATE ?
+                 this.OFF_STATE : this.ON_STATE );
+      },
   
-          // default state is off.
-          this.hiddenInput = $("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + this.OFF_STATE + "'></input>");
-          this.block.$el.append(this.hiddenInput);
+      instrumentBlock: function() {
+        var data = this.block.getData();
   
-          this.uiInput = $("<input name='note-ui' type='checkbox' value='note'>");
-          var a = $('<a class="st-block-ui-btn st-icon">');
+        // default state is off.
+        this.hiddenInput = $("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + this.OFF_STATE + "'></input>");
+        this.block.$el.append(this.hiddenInput);
   
-          this.uiInput.on('click', this, this.toggle);
+        // if current state is on, toggle.
+        if (data.note === this.ON_STATE) {
+          this.toggle();
+        }
+      },
   
-          // if current state is on, toggle.
-          if (data.note === this.ON_STATE) {
-            this.uiInput.attr({'checked': 'checked'});
-            this.toggle();
-          }
+      initialize: function() {
+        this.instrumentBlock();
+        this.$el.on('click', this, this.toggle);
+      },
   
-          this.$el.append(a.append(this.uiInput));
-        },
+    });
   
-      });
+    return BlockNotes;
   
-      return BlockNotes;
-  
-    })();
+  })();
   SirTrevor.BlockReorder = (function(){
   
     var BlockReorder = function(block_element, instance_id) {
@@ -1393,7 +1393,7 @@
         );
   
         this.$inner = this.$el.find('.st-block__inner');
-        this.$inner.bind('click mouseover', function(e){ e.stopPropagation(); });
+        this.$inner.bind('click', function(e){ e.stopPropagation(); });
       },
   
       render: function() {
@@ -1668,6 +1668,10 @@
         this.getTextBlock().blur();
       },
   
+      onHover: function() {
+        debugger;
+      },
+  
       onFocus: function() {
         this.getTextBlock().bind('focus', this._onFocus);
       },
@@ -1758,6 +1762,12 @@
   
         this._withUIComponent(
           new SirTrevor.BlockReorder(this.$el, this.instanceID)
+        );
+  
+        var notes = new SirTrevor.BlockNotes(this.$el, this.instanceID, this);
+  
+        this._withUIComponent(
+          notes, '.st-block-ui-btn--type-notes'
         );
   
         this._withUIComponent(
@@ -1959,7 +1969,7 @@
   
         try {
   
-          newBlock = instance.createBlock("text"); // or this.type, if not always text.
+          newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
   
           var currentPosition = instance.getBlockPosition(this.$el);
           var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
@@ -2005,19 +2015,11 @@
   
         } finally {
   
-          // this.cleanupNestedDivs();
           this.cleanupNestedDivs(newBlock);
-  
           this.removeSplitMarker();
   
-  
-          // this.removeTrailingReturns();
-          // this.removeStartingReturns(newBlock);
-  
-          _.defer(function() {
-            newBlock.focus();
-            newBlock.$editor.caretToStart();
-          });
+          newBlock.focus();
+          newBlock.$editor.caretToStart();
         }
       },
   
@@ -2185,13 +2187,6 @@
   
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
-    },
-    onBlockRender: function() {
-      var is_note = this.getData().note;
-      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-      if (is_note === "yes")  {
-        this.$el.addClass('st-block-is-note')
-      }
     }
   });
   /*
@@ -2214,18 +2209,11 @@
     },
   
     onBlockRender: function() {
-      var is_note;
       /* Setup the upload button */
       this.$inputs.find('button').bind('click', function(ev){ ev.preventDefault(); });
       this.$inputs.find('input').on('change', _.bind(function(ev){
         this.onDrop(ev.currentTarget);
       }, this));
-  
-      is_note = this.getData().note;
-      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-      if (is_note === "yes")  {
-        this.$el.addClass('st-block-is-note')
-      }
     },
   
     onUploadSuccess : function(data) {
@@ -2303,18 +2291,11 @@
     },
   
     onBlockRender: function(){
-      var is_note;
       /* Setup the upload button */
       this.$inputs.find('button').bind('click', function(ev){ ev.preventDefault(); });
       this.$inputs.find('input').on('change', _.bind(function(ev){
         this.onDrop(ev.currentTarget);
       }, this));
-  
-      is_note = this.getData().note;
-      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-      if (is_note === "yes")  {
-        this.$el.addClass('st-block-is-note')
-      }
     },
   
     onUploadSuccess : function(data) {
@@ -2360,13 +2341,6 @@
   
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
-    },
-    onBlockRender: function() {
-      var is_note = this.getData().note;
-      this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-      if (is_note === "yes")  {
-        this.$el.addClass('st-block-is-note')
-      }
     }
   });
   SirTrevor.Blocks.Tweet = (function(){
@@ -2469,13 +2443,6 @@
       onDrop: function(transferData){
         var url = transferData.getData('text/plain');
         this.handleTwitterDropPaste(url);
-      },
-      onBlockRender: function() {
-        var is_note = this.getData().note;
-        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-        if (is_note === "yes")  {
-          this.$el.addClass('st-block-is-note')
-        }
       }
     });
   
@@ -2505,15 +2472,8 @@
       },
   
       onBlockRender: function() {
-        var is_note;
         this.checkForList = _.bind(this.checkForList, this);
         this.getTextBlock().on('click keyup', this.checkForList);
-  
-        is_note = this.getData().note;
-        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-        if (is_note === "yes")  {
-          this.$el.addClass('st-block-is-note')
-        }
       },
   
       checkForList: function() {
@@ -2618,13 +2578,6 @@
       onDrop: function(transferData){
         var url = transferData.getData('text/plain');
         this.handleDropPaste(url);
-      },
-      onBlockRender: function() {
-        var is_note = this.getData().note;
-        this.$el.append("<input class='st-input-string js-note-input' name='note' type='hidden' value='" + is_note + "'></input>")
-        if (is_note === "yes")  {
-          this.$el.addClass('st-block-is-note')
-        }
       }
     });
   
@@ -2796,69 +2749,8 @@
   
     });
   
-    var Annotation = SirTrevor.Formatter.extend({
-      title: "Annotate",
-      iconName: "annotate",
-      text : "*",
-  
-      OFF_STATE: "no",
-      ON_STATE: "yes",
-      notesClassName: 'st-block-is-note',
-  
-      prepare: function() {
-        var selection = window.getSelection();
-  
-        if (selection.rangeCount === 0) {
-          SirTrevor.log("Can't get current selection from formatter!");
-          return;
-        }
-  
-        var node = $(selection.getRangeAt(0)
-                     .startContainer
-                     .parentNode)
-                   .parents(".st-block")
-                   .first();
-  
-        this._instance = SirTrevor.getInstance(node.attr('data-instance'));
-        this._block = this._instance.getBlocksByIDs( [node.attr('id')] ) [0];
-      },
-  
-      getCurrentBlock: function() {
-        return this._block;
-      },
-  
-      getCurrentInstance: function() {
-        return this._instance;
-      },
-  
-      toggle: function(block) {
-        var state, hiddenInput, data;
-  
-        hiddenInput = block.$el.find('input.js-note-input[type="hidden"]');
-        data = hiddenInput.val();
-        state = data == "yes" ? this.OFF_STATE : this.ON_STATE;
-  
-        block.$el.toggleClass(this.notesClassName);
-        hiddenInput.val(state);
-        return state
-      },
-  
-      onClick: function() {
-        this.toggle(this.getCurrentBlock())
-      },
-  
-      isActive: function() {
-        var hiddenInput;
-        this.prepare();
-        hiddenInput = this._block.$el.find('input.js-note-input[type="hidden"]');
-        return hiddenInput.val() == "yes";
-      }
-  
-    });
-  
     SirTrevor.Formatters.Heading = new Heading();
     SirTrevor.Formatters.Quote = new Quote();
-    SirTrevor.Formatters.Annotation = new Annotation();
   
   })();
 
@@ -3201,6 +3093,7 @@
         this._setRequired();
         this._setBlocksTypes();
         this._bindFunctions();
+        this._setupActiveClass();
   
         this.store("create");
   
@@ -3209,6 +3102,41 @@
         this.build();
   
         SirTrevor.bindFormSubmit(this.$form);
+      },
+  
+      _setupActiveClass: function() {
+        var root = $('#' + this.ID);
+        var className = 'st-active-block';
+        var focus, current, timeout;
+  
+        var resetActive = function() {
+          window.clearTimeout(timeout);
+          timeout = window.setTimeout(function() {
+            root.find('.st-block').removeClass(className);
+            current.addClass(className);
+          }, 200);
+        };
+  
+        root.delegate('.st-block', 'focus', function(e) {
+          focus = $(this);
+          current = focus;
+          resetActive();
+        });
+  
+        root.delegate('.st-block', 'mouseout', function(e) {
+          // current = focus;
+          // resetActive();
+        });
+  
+        root.delegate('.st-block', 'mouseover', function(e) {
+          e.stopPropagation();
+          if ($(e.target).hasClass('st-block__ui') ||
+              $(e.target).parents('.st-block__ui').length > 0) {
+            return false;
+          }
+          current = $(this);
+          resetActive();
+        });
       },
   
       /*
@@ -3339,7 +3267,7 @@
         A block will have a reference to an Editor instance & the parent BlockType.
         We also have to remember to store static counts for how many blocks we have, and keep a nice array of all the blocks available.
       */
-      createBlock: function(type, data, render_at) {
+      createBlock: function(type, data, render_at, focus) {
         type = _.classify(type);
   
         if(this._blockLimitReached()) {
@@ -3367,7 +3295,9 @@
         this.blocks.push(block);
         this._incrementBlockTypeCount(type);
   
-        block.focus();
+        if (focus !== false) {
+          block.focus();
+        }
   
         SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);
         SirTrevor.log("Block created of type " + type);
