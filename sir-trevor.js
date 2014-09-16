@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-15
+ * 2014-09-16
  */
 
 (function ($, _){
@@ -254,10 +254,10 @@
         'delete':           'Delete?',
         'drop':             'Drag __block__ here',
         'paste':            'Or paste URL here',
-        'upload':           '...or choose a file',
+        'upload':           '…or choose a file',
         'close':            'close',
         'position':         'Position',
-        'wait':             'Please wait...',
+        'wait':             'Please wait…',
         'link':             'Enter a link'
       },
       errors: {
@@ -276,8 +276,8 @@
           'title': "List"
         },
         quote: {
-          'title': "Quote",
-          'credit_field': "Credit"
+          'title': "Zitat",
+          'credit_field': "Quelle"
         },
         extended_image: {
           'title': "Image",

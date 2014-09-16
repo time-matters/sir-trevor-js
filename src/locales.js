@@ -4,10 +4,10 @@ SirTrevor.Locales = {
       'delete':           'Delete?',
       'drop':             'Drag __block__ here',
       'paste':            'Or paste URL here',
-      'upload':           '...or choose a file',
+      'upload':           '…or choose a file',
       'close':            'close',
       'position':         'Position',
-      'wait':             'Please wait...',
+      'wait':             'Please wait…',
       'link':             'Enter a link'
     },
     errors: {
@@ -26,8 +26,8 @@ SirTrevor.Locales = {
         'title': "List"
       },
       quote: {
-        'title': "Quote",
-        'credit_field': "Credit"
+        'title': "Zitat",
+        'credit_field': "Quelle"
       },
       extended_image: {
         'title': "Image",
