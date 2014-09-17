@@ -72,6 +72,7 @@ SirTrevor.Block = (function(){
     uploadable: false,
     fetchable: false,
     ajaxable: false,
+    styleable: false,
 
     drop_options: {},
     paste_options: {},

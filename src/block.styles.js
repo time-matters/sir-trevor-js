@@ -1,6 +1,8 @@
 SirTrevor.BlockStyles = (function(){
 
   var BlockStyles = function(block_element, instance_id, block) {
+    if (!block.styleable) { return false; }
+
     this.$block = block_element;
     this.instanceID = instance_id;
     this.block = block;
@@ -39,10 +41,7 @@ SirTrevor.BlockStyles = (function(){
     },
 
     availableStyles: function() {
-      return [
-        { name: 'Default', value: 'default', className: 'default' },
-        { name: 'Full-width', value: 'fullwidth', className: 'full-width' }
-      ];
+      return this.block.styles;
     },
 
     updateValue: function(val) {

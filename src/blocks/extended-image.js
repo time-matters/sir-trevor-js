@@ -10,6 +10,12 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
   droppable: true,
   uploadable: true,
 
+  styleable: true,
+  styles: [
+    { name: 'Default', value: 'default', className: 'default' },
+    { name: 'Full-width', value: 'fullwidth', className: 'full-width' }
+  ],
+
   icon_name: 'image',
 
   loadData: function(data) {

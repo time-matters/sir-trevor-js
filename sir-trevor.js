@@ -1180,6 +1180,8 @@
   SirTrevor.BlockStyles = (function(){
   
     var BlockStyles = function(block_element, instance_id, block) {
+      if (!block.styleable) { return false; }
+  
       this.$block = block_element;
       this.instanceID = instance_id;
       this.block = block;
@@ -1218,10 +1220,7 @@
       },
   
       availableStyles: function() {
-        return [
-          { name: 'Default', value: 'default', className: 'default' },
-          { name: 'Full-width', value: 'fullwidth', className: 'full-width' }
-        ];
+        return this.block.styles;
       },
   
       updateValue: function(val) {
@@ -1647,6 +1646,7 @@
       uploadable: false,
       fetchable: false,
       ajaxable: false,
+      styleable: false,
   
       drop_options: {},
       paste_options: {},
@@ -2353,6 +2353,12 @@
   
     droppable: true,
     uploadable: true,
+  
+    styleable: true,
+    styles: [
+      { name: 'Default', value: 'default', className: 'default' },
+      { name: 'Full-width', value: 'fullwidth', className: 'full-width' }
+    ],
   
     icon_name: 'image',
   
