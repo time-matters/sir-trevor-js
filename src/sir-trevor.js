@@ -121,6 +121,7 @@
   //= block.notes.js
   //= block.reorder.js
   //= block.add.js
+  //= block.styles.js
   //= block.deletion.js
   //= block.validations.js
   //= block.store.js

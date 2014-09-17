@@ -72,6 +72,7 @@ SirTrevor.Block = (function(){
     uploadable: false,
     fetchable: false,
     ajaxable: false,
+    styleable: false,
 
     drop_options: {},
     paste_options: {},
@@ -294,6 +295,10 @@ SirTrevor.Block = (function(){
 
       this._withUIComponent(
         new SirTrevor.BlockDeletion(), '.btn--editor-panel--delete', this.onDeleteClick
+      );
+
+      this._withUIComponent(
+        new SirTrevor.BlockStyles(this.$el, this.instanceID, this)
       );
 
       this._withUIComponent(
