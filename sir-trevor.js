@@ -1226,6 +1226,26 @@
   
       updateValue: function(val) {
         this.hiddenInput.val(val);
+        this.updateClass(val);
+      },
+  
+      updateClass: function(val) {
+        var styles = this.availableStyles();
+        var $el = this.block.$el;
+  
+        // This uses Array.prototype.map and will not work in IE7 and IE8.
+        // Polyfill at will                                              .
+        var classNames = styles.map(function(e) { return e.className; });
+        $el.removeClass(classNames.join(' '));
+  
+        try {
+          var targetClassName = styles.filter(function(e) {
+            return e.value === val;
+          }).pop().className;
+          $el.addClass(targetClassName);
+        } catch (e) {
+          console.log('Ignoring a style that seems obsolete in current configuration');
+        }
       },
   
       onSelectChange: function(event) {
