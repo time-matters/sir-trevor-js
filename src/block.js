@@ -297,6 +297,10 @@ SirTrevor.Block = (function(){
       );
 
       this._withUIComponent(
+        new SirTrevor.BlockStyles(this.$el, this.instanceID, this)
+      );
+
+      this._withUIComponent(
         new SirTrevor.BlockAdd(this.$el)
       );
 
