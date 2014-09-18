@@ -582,7 +582,9 @@ SirTrevor.Block = (function(){
       delete data.uuid;
       //TODO this has to come from block.notes.js
       delete data.note;
-      delete data["note-ui"];
+      // delete data["note-ui"];
+      delete data.style;
+      //TODO this has to come from block.styles.js
       return _.isEmpty(data);
     }
 

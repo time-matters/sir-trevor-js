@@ -427,6 +427,9 @@ SirTrevor.Editor = (function(){
       Validate all of our blocks, and serialise all data onto the JSON objects
     */
     onFormSubmit: function(should_validate) {
+
+      this.removeEmptyBlocks();
+
       // if undefined or null or anything other than false - treat as true
       should_validate = (should_validate === false) ? false : true;
 
@@ -442,6 +445,26 @@ SirTrevor.Editor = (function(){
       this.store("save");
 
       return this.errors.length;
+    },
+
+    findEmptyTextBlocks: function() {
+      var result = [];
+      this.blocks.forEach(function(block) {
+        if ((block.type === "text") &&
+            ((block.getData().text === undefined) ||
+            (block.getData().text.trim() === ""))) {
+          result.push(block);
+        }
+      });
+      return result;
+    },
+
+    removeEmptyBlocks: function() {
+      var blocksToDelete = this.findEmptyTextBlocks();
+      var instance = this;
+      blocksToDelete.forEach(function(block) {
+        instance.removeBlock(block.blockID);
+      });
     },
 
     validateBlocks: function(should_validate) {
