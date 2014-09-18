@@ -17,7 +17,7 @@
   SirTrevor.SKIP_VALIDATION = false;
 
   SirTrevor.version = "0.3.0";
-  SirTrevor.LANGUAGE = "en";
+  SirTrevor.LANGUAGE = "de";
 
   function $element(el) {
     return el instanceof $ ? el : $(el);
@@ -280,8 +280,8 @@
           'title': "List"
         },
         quote: {
-          'title': "Zitat",
-          'credit_field': "Quelle"
+          'title': "Cite",
+          'credit_field': "Credit"
         },
         extended_image: {
           'title': "Image",
@@ -309,6 +309,69 @@
         },
         heading: {
           'title': "Heading"
+        }
+      }
+    },
+    de: {
+      general: {
+        'add':              'Absatz hinzufügen',
+        'deleteElement':    'Absatz löschen',
+        'delete':           'Löschen?',
+        'drop':             '__block__ hierher bewegen',
+        'paste':            'Oder URL hier einfügen',
+        'upload':           '…oder Datei auswählen',
+        'close':            'Schließen',
+        'position':         'Absatz verschieben',
+        'wait':             'Bitte warten…',
+        'link':             'Link eingeben',
+        'note':             'Anmerkung hinzufügen',
+        'style':            'Style'
+      },
+      errors: {
+        'title': "Folgende Fehler sind aufgetreten:",
+        'validation_fail': "__type__ Block ist nicht gültig",
+        'block_empty': "__name__ darf nicht leer sein",
+        'type_missing': "Es wird ein Block vom Typ __type__ benötigt",
+        'required_type_empty': "Ein benötigter Block vom Typ  __type__ ist leer",
+        'load_fail': "Es gab ein Problem beim Laden der Daten für dieses Dokument"
+      },
+      blocks: {
+        text: {
+          'title': "Lauftext"
+        },
+        list: {
+          'title': "Liste"
+        },
+        quote: {
+          'title': "Zitat",
+          'credit_field': "Quelle"
+        },
+        extended_image: {
+          'title': "Bild",
+          'caption_field': "Bildunterzeile",
+          'caption_placeholder': "Bildunterzeile",
+          'copyright_field': "Fotograf",
+          'copyright_placeholder': "Fotograf",
+          'upload_error': "es gab ein problem beim hochladen"
+        },
+        image: {
+          'title': "Bild",
+          'upload_error': "es gab ein problem beim hochladen"
+        },
+        video: {
+          'title': "Video"
+        },
+        tweet: {
+          'title': "Tweet",
+          'fetch_error': "There was a problem fetching your tweet"
+        },
+        embedly: {
+          'title': "Embedly",
+          'fetch_error': "There was a problem fetching your embed",
+          'key_missing': "An Embedly API key must be present"
+        },
+        heading: {
+          'title': "Überschrift"
         }
       }
     }
