@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-17
+ * 2014-09-18
  */
 
 (function ($, _){
@@ -2156,7 +2156,9 @@
         delete data.uuid;
         //TODO this has to come from block.notes.js
         delete data.note;
-        delete data["note-ui"];
+        // delete data["note-ui"];
+        delete data.style;
+        //TODO this has to come from block.styles.js
         return _.isEmpty(data);
       }
   
@@ -3581,6 +3583,9 @@
         Validate all of our blocks, and serialise all data onto the JSON objects
       */
       onFormSubmit: function(should_validate) {
+  
+        this.removeEmptyBlocks();
+  
         // if undefined or null or anything other than false - treat as true
         should_validate = (should_validate === false) ? false : true;
   
@@ -3596,6 +3601,26 @@
         this.store("save");
   
         return this.errors.length;
+      },
+  
+      findEmptyTextBlocks: function() {
+        var result = [];
+        this.blocks.forEach(function(block) {
+          if ((block.type === "text") &&
+              ((block.getData().text === undefined) ||
+              (block.getData().text.trim() === ""))) {
+            result.push(block);
+          }
+        });
+        return result;
+      },
+  
+      removeEmptyBlocks: function() {
+        var blocksToDelete = this.findEmptyTextBlocks();
+        var instance = this;
+        blocksToDelete.forEach(function(block) {
+          instance.removeBlock(block.blockID);
+        });
       },
   
       validateBlocks: function(should_validate) {
