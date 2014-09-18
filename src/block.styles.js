@@ -18,7 +18,7 @@ SirTrevor.BlockStyles = (function(){
     tagName: 'a',
     className: 'btn--editor-panel',
     attributes: {
-      html: ' <span class="btn__label">Style</span>'
+      html: ' <span class="btn__label">'+i18n.t('general:style')+'</span>'
     },
 
     bound: ['updateValue', 'onSelectChange'],

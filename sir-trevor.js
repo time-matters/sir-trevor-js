@@ -17,7 +17,7 @@
   SirTrevor.SKIP_VALIDATION = false;
 
   SirTrevor.version = "0.3.0";
-  SirTrevor.LANGUAGE = "en";
+  SirTrevor.LANGUAGE = "de";
 
   function $element(el) {
     return el instanceof $ ? el : $(el);
@@ -251,14 +251,18 @@
   SirTrevor.Locales = {
     en: {
       general: {
+        'add':              'Add Content',
+        'deleteElement':    'Delete Element',
         'delete':           'Delete?',
         'drop':             'Drag __block__ here',
         'paste':            'Or paste URL here',
         'upload':           '…or choose a file',
         'close':            'close',
-        'position':         'Position',
+        'position':         'Change position',
         'wait':             'Please wait…',
-        'link':             'Enter a link'
+        'link':             'Enter a link',
+        'note':             'Note',
+        'style':            'Style'
       },
       errors: {
         'title': "You have the following errors:",
@@ -276,8 +280,8 @@
           'title': "List"
         },
         quote: {
-          'title': "Zitat",
-          'credit_field': "Quelle"
+          'title': "Cite",
+          'credit_field': "Credit"
         },
         extended_image: {
           'title': "Image",
@@ -305,6 +309,69 @@
         },
         heading: {
           'title': "Heading"
+        }
+      }
+    },
+    de: {
+      general: {
+        'add':              'Absatz hinzufügen',
+        'deleteElement':    'Absatz löschen',
+        'delete':           'Löschen?',
+        'drop':             '__block__ hierher bewegen',
+        'paste':            'Oder URL hier einfügen',
+        'upload':           '…oder Datei auswählen',
+        'close':            'Schließen',
+        'position':         'Absatz verschieben',
+        'wait':             'Bitte warten…',
+        'link':             'Link eingeben',
+        'note':             'Anmerkung hinzufügen',
+        'style':            'Style'
+      },
+      errors: {
+        'title': "Folgende Fehler sind aufgetreten:",
+        'validation_fail': "__type__ Block ist nicht gültig",
+        'block_empty': "__name__ darf nicht leer sein",
+        'type_missing': "Es wird ein Block vom Typ __type__ benötigt",
+        'required_type_empty': "Ein benötigter Block vom Typ  __type__ ist leer",
+        'load_fail': "Es gab ein Problem beim Laden der Daten für dieses Dokument"
+      },
+      blocks: {
+        text: {
+          'title': "Lauftext"
+        },
+        list: {
+          'title': "Liste"
+        },
+        quote: {
+          'title': "Zitat",
+          'credit_field': "Quelle"
+        },
+        extended_image: {
+          'title': "Bild",
+          'caption_field': "Bildunterzeile",
+          'caption_placeholder': "Bildunterzeile",
+          'copyright_field': "Fotograf",
+          'copyright_placeholder': "Fotograf",
+          'upload_error': "es gab ein problem beim hochladen"
+        },
+        image: {
+          'title': "Bild",
+          'upload_error': "es gab ein problem beim hochladen"
+        },
+        video: {
+          'title': "Video"
+        },
+        tweet: {
+          'title': "Tweet",
+          'fetch_error': "There was a problem fetching your tweet"
+        },
+        embedly: {
+          'title': "Embedly",
+          'fetch_error': "There was a problem fetching your embed",
+          'key_missing': "An Embedly API key must be present"
+        },
+        heading: {
+          'title': "Überschrift"
         }
       }
     }
@@ -1008,7 +1075,7 @@
       visibleClass: 'st-block-notes--is-visible',
   
       attributes: {
-        html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">Notiz</span>'
+        html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:note')+'</span>'
       },
   
       OFF_STATE: "no",
@@ -1066,7 +1133,7 @@
   
       attributes: function() {
         return {
-          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">Reihenfolge Ändern</span>',
+          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">'+i18n.t('general:position')+'</span>',
           'draggable': 'true'
         };
       },
@@ -1159,7 +1226,7 @@
       tagName: 'a',
       className: 'btn--editor-panel',
       attributes: {
-        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">Weitere Inhalt</span>'
+        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:add')+'</span>'
       },
   
       bound: ['create'],
@@ -1197,7 +1264,7 @@
       tagName: 'a',
       className: 'btn--editor-panel',
       attributes: {
-        html: ' <span class="btn__label">Style</span>'
+        html: ' <span class="btn__label">'+i18n.t('general:style')+'</span>'
       },
   
       bound: ['updateValue', 'onSelectChange'],
@@ -1286,7 +1353,7 @@
       className: 'btn--editor-panel btn--editor-panel--delete',
   
       attributes: {
-        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">Element Löschen</span>'
+        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:deleteElement')+'</span>'
       }
   
     });

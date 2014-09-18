@@ -13,7 +13,7 @@ SirTrevor.BlockAdd = (function(){
     tagName: 'a',
     className: 'btn--editor-panel',
     attributes: {
-      html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">Weitere Inhalt</span>'
+      html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:add')+'</span>'
     },
 
     bound: ['create'],

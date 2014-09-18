@@ -8,7 +8,7 @@
   SirTrevor.SKIP_VALIDATION = false;
 
   SirTrevor.version = "0.3.0";
-  SirTrevor.LANGUAGE = "en";
+  SirTrevor.LANGUAGE = "de";
 
   function $element(el) {
     return el instanceof $ ? el : $(el);
