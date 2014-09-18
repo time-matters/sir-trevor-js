@@ -1,14 +1,18 @@
 SirTrevor.Locales = {
   en: {
     general: {
+      'add':              'Add Content',
+      'deleteElement':    'Delete Element',
       'delete':           'Delete?',
       'drop':             'Drag __block__ here',
       'paste':            'Or paste URL here',
       'upload':           '…or choose a file',
       'close':            'close',
-      'position':         'Position',
+      'position':         'Change position',
       'wait':             'Please wait…',
-      'link':             'Enter a link'
+      'link':             'Enter a link',
+      'note':             'Note',
+      'style':            'Style'
     },
     errors: {
       'title': "You have the following errors:",

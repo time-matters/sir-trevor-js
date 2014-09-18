@@ -251,14 +251,18 @@
   SirTrevor.Locales = {
     en: {
       general: {
+        'add':              'Add Content',
+        'deleteElement':    'Delete Element',
         'delete':           'Delete?',
         'drop':             'Drag __block__ here',
         'paste':            'Or paste URL here',
         'upload':           '…or choose a file',
         'close':            'close',
-        'position':         'Position',
+        'position':         'Change position',
         'wait':             'Please wait…',
-        'link':             'Enter a link'
+        'link':             'Enter a link',
+        'note':             'Note',
+        'style':            'Style'
       },
       errors: {
         'title': "You have the following errors:",
@@ -1008,7 +1012,7 @@
       visibleClass: 'st-block-notes--is-visible',
   
       attributes: {
-        html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">Notiz</span>'
+        html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:note')+'</span>'
       },
   
       OFF_STATE: "no",
@@ -1066,7 +1070,7 @@
   
       attributes: function() {
         return {
-          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">Reihenfolge Ändern</span>',
+          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">'+i18n.t('general:position')+'</span>',
           'draggable': 'true'
         };
       },
@@ -1159,7 +1163,7 @@
       tagName: 'a',
       className: 'btn--editor-panel',
       attributes: {
-        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">Weitere Inhalt</span>'
+        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:add')+'</span>'
       },
   
       bound: ['create'],
@@ -1197,7 +1201,7 @@
       tagName: 'a',
       className: 'btn--editor-panel',
       attributes: {
-        html: ' <span class="btn__label">Style</span>'
+        html: ' <span class="btn__label">'+i18n.t('general:style')+'</span>'
       },
   
       bound: ['updateValue', 'onSelectChange'],
@@ -1286,7 +1290,7 @@
       className: 'btn--editor-panel btn--editor-panel--delete',
   
       attributes: {
-        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">Element Löschen</span>'
+        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:deleteElement')+'</span>'
       }
   
     });

@@ -11,7 +11,7 @@ SirTrevor.BlockDeletion = (function(){
     className: 'btn--editor-panel btn--editor-panel--delete',
 
     attributes: {
-      html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">Element Löschen</span>'
+      html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:deleteElement')+'</span>'
     }
 
   });
