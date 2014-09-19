@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-18
+ * 2014-09-19
  */
 
 (function ($, _){
@@ -805,14 +805,14 @@
       markdown = markdown.replace(tagStripper, '<br>');
     }
   
-    function replaceBolds(match, p1, p2){
-      if(_.isUndefined(p2)) { p2 = ''; }
-      return "**" + p1.replace(/<(.)?br(.)?>/g, '') + "**" + p2;
+    function replaceBolds(match, p1, p2, p3){
+      if(_.isUndefined(p3)) { p3 = ''; }
+      return p1 + "**" + p2.replace(/<(.)?br(.)?>/g, '') + "**" + p3;
     }
   
-    function replaceItalics(match, p1, p2){
-      if(_.isUndefined(p2)) { p2 = ''; }
-      return "_" + p1.replace(/<(.)?br(.)?>/g, '') + "_" + p2;
+    function replaceItalics(match, p1, p2, p3){
+      if(_.isUndefined(p3)) { p3 = ''; }
+      return p1 + "_" + p2.replace(/<(.)?br(.)?>/g, '') + "_" + p3;
     }
   
     markdown = markdown.replace(/<(\w+)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>\s*<\/\1>/gim, '') //Empty elements
@@ -820,10 +820,10 @@
                         .replace(/<a.*?href=[""'](.*?)[""'].*?>(.*?)<\/a>/gim, function(match, p1, p2){
                           return "[" + p2.trim().replace(/<(.)?br(.)?>/g, '') + "]("+ p1 +")";
                         }) // Hyperlinks
-                        .replace(/<strong>(?:\s*)(.*?)(\s)*?<\/strong>/gim, replaceBolds)
-                        .replace(/<b>(?:\s*)(.*?)(\s*)?<\/b>/gim, replaceBolds)
-                        .replace(/<em>(?:\s*)(.*?)(\s*)?<\/em>/gim, replaceItalics)
-                        .replace(/<i>(?:\s*)(.*?)(\s*)?<\/i>/gim, replaceItalics);
+                        .replace(/<strong>(\s*)(.*?)(\s)*?<\/strong>/gim, replaceBolds)
+                        .replace(/<b>(\s*)(.*?)(\s*)?<\/b>/gim, replaceBolds)
+                        .replace(/<em>(\s*)(.*?)(\s*)?<\/em>/gim, replaceItalics)
+                        .replace(/<i>(\s*)(.*?)(\s*)?<\/i>/gim, replaceItalics);
   
   
     // Use custom formatters toMarkdown functions (if any exist)
@@ -1910,7 +1910,6 @@
   
       _handleContentPaste: function(ev) {
         var target = $(ev.currentTarget);
-  
         _.delay(_.bind(this.onContentPasted, this, ev, target), 0);
       },
   

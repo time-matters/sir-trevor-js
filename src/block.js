@@ -269,7 +269,6 @@ SirTrevor.Block = (function(){
 
     _handleContentPaste: function(ev) {
       var target = $(ev.currentTarget);
-
       _.delay(_.bind(this.onContentPasted, this, ev, target), 0);
     },
 

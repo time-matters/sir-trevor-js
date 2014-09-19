@@ -1,5 +1,6 @@
 describe("toMarkdown", function(){
 
+
   it("converts links to markdown", function(){
     var html = "<a href='http://google.com'>test</a>",
         markdown = SirTrevor.toMarkdown(html, "Text");
@@ -130,14 +131,14 @@ describe("toMarkdown", function(){
     var html = "<b> Test</b>",
         markdown = SirTrevor.toMarkdown(html, "Text");
 
-    expect(markdown).toBe("**Test**");
+    expect(markdown).toBe(" **Test**");
   });
 
   it("strips whitepace from italics", function(){
     var html = "<i> Test</i>",
         markdown = SirTrevor.toMarkdown(html, "Text");
 
-    expect(markdown).toBe("_Test_");
+    expect(markdown).toBe(" _Test_");
   });
 
   it("strips whitepace from links", function(){
