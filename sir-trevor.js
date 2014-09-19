@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-19
+ * 2014-09-22
  */
 
 (function ($, _){
@@ -1980,6 +1980,7 @@
       _previousCaretOffset: undefined,
       _checkArrowKeysDown: function(ev) {
         var target = ev.target;
+        // console.log('down');
   
         // only trigger when an arrow key was hit.
         if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {
@@ -2000,7 +2001,7 @@
         var target = ev.target;
   
         if ($.inArray(this.type, ["Heading", "text", "Quote", "list"]) === -1) {
-          return;
+          return true;
         }
   
         // only trigger when an arrow key was hit.
@@ -2042,6 +2043,8 @@
             this.removeSplitMarker();
           }
         }
+  
+        return true;
       },
   
       focusPreviousBlock: function() {
@@ -2082,7 +2085,7 @@
         var currentPosition = instance.getBlockPosition(this.$el);
   
         // guard block being the first.
-        if (currentPosition < 1) {
+        if (currentPosition >= instance.blocks.length) {
           console.log("Can't focus next block: no next block.");
           return;
         }
