@@ -1999,8 +1999,12 @@
       _checkArrowKeysUp: function(ev) {
         var target = ev.target;
   
+        if ($.inArray(this.type, ["Heading", "text", "Quote", "list"]) === -1) {
+          return;
+        }
+  
         // only trigger when an arrow key was hit.
-        if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {
+        if (ev !== undefined && $.inArray(ev.keyCode, [37, 38, 39, 40]) !== -1) {
   
           if (!window.getSelection().isCollapsed) {
             return; // when selecting, do not alter cursor management.
@@ -2012,21 +2016,96 @@
   
             if (offset.top === this._previousCaretOffset.top) {
   
+              // up / down
               if (ev.keyCode === 38) {
-                console.log('up up');
+                this.focusPreviousBlock();
+                return false;
               } else if (ev.keyCode === 40) {
-                console.log('down down');
-              } else {
-                // debugger;
+                this.focusNextBlock();
+                return false;
+  
+              } else if (offset.left === this._previousCaretOffset.left) {
+  
+                // left / right
+                if (ev.keyCode == 37) {
+                  this.focusPreviousBlock();
+                  return false;
+                } else if (ev.keyCode == 39) {
+                  this.focusNextBlock();
+                  return false;
+                }
+  
               }
-            } else {
-              // debugger;
             }
   
           } finally {
             this.removeSplitMarker();
           }
         }
+      },
+  
+      focusPreviousBlock: function() {
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var currentBlock = this;
+        var currentPosition = instance.getBlockPosition(this.$el);
+  
+        // guard block being the first.
+        if (currentPosition < 1) {
+          console.log("Can't focus previous block: no previous block.");
+          return;
+        }
+  
+        var previousBlock = instance.blocks.filter(function(block) {
+          return instance.getBlockPosition(block.$el) === (currentPosition - 1);
+        })[0];
+  
+        // guard previous block not being retrievable via position.
+        if (previousBlock === undefined) {
+          console.log("Can't merge with previous block: can't find by position");
+          return;
+        }
+  
+        // guard previous block not being text.
+        if ($.inArray(previousBlock.type, ["Heading", "text", "Quote", "list"]) === -1) {
+          console.log("Can't focus previous block: not a text block. ("+previousBlock.type+")");
+          return;
+        }
+  
+        // cursor management
+        previousBlock.focus();
+        previousBlock.$editor.caretToEnd();
+      },
+  
+      focusNextBlock: function() {
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var currentBlock = this;
+        var currentPosition = instance.getBlockPosition(this.$el);
+  
+        // guard block being the first.
+        if (currentPosition < 1) {
+          console.log("Can't focus next block: no next block.");
+          return;
+        }
+  
+        var nextBlock = instance.blocks.filter(function(block) {
+          return instance.getBlockPosition(block.$el) === (currentPosition + 1);
+        })[0];
+  
+        // guard next block not being retrievable via position.
+        if (nextBlock === undefined) {
+          console.log("Can't merge with next block: can't find by position");
+          return;
+        }
+  
+        // guard next block not being text.
+        if ($.inArray(nextBlock.type, ["Heading", "text", "Quote", "list"]) === -1) {
+          console.log("Can't focus next block: not a text block. ("+nextBlock.type+")");
+          return;
+        }
+  
+        // cursor management
+        nextBlock.focus();
+        nextBlock.$editor.caretToStart();
       },
   
       _checkReturn: function(ev) {
@@ -2133,10 +2212,10 @@
         // nodes that used to be one. that is not good when the font
         // features ligatures and/or negative kerning. normalizing the
         // parent node restores consecutive text nodes into one.
-        //
+  
         // however, this should not be done when at the beginning of a
         // node, since normalize also removes empty text nodes, and the
-        // caret needs to be there.
+        // caret needs to stay there.
   
         var range = window.getSelection().getRangeAt(0);
         if (range.startOffset + range.endOffset !== 0) {
