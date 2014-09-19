@@ -1893,6 +1893,7 @@
       onContentPasted: function(event, target){
         target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
         this.getTextBlock().caretToEnd();
+        this.splitAtReturns();
       },
   
       beforeLoadingData: function() {
@@ -2118,6 +2119,53 @@
         node.find('div:empty').remove();
       },
   
+      splitAtReturns: function() {
+        var next, r = this.$el.find('br').first();
+        if (r.length === 0) { return; }
+        r.replaceWith('<i id="split-marker"></i>');
+        try {
+          next = this.splitAtSplitMarker();
+        } finally {
+          this.removeSplitMarker();
+        }
+        next.splitAtReturns();
+      },
+  
+      splitAtSplitMarker: function() {
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var newBlock, currentPosition, nextBlockPosition;
+  
+        try {
+  
+          newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
+          currentPosition = instance.getBlockPosition(this.$el);
+          nextBlockPosition = instance.getBlockPosition(newBlock.$el);
+  
+          if ((nextBlockPosition - currentPosition) !== 1) {
+            instance.changeBlockPosition(newBlock.$el, currentPosition + 1, "After");
+          }
+  
+          var range = window.getSelection().getRangeAt(0);
+          range.setStartAfter($('#split-marker')[0]);
+          range.setEndAfter(this.$el.find('.st-text-block').children().last()[0]);
+  
+          var remainder = range.cloneContents();
+          range.deleteContents();
+  
+          newBlock.$editor.append(remainder);
+          newBlock.$editor.find('div:empty').remove();
+  
+        } finally {
+  
+          this.cleanupNestedDivs(newBlock);
+  
+          newBlock.focus();
+          newBlock.$editor.caretToStart();
+        }
+  
+        return newBlock;
+      },
+  
       onReturn: function(event, target) {
   
         if ($.inArray(this.type, ["Heading", "text"]) === -1) {
@@ -2133,60 +2181,10 @@
         document.execCommand("removeFormat", false);
   
         this.insertSplitMarker();
-  
         try {
-  
-          newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
-  
-          var currentPosition = instance.getBlockPosition(this.$el);
-          var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
-          if ((nextBlockPosition - currentPosition) !== 1) {
-            instance.changeBlockPosition(newBlock.$el, currentPosition + 1, "After");
-          }
-  
-          var i;
-          var remainingDivs = $('.st-text-block div:has(#split-marker) ~ div');
-          var split = $('.st-text-block div:has(#split-marker)');
-  
-          if (split.length === 0) {
-            split = $('div.st-text-block:has(#split-marker)');
-          }
-  
-          var contents = split.find("#split-marker").addBack().contents();
-          var afterSplit = false;
-  
-          // var remainders = $("<div></div>");
-          var remainders = $();
-  
-          for (i=0; i<contents.length; i++) {
-            if (contents[i].id === "split-marker") {
-              afterSplit = true;
-              continue;
-            } else if (afterSplit) {
-              remainders = remainders.add(contents[i]);
-            }
-          }
-  
-          if (remainders.length > 0) {
-  
-            // insert remaining inline content
-            newBlock.$editor.append(remainders);
-            newBlock.$editor.find('div:empty').remove();
-          }
-  
-          if (remainingDivs.length > 0) {
-            // insert remaining divs
-            newBlock.$editor.append(remainingDivs);
-            newBlock.$editor.find('div:empty').remove();
-          }
-  
+          this.splitAtSplitMarker();
         } finally {
-  
-          this.cleanupNestedDivs(newBlock);
           this.removeSplitMarker();
-  
-          newBlock.focus();
-          newBlock.$editor.caretToStart();
         }
       },
   
