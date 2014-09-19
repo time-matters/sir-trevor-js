@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-18
+ * 2014-09-19
  */
 
 (function ($, _){
@@ -805,14 +805,14 @@
       markdown = markdown.replace(tagStripper, '<br>');
     }
   
-    function replaceBolds(match, p1, p2){
-      if(_.isUndefined(p2)) { p2 = ''; }
-      return "**" + p1.replace(/<(.)?br(.)?>/g, '') + "**" + p2;
+    function replaceBolds(match, p1, p2, p3){
+      if(_.isUndefined(p3)) { p3 = ''; }
+      return p1 + "**" + p2.replace(/<(.)?br(.)?>/g, '') + "**" + p3;
     }
   
-    function replaceItalics(match, p1, p2){
-      if(_.isUndefined(p2)) { p2 = ''; }
-      return "_" + p1.replace(/<(.)?br(.)?>/g, '') + "_" + p2;
+    function replaceItalics(match, p1, p2, p3){
+      if(_.isUndefined(p3)) { p3 = ''; }
+      return p1 + "_" + p2.replace(/<(.)?br(.)?>/g, '') + "_" + p3;
     }
   
     markdown = markdown.replace(/<(\w+)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>\s*<\/\1>/gim, '') //Empty elements
@@ -820,10 +820,10 @@
                         .replace(/<a.*?href=[""'](.*?)[""'].*?>(.*?)<\/a>/gim, function(match, p1, p2){
                           return "[" + p2.trim().replace(/<(.)?br(.)?>/g, '') + "]("+ p1 +")";
                         }) // Hyperlinks
-                        .replace(/<strong>(?:\s*)(.*?)(\s)*?<\/strong>/gim, replaceBolds)
-                        .replace(/<b>(?:\s*)(.*?)(\s*)?<\/b>/gim, replaceBolds)
-                        .replace(/<em>(?:\s*)(.*?)(\s*)?<\/em>/gim, replaceItalics)
-                        .replace(/<i>(?:\s*)(.*?)(\s*)?<\/i>/gim, replaceItalics);
+                        .replace(/<strong>(\s*)(.*?)(\s)*?<\/strong>/gim, replaceBolds)
+                        .replace(/<b>(\s*)(.*?)(\s*)?<\/b>/gim, replaceBolds)
+                        .replace(/<em>(\s*)(.*?)(\s*)?<\/em>/gim, replaceItalics)
+                        .replace(/<i>(\s*)(.*?)(\s*)?<\/i>/gim, replaceItalics);
   
   
     // Use custom formatters toMarkdown functions (if any exist)
@@ -1893,6 +1893,7 @@
       onContentPasted: function(event, target){
         target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
         this.getTextBlock().caretToEnd();
+        this.splitAtReturns();
       },
   
       beforeLoadingData: function() {
@@ -1910,7 +1911,6 @@
   
       _handleContentPaste: function(ev) {
         var target = $(ev.currentTarget);
-  
         _.delay(_.bind(this.onContentPasted, this, ev, target), 0);
       },
   
@@ -2119,6 +2119,53 @@
         node.find('div:empty').remove();
       },
   
+      splitAtReturns: function() {
+        var next, r = this.$el.find('br').first();
+        if (r.length === 0) { return; }
+        r.replaceWith('<i id="split-marker"></i>');
+        try {
+          next = this.splitAtSplitMarker();
+        } finally {
+          this.removeSplitMarker();
+        }
+        next.splitAtReturns();
+      },
+  
+      splitAtSplitMarker: function() {
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var newBlock, currentPosition, nextBlockPosition;
+  
+        try {
+  
+          newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
+          currentPosition = instance.getBlockPosition(this.$el);
+          nextBlockPosition = instance.getBlockPosition(newBlock.$el);
+  
+          if ((nextBlockPosition - currentPosition) !== 1) {
+            instance.changeBlockPosition(newBlock.$el, currentPosition + 1, "After");
+          }
+  
+          var range = window.getSelection().getRangeAt(0);
+          range.setStartAfter($('#split-marker')[0]);
+          range.setEndAfter(this.$el.find('.st-text-block').children().last()[0]);
+  
+          var remainder = range.cloneContents();
+          range.deleteContents();
+  
+          newBlock.$editor.append(remainder);
+          newBlock.$editor.find('div:empty').remove();
+  
+        } finally {
+  
+          this.cleanupNestedDivs(newBlock);
+  
+          newBlock.focus();
+          newBlock.$editor.caretToStart();
+        }
+  
+        return newBlock;
+      },
+  
       onReturn: function(event, target) {
   
         if ($.inArray(this.type, ["Heading", "text"]) === -1) {
@@ -2134,60 +2181,10 @@
         document.execCommand("removeFormat", false);
   
         this.insertSplitMarker();
-  
         try {
-  
-          newBlock = instance.createBlock("text", undefined, undefined, false); // or this.type, if not always text.
-  
-          var currentPosition = instance.getBlockPosition(this.$el);
-          var nextBlockPosition = instance.getBlockPosition(newBlock.$el);
-          if ((nextBlockPosition - currentPosition) !== 1) {
-            instance.changeBlockPosition(newBlock.$el, currentPosition + 1, "After");
-          }
-  
-          var i;
-          var remainingDivs = $('.st-text-block div:has(#split-marker) ~ div');
-          var split = $('.st-text-block div:has(#split-marker)');
-  
-          if (split.length === 0) {
-            split = $('div.st-text-block:has(#split-marker)');
-          }
-  
-          var contents = split.find("#split-marker").addBack().contents();
-          var afterSplit = false;
-  
-          // var remainders = $("<div></div>");
-          var remainders = $();
-  
-          for (i=0; i<contents.length; i++) {
-            if (contents[i].id === "split-marker") {
-              afterSplit = true;
-              continue;
-            } else if (afterSplit) {
-              remainders = remainders.add(contents[i]);
-            }
-          }
-  
-          if (remainders.length > 0) {
-  
-            // insert remaining inline content
-            newBlock.$editor.append(remainders);
-            newBlock.$editor.find('div:empty').remove();
-          }
-  
-          if (remainingDivs.length > 0) {
-            // insert remaining divs
-            newBlock.$editor.append(remainingDivs);
-            newBlock.$editor.find('div:empty').remove();
-          }
-  
+          this.splitAtSplitMarker();
         } finally {
-  
-          this.cleanupNestedDivs(newBlock);
           this.removeSplitMarker();
-  
-          newBlock.focus();
-          newBlock.$editor.caretToStart();
         }
       },
   
