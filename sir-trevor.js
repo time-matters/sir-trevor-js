@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-18
+ * 2014-09-19
  */
 
 (function ($, _){
@@ -1685,9 +1685,10 @@
   
     _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
   
-      bound: ["_checkReturn", "_checkBackspaceAtStartKeyDown",
-              "_checkBackspaceAtStartKeyUp", "_handleContentPaste", "_onFocus",
-              "_onBlur", "onDrop", "onDeleteClick", "clearInsertedStyles",
+      bound: ["_checkArrowKeysUp", "_checkArrowKeysDown", "_checkReturn",
+              "_checkBackspaceAtStartKeyDown", "_checkBackspaceAtStartKeyUp",
+              "_handleContentPaste", "_onFocus", "_onBlur", "onDrop",
+              "onDeleteClick", "clearInsertedStyles",
               "getSelectionForFormatter", "onBlockRender"],
   
       className: 'st-block st-icon--add',
@@ -1967,11 +1968,65 @@
         this.getTextBlock()
           .bind('paste', this._handleContentPaste)
           .bind('keyup', this._checkReturn)
+          .bind('keydown', this._checkArrowKeysDown)
+          .bind('keyup', this._checkArrowKeysUp)
           .bind('keydown', this._checkBackspaceAtStartKeyDown)
           .bind('keyup', this._checkBackspaceAtStartKeyUp)
           .bind('keyup', this.getSelectionForFormatter)
           .bind('mouseup', this.getSelectionForFormatter)
           .bind('DOMNodeInserted', this.clearInsertedStyles);
+      },
+  
+      _previousCaretOffset: undefined,
+      _checkArrowKeysDown: function(ev) {
+        var target = ev.target;
+  
+        // only trigger when an arrow key was hit.
+        if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {
+  
+          if (!window.getSelection().isCollapsed) {
+            return; // when selecting, do not alter cursor management.
+          }
+  
+          try {
+            var marker = this.insertSplitMarker();
+            this._previousCaretOffset = marker.offset();
+          } finally {
+            this.removeSplitMarker();
+          }
+        }
+      },
+      _checkArrowKeysUp: function(ev) {
+        var target = ev.target;
+  
+        // only trigger when an arrow key was hit.
+        if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {
+  
+          if (!window.getSelection().isCollapsed) {
+            return; // when selecting, do not alter cursor management.
+          }
+  
+          try {
+            var marker = this.insertSplitMarker();
+            var offset = marker.offset();
+  
+            if (offset.top === this._previousCaretOffset.top) {
+  
+              if (ev.keyCode === 38) {
+                console.log('up up');
+              } else if (ev.keyCode === 40) {
+                console.log('down down');
+              } else {
+                // debugger;
+              }
+            } else {
+              // debugger;
+            }
+  
+          } finally {
+            this.removeSplitMarker();
+          }
+        }
       },
   
       _checkReturn: function(ev) {
@@ -2066,10 +2121,27 @@
         } else if (document.selection && document.selection.type != "Control") {
           document.selection.createRange().pasteHTML(marker);
         }
+        return $('#split-marker');
       },
   
       removeSplitMarker: function() {
-        $('#split-marker').remove();
+        var marker = $('#split-marker');
+        var parent = marker.parent();
+        marker.remove();
+  
+        // removing the split marker might leave the dom with two text
+        // nodes that used to be one. that is not good when the font
+        // features ligatures and/or negative kerning. normalizing the
+        // parent node restores consecutive text nodes into one.
+        //
+        // however, this should not be done when at the beginning of a
+        // node, since normalize also removes empty text nodes, and the
+        // caret needs to be there.
+  
+        var range = window.getSelection().getRangeAt(0);
+        if (range.startOffset + range.endOffset !== 0) {
+          parent[0].normalize();
+        }
       },
   
       removeStartingReturns: function(block) {
