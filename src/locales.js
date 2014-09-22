@@ -45,6 +45,9 @@ SirTrevor.Locales = {
         'title': "Image",
         'upload_error': "There was a problem with your upload"
       },
+      audio: {
+        'title': "Audio"
+      },
       video: {
         'title': "Video"
       },
@@ -107,6 +110,9 @@ SirTrevor.Locales = {
       image: {
         'title': "Bild",
         'upload_error': "es gab ein problem beim hochladen"
+      },
+      audio: {
+        'title': "Audio"
       },
       video: {
         'title': "Video"
