@@ -2577,7 +2577,7 @@
     styleable: true,
     styles: [
       { name: 'Default', value: 'default', className: 'default' },
-      { name: 'Full-width', value: 'fullwidth', className: 'full-width' }
+      { name: 'Full-width', value: 'fullwidth', className: 'default' }
     ],
   
     icon_name: 'image',
@@ -2859,6 +2859,12 @@
       pastable: true,
   
       icon_name: 'video',
+  
+      styleable: true,
+      styles: [
+        { name: 'Default', value: 'default', className: 'default' },
+        { name: 'Full-width', value: 'fullwidth', className: 'default' }
+      ],
   
       loadData: function(data){
         if (!this.providers.hasOwnProperty(data.source)) { return; }
