@@ -138,6 +138,7 @@
   //= blocks/tweet.js
   //= blocks/unordered-list.js
   //= blocks/video.js
+  //= blocks/audio.js
 
   /* Default Formatters */
   //= formatters
