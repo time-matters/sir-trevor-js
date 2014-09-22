@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-19
+ * 2014-09-22
  */
 
 (function ($, _){
@@ -1685,9 +1685,10 @@
   
     _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
   
-      bound: ["_checkReturn", "_checkBackspaceAtStartKeyDown",
-              "_checkBackspaceAtStartKeyUp", "_handleContentPaste", "_onFocus",
-              "_onBlur", "onDrop", "onDeleteClick", "clearInsertedStyles",
+      bound: ["_checkArrowKeysUp", "_checkArrowKeysDown", "_checkReturn",
+              "_checkBackspaceAtStartKeyDown", "_checkBackspaceAtStartKeyUp",
+              "_handleContentPaste", "_onFocus", "_onBlur", "onDrop",
+              "onDeleteClick", "clearInsertedStyles",
               "getSelectionForFormatter", "onBlockRender"],
   
       className: 'st-block st-icon--add',
@@ -1967,11 +1968,147 @@
         this.getTextBlock()
           .bind('paste', this._handleContentPaste)
           .bind('keyup', this._checkReturn)
+          .bind('keydown', this._checkArrowKeysDown)
+          .bind('keyup', this._checkArrowKeysUp)
           .bind('keydown', this._checkBackspaceAtStartKeyDown)
           .bind('keyup', this._checkBackspaceAtStartKeyUp)
           .bind('keyup', this.getSelectionForFormatter)
           .bind('mouseup', this.getSelectionForFormatter)
           .bind('DOMNodeInserted', this.clearInsertedStyles);
+      },
+  
+      _previousCaretOffset: undefined,
+      _checkArrowKeysDown: function(ev) {
+        var target = ev.target;
+        // console.log('down');
+  
+        // only trigger when an arrow key was hit.
+        if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {
+  
+          if (!window.getSelection().isCollapsed) {
+            return; // when selecting, do not alter cursor management.
+          }
+  
+          try {
+            var marker = this.insertSplitMarker();
+            this._previousCaretOffset = marker.offset();
+          } finally {
+            this.removeSplitMarker();
+          }
+        }
+      },
+      _checkArrowKeysUp: function(ev) {
+        var target = ev.target;
+  
+        if ($.inArray(this.type, ["Heading", "text", "Quote", "list"]) === -1) {
+          return true;
+        }
+  
+        // only trigger when an arrow key was hit.
+        if (ev !== undefined && $.inArray(ev.keyCode, [37, 38, 39, 40]) !== -1) {
+  
+          if (!window.getSelection().isCollapsed) {
+            return; // when selecting, do not alter cursor management.
+          }
+  
+          try {
+            var marker = this.insertSplitMarker();
+            var offset = marker.offset();
+  
+            if (offset.top === this._previousCaretOffset.top) {
+  
+              // up / down
+              if (ev.keyCode === 38) {
+                this.focusPreviousBlock();
+                return false;
+              } else if (ev.keyCode === 40) {
+                this.focusNextBlock();
+                return false;
+  
+              } else if (offset.left === this._previousCaretOffset.left) {
+  
+                // left / right
+                if (ev.keyCode == 37) {
+                  this.focusPreviousBlock();
+                  return false;
+                } else if (ev.keyCode == 39) {
+                  this.focusNextBlock();
+                  return false;
+                }
+  
+              }
+            }
+  
+          } finally {
+            this.removeSplitMarker();
+          }
+        }
+  
+        return true;
+      },
+  
+      focusPreviousBlock: function() {
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var currentBlock = this;
+        var currentPosition = instance.getBlockPosition(this.$el);
+  
+        // guard block being the first.
+        if (currentPosition < 1) {
+          console.log("Can't focus previous block: no previous block.");
+          return;
+        }
+  
+        var previousBlock = instance.blocks.filter(function(block) {
+          return instance.getBlockPosition(block.$el) === (currentPosition - 1);
+        })[0];
+  
+        // guard previous block not being retrievable via position.
+        if (previousBlock === undefined) {
+          console.log("Can't merge with previous block: can't find by position");
+          return;
+        }
+  
+        // guard previous block not being text.
+        if ($.inArray(previousBlock.type, ["Heading", "text", "Quote", "list"]) === -1) {
+          console.log("Can't focus previous block: not a text block. ("+previousBlock.type+")");
+          return;
+        }
+  
+        // cursor management
+        previousBlock.focus();
+        previousBlock.$editor.caretToEnd();
+      },
+  
+      focusNextBlock: function() {
+        var instance = SirTrevor.getInstance(this.instanceID);
+        var currentBlock = this;
+        var currentPosition = instance.getBlockPosition(this.$el);
+  
+        // guard block being the first.
+        if (currentPosition >= instance.blocks.length) {
+          console.log("Can't focus next block: no next block.");
+          return;
+        }
+  
+        var nextBlock = instance.blocks.filter(function(block) {
+          return instance.getBlockPosition(block.$el) === (currentPosition + 1);
+        })[0];
+  
+        // guard next block not being retrievable via position.
+        if (nextBlock === undefined) {
+          console.log("Can't merge with next block: can't find by position");
+          return;
+        }
+  
+        // guard next block not being text.
+        if ($.inArray(nextBlock.type, ["Heading", "text", "Quote", "list"]) === -1) {
+          console.log("Can't focus next block: not a text block. ("+nextBlock.type+")");
+          return;
+        }
+  
+        // cursor management
+        nextBlock.focus();
+        nextBlock.$editor.caretToStart();
       },
   
       _checkReturn: function(ev) {
@@ -2066,10 +2203,27 @@
         } else if (document.selection && document.selection.type != "Control") {
           document.selection.createRange().pasteHTML(marker);
         }
+        return $('#split-marker');
       },
   
       removeSplitMarker: function() {
-        $('#split-marker').remove();
+        var marker = $('#split-marker');
+        var parent = marker.parent();
+        marker.remove();
+  
+        // removing the split marker might leave the dom with two text
+        // nodes that used to be one. that is not good when the font
+        // features ligatures and/or negative kerning. normalizing the
+        // parent node restores consecutive text nodes into one.
+  
+        // however, this should not be done when at the beginning of a
+        // node, since normalize also removes empty text nodes, and the
+        // caret needs to stay there.
+  
+        var range = window.getSelection().getRangeAt(0);
+        if (range.startOffset + range.endOffset !== 0) {
+          parent[0].normalize();
+        }
       },
   
       removeStartingReturns: function(block) {
