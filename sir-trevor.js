@@ -1139,7 +1139,7 @@
   
       attributes: function() {
         return {
-          'html': '<span class="btn--rocker"><button class="btn--rocker__up"><span class="icon--dropup"></span></button><button class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">'+i18n.t('general:position')+'</span>',
+          'html': '<span class="btn--rocker"><button type="button" class="btn--rocker__up"><span class="icon--dropup"></span></button><button type="button" class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">'+i18n.t('general:position')+'</span>',
           'draggable': 'true'
         };
       },
