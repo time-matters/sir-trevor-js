@@ -450,9 +450,9 @@ SirTrevor.Editor = (function(){
     findEmptyTextBlocks: function() {
       var result = [];
       this.blocks.forEach(function(block) {
-        if ((block.type === "text") &&
-            ((block.getData().text === undefined) ||
-            (block.getData().text.trim() === ""))) {
+        if ($.inArray(block.type, ["Heading", "text"] !== -1) &&
+             ((block.getData().text === undefined) ||
+             (block.getData().text.trim() === ""))) {
           result.push(block);
         }
       });
