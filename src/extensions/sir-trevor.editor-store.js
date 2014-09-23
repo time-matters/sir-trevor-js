@@ -40,7 +40,58 @@ SirTrevor.editorStore = function(editor, method, options) {
     }
   };
 
+  var isNewArticle = function() {
+
+    // the proper way
+    // var content = JSON.parse(_.trim(editor.$el.val()));
+    // return content['server-version'] === undefined;
+
+    // the easy way
+    var path = window.location.pathname;
+    return $.inArray(path, [
+      '/editor/articles',
+      '/editor/articles/new'
+    ]) !== -1;
+
+  };
+
+  var newestDocumentForUUID = function(uuid) {
+    var key, keys = [];
+    var prefix = "st-" + uuid;
+
+    // find eligible keys
+    for (key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) {
+        if (key.lastIndexOf(prefix) === 0) {
+          keys.push(key);
+        }
+      }
+    }
+
+    // find biggest verison number
+    var version = Math.max.apply(null, keys.map(function(e) {
+      return parseInt(/version-(\d+)/.exec(e)[1], 10);
+    }));
+
+    return {
+      version: version,
+      dataStore: localStorage[prefix + '-version-' + version]
+    };
+  };
+
+  var askUserForConfirmation = function() {
+    return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
+  };
+
   switch(method) {
+
+    case "autosave":
+      var store = editor.dataStore;
+      var value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '';
+      var key = "st-" + store.uuid + "-version-" + store.version;
+      window.localStorage.setItem(key, value);
+      editor.dataStore.version = ++editor.dataStore.version;
+    break;
 
     case "create":
       // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
@@ -56,6 +107,23 @@ SirTrevor.editorStore = function(editor, method, options) {
             editor.dataStore = str;
             ensureMetadata();
           }
+
+          if (isNewArticle()) {
+
+            // check local storage for new caches.
+            // if found, ask user
+            // otherwise the usual stuff.
+            console.log("this article is assumed to be new");
+
+          } else {
+
+            // check local storage for article cache. if one is found, ask user.
+            var document = newestDocumentForUUID(editor.dataStore.uuid);
+            if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
+              editor.dataStore = JSON.parse(document.dataStore);
+            }
+          }
+
         } catch(e) {
           editor.errors.push({ text: i18n.t("errors:load_fail") });
           editor.renderErrors();
