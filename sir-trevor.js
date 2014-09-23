@@ -3926,11 +3926,13 @@
       },
   
       findEmptyTextBlocks: function() {
-        var result = [];
+        var instance = this; result = [];
         this.blocks.forEach(function(block) {
+          instance.saveBlockStateToStore(block);
+          var data = block.getData();
           if ($.inArray(block.type, ["Heading", "text"] !== -1) &&
-               ((block.getData().text === undefined) ||
-               (block.getData().text.trim() === ""))) {
+            ((data.text === undefined) ||
+             (data.text.trim() === ""))) {
             result.push(block);
           }
         });
