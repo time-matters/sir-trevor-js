@@ -3930,7 +3930,7 @@
         this.blocks.forEach(function(block) {
           instance.saveBlockStateToStore(block);
           var data = block.getData();
-          if ($.inArray(block.type, ["Heading", "text"] !== -1) &&
+          if ($.inArray(block.type, ["Heading", "text"]) !== -1 &&
             ((data.text === undefined) ||
              (data.text.trim() === ""))) {
             result.push(block);
