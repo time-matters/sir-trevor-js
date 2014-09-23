@@ -446,12 +446,43 @@
   
     options = options || {};
   
+    var reset = function() {
+      var oldDataStore = editor.dataStore;
+      editor.dataStore = {
+        data: []
+      };
+  
+      if (oldDataStore !== undefined) {
+        editor.dataStore.version = oldDataStore.version;
+        editor.dataStore.uuid = oldDataStore.uuid;
+      }
+  
+      ensureMetadata();
+    };
+  
+    var ensureMetadata = function() {
+      ensureUUID();
+      ensureVersion();
+    };
+  
+    var ensureUUID = function() {
+      if(editor.dataStore.uuid === undefined) {
+        editor.dataStore.uuid = SirTrevor.generateUUID();
+      }
+    };
+  
+    var ensureVersion = function() {
+      if(editor.dataStore.version === undefined) {
+        editor.dataStore.version = 0;
+      }
+    };
+  
     switch(method) {
   
       case "create":
         // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
         var content = _.trim(editor.$el.val());
-        editor.dataStore = { data: [] };
+        reset();
   
         if (content.length > 0) {
           try {
@@ -460,6 +491,7 @@
             if (!_.isUndefined(str.data)) {
               // Set it
               editor.dataStore = str;
+              ensureMetadata();
             }
           } catch(e) {
             editor.errors.push({ text: i18n.t("errors:load_fail") });
@@ -472,7 +504,7 @@
       break;
   
       case "reset":
-        editor.dataStore = { data: [] };
+        reset();
       break;
   
       case "add":
