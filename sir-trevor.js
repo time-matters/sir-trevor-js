@@ -248,6 +248,18 @@
       console.log(message);
     }
   };
+  /*
+  * UUID generator extracted from simple-block.js
+  */
+  
+  SirTrevor.generateUUID = function() {
+    return 'aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa'.
+      replace(/[ab]/g, function(c) {
+        var random = (Math.random()*16)%16 | 0;
+        if (c === 'b') random = random & 0x7 | 0x8; // rfc4122 4.1.1. Variant
+        return random.toString(16);
+      });
+  };
   SirTrevor.Locales = {
     en: {
       general: {
@@ -1587,16 +1599,7 @@
       },
   
       _initUUID: function() {
-  
-        var uuid = this.getData().uuid || (function () {
-          return 'aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa'.
-            replace(/[ab]/g, function(c) {
-              var random = (Math.random()*16)%16 | 0;
-              if (c === 'b') random = random & 0x7 | 0x8; // rfc4122 4.1.1. Variant
-              return random.toString(16);
-            });
-        }());
-  
+        var uuid = this.getData().uuid || SirTrevor.generateUUID();
         this.$el.append(
           $("<input class='st-input-string js-uuid-input' name='uuid' type='hidden' value='" + uuid + "'></input>")
         );
