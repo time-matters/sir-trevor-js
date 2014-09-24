@@ -478,18 +478,43 @@
     };
   
     var isNewArticle = function() {
+      var content = _.trim(editor.$el.val());
+      return content === '' || JSON.parse(content).server_uuid === undefined;
+    };
   
-      // the proper way
-      var content = JSON.parse(_.trim(editor.$el.val()));
-      return content.server_uuid === undefined;
+    var getLatestUnsavedFromUUIDs = function(uuids) {
+      return _.find(uuids, function(uuid) {
+        var result = $.ajax({
+          type: 'GET',
+          url: '/editor/articles/' + uuid + '/version',
+          async: false
+        });
+        return !(result.responseJSON &&
+                 result.responseJSON.article &&
+                 result.responseJSON.article.server_version);
+      });
+    };
   
-      // the easy way
-      // var path = window.location.pathname;
-      // return $.inArray(path, [
-      //   '/editor/articles',
-      //   '/editor/articles/new'
-      // ]) !== -1;
+    var getKeysWithoutServerUUID = function() {
+      var key, keys = [];
+      var prefix = "st-";
   
+      // find eligible keys
+      for (key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          if (key.lastIndexOf(prefix) === 0) {
+            try {
+              if (JSON.parse(localStorage.getItem(key)).server_uuid === undefined) {
+                keys.push(key);
+              }
+            } catch(e) {
+              // i hope nobody ever finds this.
+            }
+          }
+        }
+      }
+  
+      return keys.map(getUUIDFromKey);
     };
   
     var newestDocumentForUUID = function(uuid) {
@@ -516,7 +541,7 @@
       };
     };
   
-    var getUUIDFromKey = function(uuid) {
+    var getUUIDFromKey = function(key) {
       return /st-(.*)-version-(\d+)/.exec(key)[1];
     };
   
@@ -555,7 +580,9 @@
     };
   
     var askUserForConfirmation = function() {
-      return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
+      console.log('replacing the content');
+      return true; // always replace;
+      // return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
     };
   
     switch(method) {
@@ -570,35 +597,41 @@
       break;
   
       case "create":
+        var document, str, uuids, unsaved;
         // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
-        // debugger;
         var content = _.trim(editor.$el.val());
         reset();
   
-        if (content.length > 0) {
+        if (isNewArticle()) {
+  
+          uuids = getKeysWithoutServerUUID();
+          unsaved = getLatestUnsavedFromUUIDs(uuids);
+  
+          if (unsaved !== undefined) {
+  
+            document = newestDocumentForUUID(unsaved);
+            debugger;
+            if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
+              editor.dataStore = JSON.parse(document.dataStore);
+            }
+          }
+  
+        } else {
+  
           try {
+  
             // Ensure the JSON string has a data element that's an array
-            var str = JSON.parse(content);
+            str = JSON.parse(content);
             if (!_.isUndefined(str.data)) {
               // Set it
               editor.dataStore = str;
               ensureMetadata();
             }
   
-            if (isNewArticle()) {
-  
-              // check local storage for new caches.
-              // if found, ask user
-              // otherwise the usual stuff.
-              console.log("this article is assumed to be new");
-  
-            } else {
-  
-              // check local storage for article cache. if one is found, ask user.
-              var document = newestDocumentForUUID(editor.dataStore.uuid);
-              if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
-                editor.dataStore = JSON.parse(document.dataStore);
-              }
+            // check local storage for article cache. if one is found, ask user.
+            document = newestDocumentForUUID(editor.dataStore.uuid);
+            if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
+              editor.dataStore = JSON.parse(document.dataStore);
             }
   
           } catch(e) {
