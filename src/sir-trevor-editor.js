@@ -16,7 +16,8 @@ SirTrevor.Editor = (function(){
 
     bound: ['onFormSubmit', 'showBlockControls', 'hideAllTheThings', 'hideBlockControls',
             'onNewBlockCreated', 'changeBlockPosition', 'onBlockDragStart', 'onBlockDragEnd',
-            'removeBlockDragOver', 'onBlockDropped', 'createBlock', 'restoreDefaultType'],
+            'removeBlockDragOver', 'onBlockDropped', 'createBlock', 'restoreDefaultType',
+            'autosave'],
 
     events: {
       'block:reorder:down':       'hideBlockControls',
@@ -134,9 +135,29 @@ SirTrevor.Editor = (function(){
 
       this.$wrapper.addClass('st-ready');
 
+      // window.setInterval(this.autosave, 2000);
+
       if(!_.isUndefined(this.onEditorRender)) {
         this.onEditorRender();
       }
+
+    },
+
+    autosave: function() {
+      var instance = this;
+      this.store("reset");
+
+      var blockIterator = function(block, index) {
+        var _block = _.find(this.blocks, function(b) {
+          return (b.blockID == $(block).attr('id')); });
+        if (_.isUndefined(_block)) { return false; }
+
+        // Find our block
+        this.saveBlockStateToStore(_block);
+      };
+
+      _.each(this.$wrapper.find('.st-block'), blockIterator, this);
+      this.store('autosave');
     },
 
     restoreDefaultType: function(count) {

@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-23
+ * 2014-09-24
  */
 
 (function ($, _){
@@ -523,11 +523,11 @@
     switch(method) {
   
       case "autosave":
-        var store = editor.dataStore;
-        var value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '';
-        var key = "st-" + store.uuid + "-version-" + store.version;
-        window.localStorage.setItem(key, value);
         editor.dataStore.version = ++editor.dataStore.version;
+        var store = editor.dataStore,
+            value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '',
+            key = "st-" + store.uuid + "-version-" + store.version;
+        window.localStorage.setItem(key, value);
       break;
   
       case "create":
@@ -3597,7 +3597,8 @@
   
       bound: ['onFormSubmit', 'showBlockControls', 'hideAllTheThings', 'hideBlockControls',
               'onNewBlockCreated', 'changeBlockPosition', 'onBlockDragStart', 'onBlockDragEnd',
-              'removeBlockDragOver', 'onBlockDropped', 'createBlock', 'restoreDefaultType'],
+              'removeBlockDragOver', 'onBlockDropped', 'createBlock', 'restoreDefaultType',
+              'autosave'],
   
       events: {
         'block:reorder:down':       'hideBlockControls',
@@ -3715,9 +3716,29 @@
   
         this.$wrapper.addClass('st-ready');
   
+        // window.setInterval(this.autosave, 2000);
+  
         if(!_.isUndefined(this.onEditorRender)) {
           this.onEditorRender();
         }
+  
+      },
+  
+      autosave: function() {
+        var instance = this;
+        this.store("reset");
+  
+        var blockIterator = function(block, index) {
+          var _block = _.find(this.blocks, function(b) {
+            return (b.blockID == $(block).attr('id')); });
+          if (_.isUndefined(_block)) { return false; }
+  
+          // Find our block
+          this.saveBlockStateToStore(_block);
+        };
+  
+        _.each(this.$wrapper.find('.st-block'), blockIterator, this);
+        this.store('autosave');
       },
   
       restoreDefaultType: function(count) {

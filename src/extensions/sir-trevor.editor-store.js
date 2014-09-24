@@ -86,11 +86,11 @@ SirTrevor.editorStore = function(editor, method, options) {
   switch(method) {
 
     case "autosave":
-      var store = editor.dataStore;
-      var value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '';
-      var key = "st-" + store.uuid + "-version-" + store.version;
-      window.localStorage.setItem(key, value);
       editor.dataStore.version = ++editor.dataStore.version;
+      var store = editor.dataStore,
+          value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '',
+          key = "st-" + store.uuid + "-version-" + store.version;
+      window.localStorage.setItem(key, value);
     break;
 
     case "create":
