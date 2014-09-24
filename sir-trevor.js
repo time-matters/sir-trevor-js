@@ -480,15 +480,15 @@
     var isNewArticle = function() {
   
       // the proper way
-      // var content = JSON.parse(_.trim(editor.$el.val()));
-      // return content['server-version'] === undefined;
+      var content = JSON.parse(_.trim(editor.$el.val()));
+      return content.server_uuid === undefined;
   
       // the easy way
-      var path = window.location.pathname;
-      return $.inArray(path, [
-        '/editor/articles',
-        '/editor/articles/new'
-      ]) !== -1;
+      // var path = window.location.pathname;
+      // return $.inArray(path, [
+      //   '/editor/articles',
+      //   '/editor/articles/new'
+      // ]) !== -1;
   
     };
   
@@ -516,6 +516,44 @@
       };
     };
   
+    var getUUIDFromKey = function(uuid) {
+      return /st-(.*)-version-(\d+)/.exec(key)[1];
+    };
+  
+    var getAllUUIDs = function() {
+      var key, keys = [];
+  
+      // get all keys
+      for (key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          if (key.lastIndexOf('st-') === 0) {
+            keys.push(getUUIDFromKey(key));
+          }
+        }
+      }
+      return _.uniq(keys);
+    };
+  
+    var removeOldAutosaves = function() {
+      var uuids = getAllUUIDs();
+      var keysToKeep = uuids.map(function(uuid) {
+        return 'st-' + uuid + '-version-' + newestDocumentForUUID(uuid).version;
+      });
+  
+      var key, keys = [];
+  
+      // get all keys
+      for (key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          if (key.lastIndexOf('st-') === 0) {
+            if ($.inArray(key, keysToKeep) === -1) {
+              localStorage.removeItem(key);
+            }
+          }
+        }
+      }
+    };
+  
     var askUserForConfirmation = function() {
       return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
     };
@@ -528,10 +566,12 @@
             value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '',
             key = "st-" + store.uuid + "-version-" + store.version;
         window.localStorage.setItem(key, value);
+        removeOldAutosaves();
       break;
   
       case "create":
         // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
+        // debugger;
         var content = _.trim(editor.$el.val());
         reset();
   
