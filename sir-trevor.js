@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-09-23
+ * 2014-09-25
  */
 
 (function ($, _){
@@ -327,7 +327,7 @@
         'position':         'Absatz verschieben',
         'wait':             'Bitte warten…',
         'link':             'Link eingeben',
-        'note':             'Anmerkung hinzufügen',
+        'note':             'Anmerkung',
         'style':            'Style'
       },
       errors: {

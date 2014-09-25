@@ -77,7 +77,7 @@ SirTrevor.Locales = {
       'position':         'Absatz verschieben',
       'wait':             'Bitte warten…',
       'link':             'Link eingeben',
-      'note':             'Anmerkung hinzufügen',
+      'note':             'Anmerkung',
       'style':            'Style'
     },
     errors: {
