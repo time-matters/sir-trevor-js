@@ -4,7 +4,7 @@ SirTrevor.Blocks.Audio = (function(){
       soundcloud: {
         regex: /((?:http[s]?:\/\/)?(?:www.)?(:?soundcloud.com\/(.*)))/,
         html: function(callback, options) {
-          $.getJSON('http://soundcloud.com/oembed?callback=?', {
+          $.getJSON('https://soundcloud.com/oembed?callback=?', {
             format: 'js',
             url: options.remote_id,
             iframe: true
