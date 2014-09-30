@@ -598,9 +598,9 @@
     };
   
     var promptRestoration = function() {
-      var warn = $('<div class="st-autoload-info">Dieser Artikel wurde aus dem Zwischenspeicher dieses Browsers geladen. Er wurde zuvor geändert und nicht auf dem Server gesichert. Du kannst die Änderungen beibehalten indem du ihn speicherst oder die Änderungen verwerfen.<br></div>');
+      var warn = $('<div class="st-autoload-info">Dieser Artikel wurde aus dem Zwischenspeicher dieses Browsers geladen. Er wurde zuvor geändert und nicht auf dem Server gesichert. Du kannst die Änderungen beibehalten indem du speicherst oder die Änderungen verwerfen.<br></div>');
       var discard = $('<a href="#" class="st-autoload-discard-button">Verwerfen</a>');
-      var close = $('<a href="#" class="st-autoload-close-button btn--deny-delete st-icon" data-icon="close"></a>');
+      var close = $('<a href="#" class="st-icon st-autoload-close-button" data-icon="close"></a>');
   
       warn.append(discard);
       warn.append(close);
@@ -3832,7 +3832,7 @@
   
         this.$wrapper.addClass('st-ready');
   
-        // window.setInterval(this.autosave, 2000);
+        window.setInterval(this.autosave, 20 * 1000);
   
         if(!_.isUndefined(this.onEditorRender)) {
           this.onEditorRender();

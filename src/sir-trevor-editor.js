@@ -135,7 +135,7 @@ SirTrevor.Editor = (function(){
 
       this.$wrapper.addClass('st-ready');
 
-      // window.setInterval(this.autosave, 2000);
+      window.setInterval(this.autosave, 20 * 1000);
 
       if(!_.isUndefined(this.onEditorRender)) {
         this.onEditorRender();
