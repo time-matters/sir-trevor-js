@@ -136,6 +136,7 @@
   //= blocks/extended-image.js
   //= blocks/text.js
   //= blocks/tweet.js
+  //= blocks/extended-tweet.js
   //= blocks/unordered-list.js
   //= blocks/video.js
   //= blocks/audio.js
