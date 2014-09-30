@@ -18,6 +18,8 @@ SirTrevor.editorStore = function(editor, method, options) {
     if (oldDataStore !== undefined) {
       editor.dataStore.version = oldDataStore.version;
       editor.dataStore.uuid = oldDataStore.uuid;
+      editor.dataStore.server_version = oldDataStore.serverserver__version;
+      editor.dataStore.server_uuid = oldDataStore.server_uuid;
     }
 
     ensureMetadata();
@@ -122,6 +124,16 @@ SirTrevor.editorStore = function(editor, method, options) {
     return _.uniq(keys);
   };
 
+  var removeAllForUUID = function(uuid) {
+    var key, document, stop = false;
+    while (!stop) {
+      document = newestDocumentForUUID(uuid);
+      key = 'st-' + uuid + '-version-' + document.version;
+      stop = !localStorage.hasOwnProperty(key);
+      localStorage.removeItem(key);
+    }
+  };
+
   var removeOldAutosaves = function() {
     var uuids = getAllUUIDs();
     var keysToKeep = uuids.map(function(uuid) {
@@ -148,6 +160,30 @@ SirTrevor.editorStore = function(editor, method, options) {
     // return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
   };
 
+  var promptRestoration = function() {
+    var warn = $('<div class="st-autoload-info">Dieser Artikel wurde aus dem Zwischenspeicher dieses Browsers geladen. Er wurde zuvor geändert und nicht auf dem Server gesichert. Du kannst die Änderungen beibehalten indem du ihn speicherst oder die Änderungen verwerfen.<br></div>');
+    var discard = $('<a href="#" class="st-autoload-discard-button">Verwerfen</a>');
+    var close = $('<a href="#" class="st-autoload-close-button btn--deny-delete st-icon" data-icon="close"></a>');
+
+    warn.append(discard);
+    warn.append(close);
+
+    close.on('click', function(e) {
+      e.preventDefault();
+      warn.remove();
+      return false;
+    });
+
+    discard.on('click', function(e) {
+      e.preventDefault();
+      editor.store('restore');
+      warn.remove();
+      return false;
+    });
+
+    editor.$outer.prepend(warn);
+  };
+
   switch(method) {
 
     case "autosave":
@@ -159,11 +195,29 @@ SirTrevor.editorStore = function(editor, method, options) {
       removeOldAutosaves();
     break;
 
+    case "restore":
+      removeAllForUUID(editor.dataStore.uuid);
+      editor.reinitialize();
+    break;
+
     case "create":
       var document, str, uuids, unsaved;
       // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
       var content = _.trim(editor.$el.val());
+
       reset();
+
+      // Ensure the JSON string has a data element that's an array
+      try {
+        str = JSON.parse(content);
+        if (!_.isUndefined(str.data)) {
+          // Set it
+          editor.dataStore = str;
+          ensureMetadata();
+        }
+      } catch (e) {
+        // nop.
+      }
 
       if (isNewArticle()) {
 
@@ -173,9 +227,9 @@ SirTrevor.editorStore = function(editor, method, options) {
         if (unsaved !== undefined) {
 
           document = newestDocumentForUUID(unsaved);
-          debugger;
           if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
             editor.dataStore = JSON.parse(document.dataStore);
+            promptRestoration();
           }
         }
 
@@ -183,18 +237,11 @@ SirTrevor.editorStore = function(editor, method, options) {
 
         try {
 
-          // Ensure the JSON string has a data element that's an array
-          str = JSON.parse(content);
-          if (!_.isUndefined(str.data)) {
-            // Set it
-            editor.dataStore = str;
-            ensureMetadata();
-          }
-
           // check local storage for article cache. if one is found, ask user.
           document = newestDocumentForUUID(editor.dataStore.uuid);
           if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
             editor.dataStore = JSON.parse(document.dataStore);
+            promptRestoration();
           }
 
         } catch(e) {

@@ -192,10 +192,6 @@ SirTrevor.Block = (function(){
       this.getTextBlock().blur();
     },
 
-    onHover: function() {
-      debugger;
-    },
-
     onFocus: function() {
       this.getTextBlock().bind('focus', this._onFocus);
     },
