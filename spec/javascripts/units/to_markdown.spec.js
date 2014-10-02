@@ -127,25 +127,25 @@ describe("toMarkdown", function(){
     expect(markdown).toBe("test\\-something");
   });
 
-  it("strips whitepace from bolds", function(){
+  it("strips whitespace from bolds", function(){
     var html = "<b> Test</b>",
         markdown = SirTrevor.toMarkdown(html, "Text");
 
     expect(markdown).toBe(" **Test**");
   });
 
-  it("strips whitepace from italics", function(){
+  it("strips whitespace from italics", function(){
     var html = "<i> Test</i>",
         markdown = SirTrevor.toMarkdown(html, "Text");
 
     expect(markdown).toBe(" _Test_");
   });
 
-  it("strips whitepace from links", function(){
+  it("strips whitespace from links", function(){
     var html = "<a href='test'> test</a>",
         markdown = SirTrevor.toMarkdown(html, "Text");
 
-    expect(markdown).toBe("[test](test)");
+    expect(markdown).toBe(" [test](test)");
   });
 
   it("removes newlines from bolds", function(){

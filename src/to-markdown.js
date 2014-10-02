@@ -38,21 +38,23 @@ SirTrevor.toMarkdown = function(content, type) {
     markdown = markdown.replace(tagStripper, '<br>');
   }
 
-  function replaceBolds(match, p1, p2, p3){
+  function replaceBolds(match, p1, p2, p3) {
     if(_.isUndefined(p3)) { p3 = ''; }
     return p1 + "**" + p2.replace(/<(.)?br(.)?>/g, '') + "**" + p3;
   }
 
-  function replaceItalics(match, p1, p2, p3){
+  function replaceItalics(match, p1, p2, p3) {
     if(_.isUndefined(p3)) { p3 = ''; }
     return p1 + "_" + p2.replace(/<(.)?br(.)?>/g, '') + "_" + p3;
   }
 
+  function replaceHyperlinks(match, p1, p2, p3, p4) {
+    return p2 + "[" + p3.trim().replace(/<(.)?br(.)?>/g, '') + "]("+ p1 +")" + p4;
+  }
+
   markdown = markdown.replace(/<(\w+)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>\s*<\/\1>/gim, '') //Empty elements
                       .replace(/\n/mg,"")
-                      .replace(/<a.*?href=[""'](.*?)[""'].*?>(.*?)<\/a>/gim, function(match, p1, p2){
-                        return "[" + p2.trim().replace(/<(.)?br(.)?>/g, '') + "]("+ p1 +")";
-                      }) // Hyperlinks
+                      .replace(/<a.*?href=[""'](.*?)[""'].*?>(\s*)(.*?)(\s*)<\/a>/gim, replaceHyperlinks) // Hyperlinks
                       .replace(/<strong>(\s*)(.*?)(\s)*?<\/strong>/gim, replaceBolds)
                       .replace(/<b>(\s*)(.*?)(\s*)?<\/b>/gim, replaceBolds)
                       .replace(/<em>(\s*)(.*?)(\s*)?<\/em>/gim, replaceItalics)
