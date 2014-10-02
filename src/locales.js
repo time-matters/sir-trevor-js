@@ -48,6 +48,9 @@ SirTrevor.Locales = {
       audio: {
         'title': "Audio"
       },
+      infographic: {
+        'title': "Infographic"
+      },
       video: {
         'title': "Video"
       },
@@ -113,6 +116,9 @@ SirTrevor.Locales = {
       },
       audio: {
         'title': "Audio"
+      },
+      infographic: {
+        'title': "Infografik"
       },
       video: {
         'title': "Video"
