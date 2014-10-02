@@ -138,6 +138,7 @@
   //= blocks/tweet.js
   //= blocks/extended-tweet.js
   //= blocks/unordered-list.js
+  //= blocks/infographic.js
   //= blocks/video.js
   //= blocks/audio.js
 
