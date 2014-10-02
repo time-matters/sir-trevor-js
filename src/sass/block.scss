@@ -141,3 +141,11 @@ ul.st-text-block {
 .st-msg--error {
   color: $error-color;
 }
+
+.st-block aside {
+  text-align: right;
+  font-size: x-small;
+  font-style: italic;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-02
+ * 2014-10-07
  */
 
 (function ($, _){
@@ -274,8 +274,10 @@
         'wait':             'Please wait…',
         'link':             'Enter a link',
         'note':             'Note',
-        'style':            'Style'
+        'style':            'Style',
+        'source':           'Source'
       },
+  
       errors: {
         'title': "You have the following errors:",
         'validation_fail': "__type__ block is invalid",
@@ -343,7 +345,8 @@
         'wait':             'Bitte warten…',
         'link':             'Link eingeben',
         'note':             'Anmerkung',
-        'style':            'Style'
+        'style':            'Style',
+        'source':           'Quelle'
       },
       errors: {
         'title': "Folgende Fehler sind aufgetreten:",
@@ -3285,6 +3288,12 @@
         { name: 'Full-width', value: 'fullwidth', className: 'default' }
       ],
   
+      extractSourceInformation: function() {
+        var url = this.$editor.find('iframe').attr('src');
+        this.$editor.parents('.st-block').append(
+          '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+      },
+  
       loadData: function(data){
         if (!this.providers.hasOwnProperty(data.source)) { return; }
   
@@ -3300,6 +3309,7 @@
           .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
   
         this.$editor.html(embed_string);
+        this.extractSourceInformation();
       },
   
       onContentPasted: function(event){

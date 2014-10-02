@@ -242,6 +242,13 @@ ul.st-text-block {
 .st-msg--error {
   color: #d70014; }
 
+.st-block aside {
+  text-align: right;
+  font-size: x-small;
+  font-style: italic;
+  margin-bottom: 0;
+  padding-bottom: 0; }
+
 .st-block-positioner {
   border: 0.125em solid;
   position: absolute;

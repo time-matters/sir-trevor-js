@@ -28,6 +28,12 @@ SirTrevor.Blocks.Video = (function(){
       { name: 'Full-width', value: 'fullwidth', className: 'default' }
     ],
 
+    extractSourceInformation: function() {
+      var url = this.$editor.find('iframe').attr('src');
+      this.$editor.parents('.st-block').append(
+        '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+    },
+
     loadData: function(data){
       if (!this.providers.hasOwnProperty(data.source)) { return; }
 
@@ -43,6 +49,7 @@ SirTrevor.Blocks.Video = (function(){
         .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
 
       this.$editor.html(embed_string);
+      this.extractSourceInformation();
     },
 
     onContentPasted: function(event){
