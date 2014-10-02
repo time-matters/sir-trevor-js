@@ -13,7 +13,8 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
   styleable: true,
   styles: [
     { name: 'Default', value: 'default', className: 'default' },
-    { name: 'Full-width', value: 'fullwidth', className: 'default' }
+    { name: 'Body-width', value: 'bodywidth', className: 'bodywidth' },
+    { name: 'Full-width', value: 'fullwidth', className: 'fullwidth' }
   ],
 
   icon_name: 'image',
