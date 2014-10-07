@@ -1421,20 +1421,32 @@
   
       onDragStart: function(ev) {
         var btn = $(ev.currentTarget).parent();
+        var self = this;
+  
+        var scrollTop = $('body').scrollTop();
+        var position = this.$block.position();
   
         ev.originalEvent.dataTransfer.setDragImage(this.$block[0], btn.position().left, btn.position().top);
         ev.originalEvent.dataTransfer.setData('Text', this.blockID);
   
-        SirTrevor.EventBus.trigger("block:reorder:dragstart", this.blockID);
-        this.$block.addClass('st-block--dragging');
+        window.setTimeout(function() {
+          SirTrevor.EventBus.trigger("block:reorder:dragstart", self.blockID);
+          self.$block.addClass('st-block--dragging');
+          $('body').scrollTop(scrollTop - position.top + self.$block.position().top);
+        }, 0);
       },
   
       onDragEnd: function(ev) {
+        var scrollTop = $('body').scrollTop();
+        var position = this.$block.position();
+  
         SirTrevor.EventBus.trigger("block:reorder:dragend", this.blockID);
         this.$block.removeClass('st-block--dragging');
+  
+        $('body').scrollTop(scrollTop - position.top + this.$block.position().top);
       },
   
-      onDrag: function(ev){},
+      onDrag: function(ev) {},
   
       onClick: function(event) {
         var $target, idx;
