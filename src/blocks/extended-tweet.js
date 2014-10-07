@@ -22,7 +22,7 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
             hide_thread: 1,
             iframe: true
           }, function(data) {
-            callback(data.html);
+            callback(data.html, options);
           });
         }
       }
@@ -36,20 +36,21 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
 
     icon_name: 'twitter',
 
+    extractSourceInformation: function(options) {
+      var url = options.remote_id;
+      this.$editor.parents('.st-block').append(
+        '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+    },
+
     loadData: function(data){
       if (!this.providers.hasOwnProperty(data.source)) { return; }
-
-      // if (this.providers[data.source].square) {
-      //   this.$editor.addClass('st-block__editor--with-square-media');
-      // } else {
-      //   this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-      // }
 
       var embed_string, self = this;
       var html = this.providers[data.source].html;
 
-      var update_editor = function(embed_string) {
+      var update_editor = function(embed_string, options) {
         self.$editor.html(embed_string);
+        self.extractSourceInformation(options);
       };
 
       if (html instanceof Function) {
@@ -68,7 +69,6 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
           .replace('{{width}}', this.$editor.width());
         update_editor();
       }
-
     },
 
     onContentPasted: function(event){

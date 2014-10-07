@@ -12,8 +12,10 @@ SirTrevor.Locales = {
       'wait':             'Please wait…',
       'link':             'Enter a link',
       'note':             'Note',
-      'style':            'Style'
+      'style':            'Style',
+      'source':           'Source'
     },
+
     errors: {
       'title': "You have the following errors:",
       'validation_fail': "__type__ block is invalid",
@@ -81,7 +83,8 @@ SirTrevor.Locales = {
       'wait':             'Bitte warten…',
       'link':             'Link eingeben',
       'note':             'Anmerkung',
-      'style':            'Style'
+      'style':            'Style',
+      'source':           'Quelle'
     },
     errors: {
       'title': "Folgende Fehler sind aufgetreten:",
