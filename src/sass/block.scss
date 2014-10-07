@@ -143,9 +143,12 @@ ul.st-text-block {
 }
 
 .st-block aside {
-  text-align: right;
   font-size: x-small;
   font-style: italic;
+  line-height: 1.2;
   margin-bottom: 0;
   padding-bottom: 0;
+  padding-top: 8px;
+  text-align: right;
+  word-break: break-all;
 }

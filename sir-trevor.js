@@ -3035,7 +3035,7 @@
               hide_thread: 1,
               iframe: true
             }, function(data) {
-              callback(data.html);
+              callback(data.html, options);
             });
           }
         }
@@ -3049,20 +3049,21 @@
   
       icon_name: 'twitter',
   
+      extractSourceInformation: function(options) {
+        var url = options.remote_id;
+        this.$editor.parents('.st-block').append(
+          '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+      },
+  
       loadData: function(data){
         if (!this.providers.hasOwnProperty(data.source)) { return; }
-  
-        // if (this.providers[data.source].square) {
-        //   this.$editor.addClass('st-block__editor--with-square-media');
-        // } else {
-        //   this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-        // }
   
         var embed_string, self = this;
         var html = this.providers[data.source].html;
   
-        var update_editor = function(embed_string) {
+        var update_editor = function(embed_string, options) {
           self.$editor.html(embed_string);
+          self.extractSourceInformation(options);
         };
   
         if (html instanceof Function) {
@@ -3081,7 +3082,6 @@
             .replace('{{width}}', this.$editor.width());
           update_editor();
         }
-  
       },
   
       onContentPasted: function(event){
@@ -3198,6 +3198,12 @@
   
       icon_name: 'image',
   
+      extractSourceInformation: function() {
+        var url = this.$editor.find('iframe').attr('src');
+        this.$editor.parents('.st-block').append(
+          '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+      },
+  
       loadData: function(data){
         if (!this.providers.hasOwnProperty(data.source)) { return; }
   
@@ -3207,6 +3213,7 @@
           .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
   
         this.$editor.html(embed_string);
+        this.extractSourceInformation();
       },
   
       onContentPasted: function(event){
@@ -3369,6 +3376,12 @@
   
       icon_name: 'video',
   
+      extractSourceInformation: function() {
+        var url = this.$editor.find('iframe').attr('src');
+        this.$editor.parents('.st-block').append(
+          '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+      },
+  
       loadData: function(data){
         if (!this.providers.hasOwnProperty(data.source)) { return; }
   
@@ -3383,6 +3396,7 @@
   
         var update_editor = function(embed_string) {
           self.$editor.html(embed_string);
+          self.extractSourceInformation();
         };
   
         if (html instanceof Function) {
@@ -3401,7 +3415,6 @@
             .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
           update_editor();
         }
-  
       },
   
       onContentPasted: function(event){

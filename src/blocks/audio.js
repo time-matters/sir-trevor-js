@@ -23,6 +23,12 @@ SirTrevor.Blocks.Audio = (function(){
 
     icon_name: 'video',
 
+    extractSourceInformation: function() {
+      var url = this.$editor.find('iframe').attr('src');
+      this.$editor.parents('.st-block').append(
+        '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+    },
+
     loadData: function(data){
       if (!this.providers.hasOwnProperty(data.source)) { return; }
 
@@ -37,6 +43,7 @@ SirTrevor.Blocks.Audio = (function(){
 
       var update_editor = function(embed_string) {
         self.$editor.html(embed_string);
+        self.extractSourceInformation();
       };
 
       if (html instanceof Function) {
@@ -55,7 +62,6 @@ SirTrevor.Blocks.Audio = (function(){
           .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
         update_editor();
       }
-
     },
 
     onContentPasted: function(event){
