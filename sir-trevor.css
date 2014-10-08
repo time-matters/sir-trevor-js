@@ -135,12 +135,17 @@
 .with-st-controls:before {
   display: none; }
 
+.st-outer--is-reordering .st-block:after,
 .st-outer--is-reordering .st-block.st-drag-over:after,
 .st-outer--is-reordering .st-block.st-drag-over:last-child:after {
+  background: white;
+  font-size: x-small;
+  height: 20px;
   font-family: inherit;
   content: "Drop block here";
   text-align: center;
-  padding: 0.7em 0; }
+  padding: 0.7em 0;
+  display: block; }
 
 ul.st-text-block {
   margin-left: 1.875em; }
