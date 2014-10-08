@@ -2846,7 +2846,7 @@
       var copyright = $([
         "<label class='st-input-label'>" + i18n.t('blocks:extended_image:copyright_field') +
         "</label>",
-        "<input type='text' maxlength='140' name='copyright' class='st-input-string st-required js-copyright-input'",
+        "<input type='text' maxlength='140' name='copyright' class='st-input-string js-copyright-input'",
         "placeholder='" + i18n.t("blocks:extended_image:copyright_placeholder") + "'></input>"
       ].join("\n"));
       figure.append(copyright);
@@ -2854,7 +2854,7 @@
       var caption = $([
         "<label class='st-input-label'>" + i18n.t('blocks:extended_image:caption_field') +
         "</label>",
-        "<input type='text' name='caption' class='st-input-string st-required js-caption-input'",
+        "<input type='text' name='caption' class='st-input-string js-caption-input'",
         "placeholder='" + i18n.t("blocks:extended_image:caption_placeholder") + "'></input>"
       ].join("\n"));
       figure.append(caption);
