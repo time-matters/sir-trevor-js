@@ -157,3 +157,12 @@ ul.st-text-block {
   text-align: right;
   word-break: break-all;
 }
+
+.st-divider {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  hr {
+    margin: 0;
+    padding: 0;
+  }
+}

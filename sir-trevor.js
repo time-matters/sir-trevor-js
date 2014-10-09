@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-08
+ * 2014-10-09
  */
 
 (function ($, _){
@@ -309,6 +309,9 @@
           'title': "Image",
           'upload_error': "There was a problem with your upload"
         },
+        divider: {
+          'title': "Divider"
+        },
         audio: {
           'title': "Audio"
         },
@@ -378,6 +381,9 @@
         image: {
           'title': "Bild",
           'upload_error': "es gab ein problem beim hochladen"
+        },
+        divider: {
+          'title': "Trenner"
         },
         audio: {
           'title': "Audio"
@@ -2764,6 +2770,121 @@
     }
   });
   /*
+    Text Block
+  */
+  SirTrevor.Blocks.Text = SirTrevor.Block.extend({
+  
+    type: "text",
+  
+    title: function() { return i18n.t('blocks:text:title'); },
+  
+    editorHTML: '<div class="st-required st-text-block" contenteditable="true"></div>',
+  
+    icon_name: 'text',
+    changeable: ['Heading', 'quote'],
+  
+    loadData: function(data){
+      this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+    }
+  });
+  /*
+    Unordered List
+  */
+  
+  SirTrevor.Blocks.List = (function() {
+  
+    var template = '<div class="st-text-block st-required" contenteditable="true"><ul><li></li></ul></div>';
+  
+    return SirTrevor.Block.extend({
+  
+      type: 'list',
+  
+      title: function() { return i18n.t('blocks:list:title'); },
+  
+      icon_name: 'list',
+  
+      editorHTML: function() {
+        return _.template(template, this);
+      },
+  
+      loadData: function(data){
+        this.getTextBlock().html("<ul>" + SirTrevor.toHTML(data.text, this.type) + "</ul>");
+      },
+  
+      onBlockRender: function() {
+        this.checkForList = _.bind(this.checkForList, this);
+        this.getTextBlock().on('click keyup', this.checkForList);
+      },
+  
+      checkForList: function() {
+        if (this.$('ul').length === 0) {
+          document.execCommand("insertUnorderedList", false, false);
+        }
+      },
+  
+      toMarkdown: function(markdown) {
+        return markdown.replace(/<\/li>/mg,"\n")
+                       .replace(/<\/?[^>]+(>|$)/g, "")
+                       .replace(/^(.+)$/mg," - $1");
+      },
+  
+      toHTML: function(html) {
+        html = html.replace(/^ - (.+)$/mg,"<li>$1</li>")
+                   .replace(/\n/mg, "");
+  
+        return html;
+      },
+  
+      onContentPasted: function(event, target) {
+        var replace = this.pastedMarkdownToHTML(target[0].innerHTML),
+            list = this.$('ul').html(replace);
+  
+        this.getTextBlock().caretToEnd();
+      },
+  
+      isEmpty: function() {
+        return _.isEmpty(this.saveAndGetData().text);
+      }
+  
+    });
+  
+  })();
+  /*
+    Divider
+  */
+  
+  SirTrevor.Blocks.Divider = (function() {
+  
+    var template = '<div class="st-divider"><hr></div>';
+  
+    return SirTrevor.Block.extend({
+  
+      type: 'divider',
+  
+      title: function() { return i18n.t('blocks:divider:title'); },
+  
+      icon_name: 'list',
+  
+      editorHTML: function() {
+        return _.template(template, this);
+      },
+  
+      toMarkdown: function(markdown) {
+        return "---------------------------------------";
+      },
+  
+      toHTML: function(html) {
+        return template;
+      },
+  
+      isEmpty: function() {
+        return false;
+      }
+  
+    });
+  
+  })();
+  /*
     Simple Image Block
   */
   
@@ -2906,24 +3027,92 @@
   
     }
   });
-  /*
-    Text Block
-  */
-  SirTrevor.Blocks.Text = SirTrevor.Block.extend({
+  SirTrevor.Blocks.Video = (function(){
   
-    type: "text",
+    return SirTrevor.Block.extend({
   
-    title: function() { return i18n.t('blocks:text:title'); },
+      // more providers at https://gist.github.com/jeffling/a9629ae28e076785a14f
+      providers: {
+        vimeo: {
+          regex: /(?:http[s]?:\/\/)?(?:www.)?vimeo.com\/(.+)/,
+          html: "<iframe src=\"{{protocol}}//player.vimeo.com/video/{{remote_id}}?title=0&byline=0\" width=\"580\" height=\"320\" frameborder=\"0\"></iframe>"
+        },
+        youtube: {
+          regex: /(?:http[s]?:\/\/)?(?:www.)?(?:(?:youtube.com\/watch\?(?:.*)(?:v=))|(?:youtu.be\/))([^&].+)/,
+          html: "<iframe src=\"{{protocol}}//www.youtube.com/embed/{{remote_id}}\" width=\"580\" height=\"320\" frameborder=\"0\" allowfullscreen></iframe>"
+        }
+      },
   
-    editorHTML: '<div class="st-required st-text-block" contenteditable="true"></div>',
+      type: 'video',
+      title: function() { return i18n.t('blocks:video:title'); },
   
-    icon_name: 'text',
-    changeable: ['Heading', 'quote'],
+      droppable: true,
+      pastable: true,
   
-    loadData: function(data){
-      this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
-    }
-  });
+      icon_name: 'video',
+  
+      styleable: true,
+      styles: [
+        { name: 'Default', value: 'default', className: 'default' },
+        { name: 'Full-width', value: 'fullwidth', className: 'default' }
+      ],
+  
+      extractSourceInformation: function() {
+        var url = this.$editor.find('iframe').attr('src');
+        this.$editor.parents('.st-block').append(
+          '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
+      },
+  
+      loadData: function(data){
+        if (!this.providers.hasOwnProperty(data.source)) { return; }
+  
+        if (this.providers[data.source].square) {
+          this.$editor.addClass('st-block__editor--with-square-media');
+        } else {
+          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+        }
+  
+        var embed_string = this.providers[data.source].html
+          .replace('{{protocol}}', window.location.protocol)
+          .replace('{{remote_id}}', data.remote_id)
+          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+  
+        this.$editor.html(embed_string);
+        this.extractSourceInformation();
+      },
+  
+      onContentPasted: function(event){
+        this.handleDropPaste($(event.target).val());
+      },
+  
+      handleDropPaste: function(url){
+        if(!_.isURI(url)) {
+          return;
+        }
+  
+        var match, data;
+  
+        _.each(this.providers, function(provider, index) {
+          match = provider.regex.exec(url);
+  
+          if(match !== null && !_.isUndefined(match[1])) {
+            data = {
+              source: index,
+              remote_id: match[1]
+            };
+  
+            this.setAndLoadData(data);
+          }
+        }, this);
+      },
+  
+      onDrop: function(transferData){
+        var url = transferData.getData('text/plain');
+        this.handleDropPaste(url);
+      }
+    });
+  
+  })();
   SirTrevor.Blocks.Tweet = (function(){
   
     var tweet_template = _.template([
@@ -3133,68 +3322,6 @@
     });
   
   })();
-  /*
-    Unordered List
-  */
-  
-  SirTrevor.Blocks.List = (function() {
-  
-    var template = '<div class="st-text-block st-required" contenteditable="true"><ul><li></li></ul></div>';
-  
-    return SirTrevor.Block.extend({
-  
-      type: 'list',
-  
-      title: function() { return i18n.t('blocks:list:title'); },
-  
-      icon_name: 'list',
-  
-      editorHTML: function() {
-        return _.template(template, this);
-      },
-  
-      loadData: function(data){
-        this.getTextBlock().html("<ul>" + SirTrevor.toHTML(data.text, this.type) + "</ul>");
-      },
-  
-      onBlockRender: function() {
-        this.checkForList = _.bind(this.checkForList, this);
-        this.getTextBlock().on('click keyup', this.checkForList);
-      },
-  
-      checkForList: function() {
-        if (this.$('ul').length === 0) {
-          document.execCommand("insertUnorderedList", false, false);
-        }
-      },
-  
-      toMarkdown: function(markdown) {
-        return markdown.replace(/<\/li>/mg,"\n")
-                       .replace(/<\/?[^>]+(>|$)/g, "")
-                       .replace(/^(.+)$/mg," - $1");
-      },
-  
-      toHTML: function(html) {
-        html = html.replace(/^ - (.+)$/mg,"<li>$1</li>")
-                   .replace(/\n/mg, "");
-  
-        return html;
-      },
-  
-      onContentPasted: function(event, target) {
-        var replace = this.pastedMarkdownToHTML(target[0].innerHTML),
-            list = this.$('ul').html(replace);
-  
-        this.getTextBlock().caretToEnd();
-      },
-  
-      isEmpty: function() {
-        return _.isEmpty(this.saveAndGetData().text);
-      }
-  
-    });
-  
-  })();
   SirTrevor.Blocks.Infographic = (function(){
   
     return SirTrevor.Block.extend({
@@ -3282,92 +3409,6 @@
       frame.style.height = height;
     }
   };
-  SirTrevor.Blocks.Video = (function(){
-  
-    return SirTrevor.Block.extend({
-  
-      // more providers at https://gist.github.com/jeffling/a9629ae28e076785a14f
-      providers: {
-        vimeo: {
-          regex: /(?:http[s]?:\/\/)?(?:www.)?vimeo.com\/(.+)/,
-          html: "<iframe src=\"{{protocol}}//player.vimeo.com/video/{{remote_id}}?title=0&byline=0\" width=\"580\" height=\"320\" frameborder=\"0\"></iframe>"
-        },
-        youtube: {
-          regex: /(?:http[s]?:\/\/)?(?:www.)?(?:(?:youtube.com\/watch\?(?:.*)(?:v=))|(?:youtu.be\/))([^&].+)/,
-          html: "<iframe src=\"{{protocol}}//www.youtube.com/embed/{{remote_id}}\" width=\"580\" height=\"320\" frameborder=\"0\" allowfullscreen></iframe>"
-        }
-      },
-  
-      type: 'video',
-      title: function() { return i18n.t('blocks:video:title'); },
-  
-      droppable: true,
-      pastable: true,
-  
-      icon_name: 'video',
-  
-      styleable: true,
-      styles: [
-        { name: 'Default', value: 'default', className: 'default' },
-        { name: 'Full-width', value: 'fullwidth', className: 'default' }
-      ],
-  
-      extractSourceInformation: function() {
-        var url = this.$editor.find('iframe').attr('src');
-        this.$editor.parents('.st-block').append(
-          '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
-      },
-  
-      loadData: function(data){
-        if (!this.providers.hasOwnProperty(data.source)) { return; }
-  
-        if (this.providers[data.source].square) {
-          this.$editor.addClass('st-block__editor--with-square-media');
-        } else {
-          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-        }
-  
-        var embed_string = this.providers[data.source].html
-          .replace('{{protocol}}', window.location.protocol)
-          .replace('{{remote_id}}', data.remote_id)
-          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
-  
-        this.$editor.html(embed_string);
-        this.extractSourceInformation();
-      },
-  
-      onContentPasted: function(event){
-        this.handleDropPaste($(event.target).val());
-      },
-  
-      handleDropPaste: function(url){
-        if(!_.isURI(url)) {
-          return;
-        }
-  
-        var match, data;
-  
-        _.each(this.providers, function(provider, index) {
-          match = provider.regex.exec(url);
-  
-          if(match !== null && !_.isUndefined(match[1])) {
-            data = {
-              source: index,
-              remote_id: match[1]
-            };
-  
-            this.setAndLoadData(data);
-          }
-        }, this);
-      },
-  
-      onDrop: function(transferData){
-        var url = transferData.getData('text/plain');
-        this.handleDropPaste(url);
-      }
-    });
-  
-  })();
   SirTrevor.Blocks.Audio = (function(){
     return SirTrevor.Block.extend({
       providers: {
