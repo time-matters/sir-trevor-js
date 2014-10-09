@@ -529,6 +529,11 @@
     };
   
     var newestDocumentForUUID = function(uuid) {
+  
+      if (editor.options.localStorage !== true) {
+        return {};
+      }
+  
       var key, keys = [];
       var prefix = "st-" + uuid;
   
@@ -4061,7 +4066,9 @@
   
         this.$wrapper.addClass('st-ready');
   
-        window.setInterval(this.autosave, 20 * 1000);
+        if (this.options.localStorage === true) {
+          window.setInterval(this.autosave, 20 * 1000);
+        }
   
         if(!_.isUndefined(this.onEditorRender)) {
           this.onEditorRender();

@@ -83,6 +83,11 @@ SirTrevor.editorStore = function(editor, method, options) {
   };
 
   var newestDocumentForUUID = function(uuid) {
+
+    if (editor.options.localStorage !== true) {
+      return {};
+    }
+
     var key, keys = [];
     var prefix = "st-" + uuid;
 
