@@ -47,6 +47,9 @@ SirTrevor.Locales = {
         'title': "Image",
         'upload_error': "There was a problem with your upload"
       },
+      divider: {
+        'title': "Divider"
+      },
       audio: {
         'title': "Audio"
       },
@@ -116,6 +119,9 @@ SirTrevor.Locales = {
       image: {
         'title': "Bild",
         'upload_error': "es gab ein problem beim hochladen"
+      },
+      divider: {
+        'title': "Trenner"
       },
       audio: {
         'title': "Audio"

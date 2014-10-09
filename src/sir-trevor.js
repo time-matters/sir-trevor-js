@@ -132,14 +132,15 @@
   /* Default Blocks */
   //= blocks/block-quote.js
   //= blocks/heading.js
+  //= blocks/text.js
+  //= blocks/unordered-list.js
+  //= blocks/divider.js
   //= blocks/image.js
   //= blocks/extended-image.js
-  //= blocks/text.js
+  //= blocks/video.js
   //= blocks/tweet.js
   //= blocks/extended-tweet.js
-  //= blocks/unordered-list.js
   //= blocks/infographic.js
-  //= blocks/video.js
   //= blocks/audio.js
 
   /* Default Formatters */
