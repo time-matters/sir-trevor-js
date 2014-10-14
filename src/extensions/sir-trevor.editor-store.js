@@ -48,16 +48,17 @@ SirTrevor.editorStore = function(editor, method, options) {
   };
 
   var getLatestUnsavedFromUUIDs = function(uuids) {
+    var name = editor.options.modelName;
+    var urlPrefix = editor.options.baseURL;
     return _.find(uuids, function(uuid) {
       var result = $.ajax({
         type: 'GET',
-        url: '/editor/articles/' + uuid + '/version',
+        url: urlPrefix + uuid + '/version',
         async: false
       });
-
       return !(result.responseJSON &&
-               result.responseJSON.data &&
-               result.responseJSON.data.server_version);
+               result.responseJSON[name] &&
+               result.responseJSON[name].server_version);
     });
   };
 

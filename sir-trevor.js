@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-09
+ * 2014-10-14
  */
 
 (function ($, _){
@@ -500,15 +500,17 @@
     };
   
     var getLatestUnsavedFromUUIDs = function(uuids) {
+      var name = editor.options.modelName;
+      var urlPrefix = editor.options.baseURL;
       return _.find(uuids, function(uuid) {
         var result = $.ajax({
           type: 'GET',
-          url: '/editor/articles/' + uuid + '/version',
+          url: urlPrefix + uuid + '/version',
           async: false
         });
         return !(result.responseJSON &&
-                 result.responseJSON.article &&
-                 result.responseJSON.article.server_version);
+                 result.responseJSON[name] &&
+                 result.responseJSON[name].server_version);
       });
     };
   
