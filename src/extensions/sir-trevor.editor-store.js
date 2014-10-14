@@ -54,9 +54,10 @@ SirTrevor.editorStore = function(editor, method, options) {
         url: '/editor/articles/' + uuid + '/version',
         async: false
       });
+
       return !(result.responseJSON &&
-               result.responseJSON.article &&
-               result.responseJSON.article.server_version);
+               result.responseJSON.data &&
+               result.responseJSON.data.server_version);
     });
   };
 
