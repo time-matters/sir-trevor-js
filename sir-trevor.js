@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-14
+ * 2014-10-17
  */
 
 (function ($, _){
@@ -2963,13 +2963,13 @@
       var editor = this.$editor;
   
       // Create our image tag
-      var figure = $("<figure class='captioned'></figure>");
-      var picture = $("<picture class='captioned__media'></picture>");
+      var figure = $("<figure class='media'></figure>");
+      var picture = $("<picture class='media__img'></picture>");
       var image = $('<img>', { src: data.file.url });
   
       figure.append(picture.append(image));
   
-      var figcaption = $("<figcaption class='captioned__text'></figcaption>");
+      var figcaption = $("<figcaption class='media__body'></figcaption>");
   
       var copyright = $([
         "<label class='st-input-label'>" + i18n.t('blocks:extended_image:copyright_field') +
