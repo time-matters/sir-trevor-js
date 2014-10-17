@@ -23,13 +23,13 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
     var editor = this.$editor;
 
     // Create our image tag
-    var figure = $("<figure class='captioned'></figure>");
-    var picture = $("<picture class='captioned__media'></picture>");
+    var figure = $("<figure class='media'></figure>");
+    var picture = $("<picture class='media__img'></picture>");
     var image = $('<img>', { src: data.file.url });
 
     figure.append(picture.append(image));
 
-    var figcaption = $("<figcaption class='captioned__text'></figcaption>");
+    var figcaption = $("<figcaption class='media__body'></figcaption>");
 
     var copyright = $([
       "<label class='st-input-label'>" + i18n.t('blocks:extended_image:copyright_field') +
