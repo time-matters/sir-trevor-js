@@ -260,9 +260,6 @@ ul.st-text-block {
 .st-divider {
   padding-top: 16px;
   padding-bottom: 16px; }
-  .st-divider hr {
-    margin: 0;
-    padding: 0; }
 
 .st-block-positioner {
   border: 0.125em solid;
