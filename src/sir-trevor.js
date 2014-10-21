@@ -131,6 +131,7 @@
 
   /* Default Blocks */
   //= blocks/block-quote.js
+  //= blocks/extended-quote.js
   //= blocks/heading.js
   //= blocks/text.js
   //= blocks/unordered-list.js
