@@ -51,6 +51,11 @@ SirTrevor.Locales = {
         'title': "Image",
         'upload_error': "There was a problem with your upload"
       },
+      definition: {
+        'title': "Glossary",
+        'term': "Term",
+        'description': "Description"
+      },
       divider: {
         'title': "Divider"
       },
@@ -127,6 +132,11 @@ SirTrevor.Locales = {
       image: {
         'title': "Bild",
         'upload_error': "es gab ein problem beim hochladen"
+      },
+      definition: {
+        'title': "Glossar",
+        'term': "Begriff",
+        'description': "Beschreibung"
       },
       divider: {
         'title': "Trenner"

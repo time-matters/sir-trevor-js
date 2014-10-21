@@ -313,6 +313,11 @@
           'title': "Image",
           'upload_error': "There was a problem with your upload"
         },
+        definition: {
+          'title': "Glossary",
+          'term': "Term",
+          'description': "Description"
+        },
         divider: {
           'title': "Divider"
         },
@@ -389,6 +394,11 @@
         image: {
           'title': "Bild",
           'upload_error': "es gab ein problem beim hochladen"
+        },
+        definition: {
+          'title': "Glossar",
+          'term': "Begriff",
+          'description': "Beschreibung"
         },
         divider: {
           'title': "Trenner"
@@ -2987,6 +2997,40 @@
       isEmpty: function() {
         return _.isEmpty(this.saveAndGetData().text);
       }
+  
+    });
+  
+  })();
+  /*
+    Definition Block
+  */
+  
+  SirTrevor.Blocks.Definition = (function(){
+  
+    var template = _.template([
+      '<dl><dt><label class="st-input-label"> <%= i18n.t("blocks:definition:term") %></label>',
+      '<input name="term" placeholder="<%= i18n.t("blocks:definition:term") %>"',
+      ' class="st-input-string js-term-input" type="text" /></dt>',
+      '<dd class="st-required st-text-block" contenteditable="true" placeholder="<%= i18n.t("blocks:definition:description") %>"></dd></dl>'
+    ].join("\n"));
+  
+    return SirTrevor.Block.extend({
+  
+      type: "definition",
+  
+      title: function() { return i18n.t('blocks:definition:title'); },
+  
+      icon_name: 'list',
+      changeable: ['Heading', 'text'],
+  
+      editorHTML: function() {
+        return template(this);
+      },
+  
+      loadData: function(data){
+        this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+        this.$('.js-term-input').val(data.term);
+      },
   
     });
   
