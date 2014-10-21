@@ -179,7 +179,7 @@ ul.st-text-block {
   }
 }
 
-*[data-placeholder]:not(:focus) {
+*[data-placeholder]:not(:focus):not([data-hide-placeholder]) {
   &:before {
     color: #b2b2b1;
     font-style: normal;

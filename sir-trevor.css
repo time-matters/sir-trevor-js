@@ -272,7 +272,7 @@ ul.st-text-block {
   padding-left: 32px;
   padding-right: 32px; }
 
-*[data-placeholder]:not(:focus):before {
+*[data-placeholder]:not(:focus):not([data-hide-placeholder]):before {
   color: #b2b2b1;
   font-style: normal;
   content: attr(data-placeholder); }

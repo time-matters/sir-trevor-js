@@ -24,6 +24,17 @@ SirTrevor.Blocks.Definition = (function(){
       return template(this);
     },
 
+    onBlockRender: function() {
+      var placeholders = this.$el.find('[data-placeholder]');
+      placeholders.on('change keydown keypress input', function() {
+        if (this.textContent) {
+          this.setAttribute('data-hide-placeholder', 'true');
+        } else {
+          this.removeAttribute('data-hide-placeholder');
+        }
+      });
+    },
+
     loadData: function(data){
       this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
       this.$('.js-term-input').val(data.term);
