@@ -261,6 +261,22 @@ ul.st-text-block {
   padding-top: 16px;
   padding-bottom: 16px; }
 
+.st-definition dt {
+  padding-left: 16px; }
+  .st-definition dt input {
+    font-weight: bold;
+    font-style: normal; }
+.st-definition dd {
+  font-weight: normal;
+  font-style: normal;
+  padding-left: 32px;
+  padding-right: 32px; }
+
+*[data-placeholder]:not(:focus):before {
+  color: #b2b2b1;
+  font-style: normal;
+  content: attr(data-placeholder); }
+
 .st-block-positioner {
   border: 0.125em solid;
   position: absolute;
