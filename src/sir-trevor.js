@@ -135,6 +135,7 @@
   //= blocks/heading.js
   //= blocks/text.js
   //= blocks/unordered-list.js
+  //= blocks/definition.js
   //= blocks/divider.js
   //= blocks/image.js
   //= blocks/extended-image.js
