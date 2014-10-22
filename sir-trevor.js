@@ -478,7 +478,7 @@
       if (oldDataStore !== undefined) {
         editor.dataStore.version = oldDataStore.version;
         editor.dataStore.uuid = oldDataStore.uuid;
-        editor.dataStore.server_version = oldDataStore.serverserver__version;
+        editor.dataStore.server_version = oldDataStore.server_version;
         editor.dataStore.server_uuid = oldDataStore.server_uuid;
       }
   
