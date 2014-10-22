@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-20
+ * 2014-10-22
  */
 
 (function ($, _){
@@ -654,7 +654,7 @@
     switch(method) {
   
       case "autosave":
-        editor.dataStore.version = ++editor.dataStore.version;
+        editor.dataStore.version = editor.dataStore.version + 1;
         var store = editor.dataStore,
             value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '',
             key = "st-" + store.uuid + "-version-" + store.version;
@@ -706,7 +706,10 @@
   
             // check local storage for article cache. if one is found, ask user.
             document = newestDocumentForUUID(editor.dataStore.uuid);
-            if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
+            if ((document.version > editor.dataStore.version) &&
+                  askUserForConfirmation() &&
+                  document.dataStore.indexOf(JSON.stringify(editor.dataStore.data)) === -1) {
+  
               editor.dataStore = JSON.parse(document.dataStore);
               promptRestoration();
             }
