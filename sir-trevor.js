@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-20
+ * 2014-10-22
  */
 
 (function ($, _){
@@ -459,15 +459,80 @@
   //fgnass.github.com/spin.js#v1.2.5
   (function(a,b,c){function g(a,c){var d=b.createElement(a||"div"),e;for(e in c)d[e]=c[e];return d}function h(a){for(var b=1,c=arguments.length;b<c;b++)a.appendChild(arguments[b]);return a}function j(a,b,c,d){var g=["opacity",b,~~(a*100),c,d].join("-"),h=.01+c/d*100,j=Math.max(1-(1-a)/b*(100-h),a),k=f.substring(0,f.indexOf("Animation")).toLowerCase(),l=k&&"-"+k+"-"||"";return e[g]||(i.insertRule("@"+l+"keyframes "+g+"{"+"0%{opacity:"+j+"}"+h+"%{opacity:"+a+"}"+(h+.01)+"%{opacity:1}"+(h+b)%100+"%{opacity:"+a+"}"+"100%{opacity:"+j+"}"+"}",0),e[g]=1),g}function k(a,b){var e=a.style,f,g;if(e[b]!==c)return b;b=b.charAt(0).toUpperCase()+b.slice(1);for(g=0;g<d.length;g++){f=d[g]+b;if(e[f]!==c)return f}}function l(a,b){for(var c in b)a.style[k(a,c)||c]=b[c];return a}function m(a){for(var b=1;b<arguments.length;b++){var d=arguments[b];for(var e in d)a[e]===c&&(a[e]=d[e])}return a}function n(a){var b={x:a.offsetLeft,y:a.offsetTop};while(a=a.offsetParent)b.x+=a.offsetLeft,b.y+=a.offsetTop;return b}var d=["webkit","Moz","ms","O"],e={},f,i=function(){var a=g("style");return h(b.getElementsByTagName("head")[0],a),a.sheet||a.styleSheet}(),o={lines:12,length:7,width:5,radius:10,rotate:0,color:"#000",speed:1,trail:100,opacity:.25,fps:20,zIndex:2e9,className:"spinner",top:"auto",left:"auto"},p=function q(a){if(!this.spin)return new q(a);this.opts=m(a||{},q.defaults,o)};p.defaults={},m(p.prototype,{spin:function(a){this.stop();var b=this,c=b.opts,d=b.el=l(g(0,{className:c.className}),{position:"relative",zIndex:c.zIndex}),e=c.radius+c.length+c.width,h,i;a&&(a.insertBefore(d,a.firstChild||null),i=n(a),h=n(d),l(d,{left:(c.left=="auto"?i.x-h.x+(a.offsetWidth>>1):c.left+e)+"px",top:(c.top=="auto"?i.y-h.y+(a.offsetHeight>>1):c.top+e)+"px"})),d.setAttribute("aria-role","progressbar"),b.lines(d,b.opts);if(!f){var j=0,k=c.fps,m=k/c.speed,o=(1-c.opacity)/(m*c.trail/100),p=m/c.lines;!function q(){j++;for(var a=c.lines;a;a--){var e=Math.max(1-(j+a*p)%m*o,c.opacity);b.opacity(d,c.lines-a,e,c)}b.timeout=b.el&&setTimeout(q,~~(1e3/k))}()}return b},stop:function(){var a=this.el;return a&&(clearTimeout(this.timeout),a.parentNode&&a.parentNode.removeChild(a),this.el=c),this},lines:function(a,b){function e(a,d){return l(g(),{position:"absolute",width:b.length+b.width+"px",height:b.width+"px",background:a,boxShadow:d,transformOrigin:"left",transform:"rotate("+~~(360/b.lines*c+b.rotate)+"deg) translate("+b.radius+"px"+",0)",borderRadius:(b.width>>1)+"px"})}var c=0,d;for(;c<b.lines;c++)d=l(g(),{position:"absolute",top:1+~(b.width/2)+"px",transform:b.hwaccel?"translate3d(0,0,0)":"",opacity:b.opacity,animation:f&&j(b.opacity,b.trail,c,b.lines)+" "+1/b.speed+"s linear infinite"}),b.shadow&&h(d,l(e("#000","0 0 4px #000"),{top:"2px"})),h(a,h(d,e(b.color,"0 0 1px rgba(0,0,0,.1)")));return a},opacity:function(a,b,c){b<a.childNodes.length&&(a.childNodes[b].style.opacity=c)}}),!function(){function a(a,b){return g("<"+a+' xmlns="urn:schemas-microsoft.com:vml" class="spin-vml">',b)}var b=l(g("group"),{behavior:"url(#default#VML)"});!k(b,"transform")&&b.adj?(i.addRule(".spin-vml","behavior:url(#default#VML)"),p.prototype.lines=function(b,c){function f(){return l(a("group",{coordsize:e+" "+e,coordorigin:-d+" "+ -d}),{width:e,height:e})}function k(b,e,g){h(i,h(l(f(),{rotation:360/c.lines*b+"deg",left:~~e}),h(l(a("roundrect",{arcsize:1}),{width:d,height:c.width,left:c.radius,top:-c.width>>1,filter:g}),a("fill",{color:c.color,opacity:c.opacity}),a("stroke",{opacity:0}))))}var d=c.length+c.width,e=2*d,g=-(c.width+c.length)*2+"px",i=l(f(),{position:"absolute",top:g,left:g}),j;if(c.shadow)for(j=1;j<=c.lines;j++)k(j,-2,"progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)");for(j=1;j<=c.lines;j++)k(j);return h(b,i)},p.prototype.opacity=function(a,b,c,d){var e=a.firstChild;d=d.shadow&&d.lines||0,e&&b+d<e.childNodes.length&&(e=e.childNodes[b+d],e=e&&e.firstChild,e=e&&e.firstChild,e&&(e.opacity=c))}):f=k(b,"animation")}(),a.Spinner=p})(window,document);
   /*
-  * Sir Trevor Editor Store
-  * By default we store the complete data on the instances $el
-  * We can easily extend this and store it on some server or something
-  */
+   * Sir Trevor Editor Store
+   * By default we store the complete data on the instances $el
+   * We can easily extend this and store it on some server or something
+   */
   
   SirTrevor.editorStore = function(editor, method, options) {
     var resp;
   
     options = options || {};
+  
+    Version = function(version) {
+      var results;
+      try {
+        results = /(\d+)\.(\d+)/.exec(version);
+        this.version = results[0];
+        this.major = results[1];
+        this.minor = results[2];
+      } catch(e) {
+        results = /(\d+)/.exec(version);
+        this.version = results[0];
+        this.major = results[1];
+        this.minor = "0";
+        this.recreateVersion();
+      }
+      return this;
+    };
+  
+    Version.prototype = {
+  
+      minorVersion: function() {
+        return parseInt(this.minor, 10);
+      },
+  
+      incrementMinorVersion: function() {
+        this.minor = (this.minorVersion() + 1).toString();
+        return this.recreateVersion();
+      },
+  
+      majorVersion: function() {
+        return parseInt(this.major, 10);
+      },
+  
+      incrementMajorVersion: function() {
+        this.major = (this.majorVersion() + 1).toString();
+        this.minor = "0";
+        return this.recreateVersion();
+      },
+  
+      recreateVersion: function() {
+        this.version = this.major + "." + this.minor;
+        return this;
+      },
+  
+      gt: function(version) {
+        if (this.majorVersion() > version.majorVersion()) {
+          return true;
+        } else if (this.majorVersion() === version.majorVersion()) {
+  
+          if (this.minorVersion() > version.minorVersion()) {
+            return true;
+          } else {
+            return false;
+          }
+  
+        } else {
+          return false;
+        }
+      },
+  
+      toString: function() {
+        return this.version;
+      }
+    };
+  
   
     var reset = function() {
       var oldDataStore = editor.dataStore;
@@ -478,7 +543,7 @@
       if (oldDataStore !== undefined) {
         editor.dataStore.version = oldDataStore.version;
         editor.dataStore.uuid = oldDataStore.uuid;
-        editor.dataStore.server_version = oldDataStore.serverserver__version;
+        editor.dataStore.server_version = oldDataStore.server_version;
         editor.dataStore.server_uuid = oldDataStore.server_uuid;
       }
   
@@ -498,7 +563,7 @@
   
     var ensureVersion = function() {
       if(editor.dataStore.version === undefined) {
-        editor.dataStore.version = 0;
+        editor.dataStore.version = '0.0';
       }
     };
   
@@ -550,7 +615,7 @@
         return {};
       }
   
-      var key, keys = [];
+      var i, key, keys = [];
       var prefix = "st-" + uuid;
   
       // find eligible keys
@@ -563,18 +628,28 @@
       }
   
       // find biggest verison number
-      var version = Math.max.apply(null, keys.map(function(e) {
-        return parseInt(/version-(\d+)/.exec(e)[1], 10);
-      }));
+      var versions = keys.map(function(e) {
+        return new Version(/version-(\d+(?:\.\d+)?)/.exec(e)[1]);
+      });
+      var result = versions[0];
+      for (i=0; i<versions.length; i++) {
+        if (versions[i].gt(result)) {
+          result = versions[i];
+        }
+      }
+  
+      if (result === undefined) {
+        return null;
+      }
   
       return {
-        version: version,
-        dataStore: localStorage[prefix + '-version-' + version]
+        version: result.toString(),
+        dataStore: localStorage[prefix + '-version-' + result.toString()]
       };
     };
   
     var getUUIDFromKey = function(key) {
-      return /st-(.*)-version-(\d+)/.exec(key)[1];
+      return /st-(.*)-version-(\d+(?:\.\d+)?)/.exec(key)[1];
     };
   
     var getAllUUIDs = function() {
@@ -595,6 +670,7 @@
       var key, document, stop = false;
       while (!stop) {
         document = newestDocumentForUUID(uuid);
+        if (document === null) { break; }
         key = 'st-' + uuid + '-version-' + document.version;
         stop = !localStorage.hasOwnProperty(key);
         localStorage.removeItem(key);
@@ -651,10 +727,13 @@
       editor.$outer.prepend(warn);
     };
   
+    var newVersion;
+  
     switch(method) {
   
       case "autosave":
-        editor.dataStore.version = ++editor.dataStore.version;
+        newVersion = (new Version(editor.dataStore.version)).incrementMinorVersion().toString();
+        editor.dataStore.version = newVersion;
         var store = editor.dataStore,
             value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '',
             key = "st-" + store.uuid + "-version-" + store.version;
@@ -669,7 +748,9 @@
   
       case "create":
         var document, str, uuids, unsaved;
-        // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
+        var parsedStore, documentVersion, dataStoreVersion;
+  
+        // Grab our JSON from the textarea and clean any whitespace in case there is a line wrap between the opening and closing textarea tags
         var content = _.trim(editor.$el.val());
   
         reset();
@@ -694,9 +775,14 @@
           if (unsaved !== undefined) {
   
             document = newestDocumentForUUID(unsaved);
-            if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
-              editor.dataStore = JSON.parse(document.dataStore);
-              promptRestoration();
+            if (document !== null) {
+              parsedStore = JSON.parse(document.dataStore);
+              documentVersion = new Version(parsedStore.version);
+              dataStoreVersion = new Version(editor.dataStore.version);
+              if (documentVersion.gt(dataStoreVersion) && askUserForConfirmation()) {
+                editor.dataStore = JSON.parse(document.dataStore);
+                promptRestoration();
+              }
             }
           }
   
@@ -706,9 +792,16 @@
   
             // check local storage for article cache. if one is found, ask user.
             document = newestDocumentForUUID(editor.dataStore.uuid);
-            if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
-              editor.dataStore = JSON.parse(document.dataStore);
-              promptRestoration();
+            if (document !== null) {
+              parsedStore = JSON.parse(document.dataStore);
+              documentVersion = new Version(parsedStore.version);
+              dataStoreVersion = new Version(editor.dataStore.version);
+              if (documentVersion.gt(dataStoreVersion) &&
+                  askUserForConfirmation() &&
+                  document.dataStore.indexOf(JSON.stringify(editor.dataStore.data)) === -1) {
+                editor.dataStore = JSON.parse(document.dataStore);
+                promptRestoration();
+              }
             }
   
           } catch(e) {
@@ -734,6 +827,7 @@
   
       case "save":
         // Store to our element
+        editor.dataStore.version = (new Version(editor.dataStore.version)).incrementMajorVersion().toString();
         editor.$el.val((editor.dataStore.data.length > 0) ? JSON.stringify(editor.dataStore) : '');
       break;
   

@@ -1,13 +1,78 @@
 /*
-* Sir Trevor Editor Store
-* By default we store the complete data on the instances $el
-* We can easily extend this and store it on some server or something
-*/
+ * Sir Trevor Editor Store
+ * By default we store the complete data on the instances $el
+ * We can easily extend this and store it on some server or something
+ */
 
 SirTrevor.editorStore = function(editor, method, options) {
   var resp;
 
   options = options || {};
+
+  Version = function(version) {
+    var results;
+    try {
+      results = /(\d+)\.(\d+)/.exec(version);
+      this.version = results[0];
+      this.major = results[1];
+      this.minor = results[2];
+    } catch(e) {
+      results = /(\d+)/.exec(version);
+      this.version = results[0];
+      this.major = results[1];
+      this.minor = "0";
+      this.recreateVersion();
+    }
+    return this;
+  };
+
+  Version.prototype = {
+
+    minorVersion: function() {
+      return parseInt(this.minor, 10);
+    },
+
+    incrementMinorVersion: function() {
+      this.minor = (this.minorVersion() + 1).toString();
+      return this.recreateVersion();
+    },
+
+    majorVersion: function() {
+      return parseInt(this.major, 10);
+    },
+
+    incrementMajorVersion: function() {
+      this.major = (this.majorVersion() + 1).toString();
+      this.minor = "0";
+      return this.recreateVersion();
+    },
+
+    recreateVersion: function() {
+      this.version = this.major + "." + this.minor;
+      return this;
+    },
+
+    gt: function(version) {
+      if (this.majorVersion() > version.majorVersion()) {
+        return true;
+      } else if (this.majorVersion() === version.majorVersion()) {
+
+        if (this.minorVersion() > version.minorVersion()) {
+          return true;
+        } else {
+          return false;
+        }
+
+      } else {
+        return false;
+      }
+    },
+
+    toString: function() {
+      return this.version;
+    }
+  };
+
 
   var reset = function() {
     var oldDataStore = editor.dataStore;
@@ -18,7 +83,7 @@ SirTrevor.editorStore = function(editor, method, options) {
     if (oldDataStore !== undefined) {
       editor.dataStore.version = oldDataStore.version;
       editor.dataStore.uuid = oldDataStore.uuid;
-      editor.dataStore.server_version = oldDataStore.serverserver__version;
+      editor.dataStore.server_version = oldDataStore.server_version;
       editor.dataStore.server_uuid = oldDataStore.server_uuid;
     }
 
@@ -38,7 +103,7 @@ SirTrevor.editorStore = function(editor, method, options) {
 
   var ensureVersion = function() {
     if(editor.dataStore.version === undefined) {
-      editor.dataStore.version = 0;
+      editor.dataStore.version = '0.0';
     }
   };
 
@@ -90,7 +155,7 @@ SirTrevor.editorStore = function(editor, method, options) {
       return {};
     }
 
-    var key, keys = [];
+    var i, key, keys = [];
     var prefix = "st-" + uuid;
 
     // find eligible keys
@@ -103,18 +168,28 @@ SirTrevor.editorStore = function(editor, method, options) {
     }
 
     // find biggest verison number
-    var version = Math.max.apply(null, keys.map(function(e) {
-      return parseInt(/version-(\d+)/.exec(e)[1], 10);
-    }));
+    var versions = keys.map(function(e) {
+      return new Version(/version-(\d+(?:\.\d+)?)/.exec(e)[1]);
+    });
+    var result = versions[0];
+    for (i=0; i<versions.length; i++) {
+      if (versions[i].gt(result)) {
+        result = versions[i];
+      }
+    }
+
+    if (result === undefined) {
+      return null;
+    }
 
     return {
-      version: version,
-      dataStore: localStorage[prefix + '-version-' + version]
+      version: result.toString(),
+      dataStore: localStorage[prefix + '-version-' + result.toString()]
     };
   };
 
   var getUUIDFromKey = function(key) {
-    return /st-(.*)-version-(\d+)/.exec(key)[1];
+    return /st-(.*)-version-(\d+(?:\.\d+)?)/.exec(key)[1];
   };
 
   var getAllUUIDs = function() {
@@ -135,6 +210,7 @@ SirTrevor.editorStore = function(editor, method, options) {
     var key, document, stop = false;
     while (!stop) {
       document = newestDocumentForUUID(uuid);
+      if (document === null) { break; }
       key = 'st-' + uuid + '-version-' + document.version;
       stop = !localStorage.hasOwnProperty(key);
       localStorage.removeItem(key);
@@ -191,10 +267,13 @@ SirTrevor.editorStore = function(editor, method, options) {
     editor.$outer.prepend(warn);
   };
 
+  var newVersion;
+
   switch(method) {
 
     case "autosave":
-      editor.dataStore.version = ++editor.dataStore.version;
+      newVersion = (new Version(editor.dataStore.version)).incrementMinorVersion().toString();
+      editor.dataStore.version = newVersion;
       var store = editor.dataStore,
           value = (store.data.length > 0) ? JSON.stringify(editor.dataStore) : '',
           key = "st-" + store.uuid + "-version-" + store.version;
@@ -209,7 +288,9 @@ SirTrevor.editorStore = function(editor, method, options) {
 
     case "create":
       var document, str, uuids, unsaved;
-      // Grab our JSON from the textarea and clean any whitespace incase there is a line wrap between the opening and closing textarea tags
+      var parsedStore, documentVersion, dataStoreVersion;
+
+      // Grab our JSON from the textarea and clean any whitespace in case there is a line wrap between the opening and closing textarea tags
       var content = _.trim(editor.$el.val());
 
       reset();
@@ -234,9 +315,14 @@ SirTrevor.editorStore = function(editor, method, options) {
         if (unsaved !== undefined) {
 
           document = newestDocumentForUUID(unsaved);
-          if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
-            editor.dataStore = JSON.parse(document.dataStore);
-            promptRestoration();
+          if (document !== null) {
+            parsedStore = JSON.parse(document.dataStore);
+            documentVersion = new Version(parsedStore.version);
+            dataStoreVersion = new Version(editor.dataStore.version);
+            if (documentVersion.gt(dataStoreVersion) && askUserForConfirmation()) {
+              editor.dataStore = JSON.parse(document.dataStore);
+              promptRestoration();
+            }
           }
         }
 
@@ -246,9 +332,16 @@ SirTrevor.editorStore = function(editor, method, options) {
 
           // check local storage for article cache. if one is found, ask user.
           document = newestDocumentForUUID(editor.dataStore.uuid);
-          if ((document.version > editor.dataStore.version) && askUserForConfirmation()) {
-            editor.dataStore = JSON.parse(document.dataStore);
-            promptRestoration();
+          if (document !== null) {
+            parsedStore = JSON.parse(document.dataStore);
+            documentVersion = new Version(parsedStore.version);
+            dataStoreVersion = new Version(editor.dataStore.version);
+            if (documentVersion.gt(dataStoreVersion) &&
+                askUserForConfirmation() &&
+                document.dataStore.indexOf(JSON.stringify(editor.dataStore.data)) === -1) {
+              editor.dataStore = JSON.parse(document.dataStore);
+              promptRestoration();
+            }
           }
 
         } catch(e) {
@@ -274,6 +367,7 @@ SirTrevor.editorStore = function(editor, method, options) {
 
     case "save":
       // Store to our element
+      editor.dataStore.version = (new Version(editor.dataStore.version)).incrementMajorVersion().toString();
       editor.$el.val((editor.dataStore.data.length > 0) ? JSON.stringify(editor.dataStore) : '');
     break;
 
