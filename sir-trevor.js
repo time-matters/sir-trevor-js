@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-22
+ * 2014-10-23
  */
 
 (function ($, _){
@@ -307,7 +307,10 @@
           'caption_placeholder': "Caption",
           'copyright_field': "Copyright",
           'copyright_placeholder': "Copyright",
-          'upload_error': "There was a problem with your upload"
+          'upload_error': "There was a problem with your upload",
+          'fullwidth': "Page width",
+          'bodywidth': "Article width",
+          'default': "Small"
         },
         image: {
           'title': "Image",
@@ -357,7 +360,7 @@
         'wait':             'Bitte warten…',
         'link':             'Link eingeben',
         'note':             'Anmerkung',
-        'style':            'Style',
+        'style':            'Darstellung',
         'source':           'Quelle'
       },
       errors: {
@@ -389,7 +392,10 @@
           'caption_placeholder': "Bildunterzeile",
           'copyright_field': "Fotograf",
           'copyright_placeholder': "Fotograf",
-          'upload_error': "es gab ein problem beim hochladen"
+          'upload_error': "es gab ein problem beim hochladen",
+          'fullwidth': "Seitenbreite",
+          'bodywidth': "Artikelbreite",
+          'default': "Kleine"
         },
         image: {
           'title': "Bild",
@@ -3147,9 +3153,9 @@
   
     styleable: true,
     styles: [
-      { name: 'Default', value: 'default', className: 'default' },
-      { name: 'Body-width', value: 'bodywidth', className: 'bodywidth' },
-      { name: 'Full-width', value: 'fullwidth', className: 'fullwidth' }
+      { name: i18n.t('blocks:extended_image:default'), value: 'default', className: 'default' },
+      { name: i18n.t('blocks:extended_image:bodywidth'), value: 'bodywidth', className: 'bodywidth' },
+      { name: i18n.t('blocks:extended_image:fullwidth'), value: 'fullwidth', className: 'fullwidth' }
     ],
   
     icon_name: 'image',
