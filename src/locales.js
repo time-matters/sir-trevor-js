@@ -45,7 +45,10 @@ SirTrevor.Locales = {
         'caption_placeholder': "Caption",
         'copyright_field': "Copyright",
         'copyright_placeholder': "Copyright",
-        'upload_error': "There was a problem with your upload"
+        'upload_error': "There was a problem with your upload",
+        'fullwidth': "Page width",
+        'bodywidth': "Article width",
+        'default': "Small"
       },
       image: {
         'title': "Image",
@@ -95,7 +98,7 @@ SirTrevor.Locales = {
       'wait':             'Bitte warten…',
       'link':             'Link eingeben',
       'note':             'Anmerkung',
-      'style':            'Style',
+      'style':            'Darstellung',
       'source':           'Quelle'
     },
     errors: {
@@ -127,7 +130,10 @@ SirTrevor.Locales = {
         'caption_placeholder': "Bildunterzeile",
         'copyright_field': "Fotograf",
         'copyright_placeholder': "Fotograf",
-        'upload_error': "es gab ein problem beim hochladen"
+        'upload_error': "es gab ein problem beim hochladen",
+        'fullwidth': "Seitenbreite",
+        'bodywidth': "Artikelbreite",
+        'default': "Kleine"
       },
       image: {
         'title': "Bild",
