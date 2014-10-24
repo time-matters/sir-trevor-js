@@ -35,18 +35,25 @@ SirTrevor.Blocks.Video = (function(){
     },
 
     loadData: function(data){
-      if (!this.providers.hasOwnProperty(data.source)) { return; }
+      var embed_string;
 
-      if (this.providers[data.source].square) {
-        this.$editor.addClass('st-block__editor--with-square-media');
+      if (!this.providers.hasOwnProperty(data.source)) {
+
+        embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+
       } else {
-        this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-      }
 
-      var embed_string = this.providers[data.source].html
-        .replace('{{protocol}}', window.location.protocol)
-        .replace('{{remote_id}}', data.remote_id)
-        .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+        if (this.providers[data.source].square) {
+          this.$editor.addClass('st-block__editor--with-square-media');
+        } else {
+          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+        }
+
+        embed_string = this.providers[data.source].html
+          .replace('{{protocol}}', window.location.protocol)
+          .replace('{{remote_id}}', data.remote_id)
+          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+      }
 
       this.$editor.html(embed_string);
       this.extractSourceInformation();
