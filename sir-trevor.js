@@ -3170,7 +3170,7 @@
   
       var source = data.file && data.file.url;
   
-      if (picture === undefined) {
+      if (source !== undefined) {
         payload= $('<img>', { src: source });
       } else {
         payload = $('<h1><i class="fa fa-exclamation-triangle"></i></h1>');
