@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-23
+ * 2014-10-24
  */
 
 (function ($, _){
@@ -3166,9 +3166,17 @@
       // Create our image tag
       var figure = $("<figure class='media'></figure>");
       var picture = $("<picture class='media__img'></picture>");
-      var image = $('<img>', { src: data.file.url });
+      var payload;
   
-      figure.append(picture.append(image));
+      var source = data.file && data.file.url;
+  
+      if (picture === undefined) {
+        payload= $('<img>', { src: source });
+      } else {
+        payload = $('<h1><i class="fa fa-exclamation-triangle"></i></h1>');
+      }
+  
+      figure.append(picture.append(payload));
   
       var figcaption = $("<figcaption class='media__body'></figcaption>");
   
@@ -3267,18 +3275,25 @@
       },
   
       loadData: function(data){
-        if (!this.providers.hasOwnProperty(data.source)) { return; }
+        var embed_string;
   
-        if (this.providers[data.source].square) {
-          this.$editor.addClass('st-block__editor--with-square-media');
+        if (!this.providers.hasOwnProperty(data.source)) {
+  
+          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+  
         } else {
-          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-        }
   
-        var embed_string = this.providers[data.source].html
-          .replace('{{protocol}}', window.location.protocol)
-          .replace('{{remote_id}}', data.remote_id)
-          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+          if (this.providers[data.source].square) {
+            this.$editor.addClass('st-block__editor--with-square-media');
+          } else {
+            this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+          }
+  
+          embed_string = this.providers[data.source].html
+            .replace('{{protocol}}', window.location.protocol)
+            .replace('{{remote_id}}', data.remote_id)
+            .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+        }
   
         this.$editor.html(embed_string);
         this.extractSourceInformation();
@@ -3465,31 +3480,39 @@
       },
   
       loadData: function(data){
-        if (!this.providers.hasOwnProperty(data.source)) { return; }
-  
         var embed_string, self = this;
-        var html = this.providers[data.source].html;
   
         var update_editor = function(embed_string, options) {
           self.$editor.html(embed_string);
           self.extractSourceInformation(options);
         };
   
-        if (html instanceof Function) {
+        if (!this.providers.hasOwnProperty(data.source)) {
   
-          html(update_editor, {
-            protocol: window.location.protocol,
-            remote_id: data.remote_id,
-            width: this.$editor.width()
-          });
+          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          self.$editor.html(embed_string);
   
         } else {
   
-          embed_string = html
-            .replace('{{protocol}}', window.location.protocol)
-            .replace('{{remote_id}}', data.remote_id)
-            .replace('{{width}}', this.$editor.width());
-          update_editor();
+          var html = this.providers[data.source].html;
+  
+  
+          if (html instanceof Function) {
+  
+            html(update_editor, {
+              protocol: window.location.protocol,
+              remote_id: data.remote_id,
+              width: this.$editor.width()
+            });
+  
+          } else {
+  
+            embed_string = html
+              .replace('{{protocol}}', window.location.protocol)
+              .replace('{{remote_id}}', data.remote_id)
+              .replace('{{width}}', this.$editor.width());
+            update_editor();
+          }
         }
       },
   
@@ -3552,15 +3575,23 @@
       },
   
       loadData: function(data){
-        if (!this.providers.hasOwnProperty(data.source)) { return; }
+        var embed_string;
   
-        var embed_string = this.providers[data.source].html
-          .replace('{{protocol}}', window.location.protocol)
-          .replace('{{remote_id}}', data.remote_id)
-          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+        if (!this.providers.hasOwnProperty(data.source)) {
   
-        this.$editor.html(embed_string);
-        this.extractSourceInformation();
+          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          this.$editor.html(embed_string);
+  
+        } else {
+  
+          embed_string = this.providers[data.source].html
+            .replace('{{protocol}}', window.location.protocol)
+            .replace('{{remote_id}}', data.remote_id)
+            .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+  
+          this.$editor.html(embed_string);
+          this.extractSourceInformation();
+        }
       },
   
       onContentPasted: function(event){
@@ -3644,37 +3675,44 @@
       },
   
       loadData: function(data){
-        if (!this.providers.hasOwnProperty(data.source)) { return; }
-  
-        if (this.providers[data.source].square) {
-          this.$editor.addClass('st-block__editor--with-square-media');
-        } else {
-          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-        }
-  
         var embed_string, self = this;
-        var html = this.providers[data.source].html;
   
         var update_editor = function(embed_string) {
           self.$editor.html(embed_string);
           self.extractSourceInformation();
         };
   
-        if (html instanceof Function) {
+        if (!this.providers.hasOwnProperty(data.source)) {
   
-          html(update_editor, {
-            protocol: window.location.protocol,
-            remote_id: data.remote_id,
-            width: this.$editor.width() // for videos that can't resize automatically like vine
-          });
+          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          self.$editor.html(embed_string);
   
         } else {
   
-          embed_string = html
-            .replace('{{protocol}}', window.location.protocol)
-            .replace('{{remote_id}}', data.remote_id)
-            .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
-          update_editor();
+          if (this.providers[data.source].square) {
+            this.$editor.addClass('st-block__editor--with-square-media');
+          } else {
+            this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+          }
+  
+          var html = this.providers[data.source].html;
+  
+          if (html instanceof Function) {
+  
+            html(update_editor, {
+              protocol: window.location.protocol,
+              remote_id: data.remote_id,
+              width: this.$editor.width() // for videos that can't resize automatically like vine
+            });
+  
+          } else {
+  
+            embed_string = html
+              .replace('{{protocol}}', window.location.protocol)
+              .replace('{{remote_id}}', data.remote_id)
+              .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+            update_editor();
+          }
         }
       },
   

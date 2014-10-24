@@ -25,9 +25,17 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
     // Create our image tag
     var figure = $("<figure class='media'></figure>");
     var picture = $("<picture class='media__img'></picture>");
-    var image = $('<img>', { src: data.file.url });
+    var payload;
 
-    figure.append(picture.append(image));
+    var source = data.file && data.file.url;
+
+    if (picture === undefined) {
+      payload= $('<img>', { src: source });
+    } else {
+      payload = $('<h1><i class="fa fa-exclamation-triangle"></i></h1>');
+    }
+
+    figure.append(picture.append(payload));
 
     var figcaption = $("<figcaption class='media__body'></figcaption>");
 

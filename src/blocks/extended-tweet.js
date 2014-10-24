@@ -43,31 +43,39 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
     },
 
     loadData: function(data){
-      if (!this.providers.hasOwnProperty(data.source)) { return; }
-
       var embed_string, self = this;
-      var html = this.providers[data.source].html;
 
       var update_editor = function(embed_string, options) {
         self.$editor.html(embed_string);
         self.extractSourceInformation(options);
       };
 
-      if (html instanceof Function) {
+      if (!this.providers.hasOwnProperty(data.source)) {
 
-        html(update_editor, {
-          protocol: window.location.protocol,
-          remote_id: data.remote_id,
-          width: this.$editor.width()
-        });
+        embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+        self.$editor.html(embed_string);
 
       } else {
 
-        embed_string = html
-          .replace('{{protocol}}', window.location.protocol)
-          .replace('{{remote_id}}', data.remote_id)
-          .replace('{{width}}', this.$editor.width());
-        update_editor();
+        var html = this.providers[data.source].html;
+
+
+        if (html instanceof Function) {
+
+          html(update_editor, {
+            protocol: window.location.protocol,
+            remote_id: data.remote_id,
+            width: this.$editor.width()
+          });
+
+        } else {
+
+          embed_string = html
+            .replace('{{protocol}}', window.location.protocol)
+            .replace('{{remote_id}}', data.remote_id)
+            .replace('{{width}}', this.$editor.width());
+          update_editor();
+        }
       }
     },
 

@@ -25,15 +25,23 @@ SirTrevor.Blocks.Infographic = (function(){
     },
 
     loadData: function(data){
-      if (!this.providers.hasOwnProperty(data.source)) { return; }
+      var embed_string;
 
-      var embed_string = this.providers[data.source].html
-        .replace('{{protocol}}', window.location.protocol)
-        .replace('{{remote_id}}', data.remote_id)
-        .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+      if (!this.providers.hasOwnProperty(data.source)) {
 
-      this.$editor.html(embed_string);
-      this.extractSourceInformation();
+        embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+        this.$editor.html(embed_string);
+
+      } else {
+
+        embed_string = this.providers[data.source].html
+          .replace('{{protocol}}', window.location.protocol)
+          .replace('{{remote_id}}', data.remote_id)
+          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+
+        this.$editor.html(embed_string);
+        this.extractSourceInformation();
+      }
     },
 
     onContentPasted: function(event){

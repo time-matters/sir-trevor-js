@@ -30,37 +30,44 @@ SirTrevor.Blocks.Audio = (function(){
     },
 
     loadData: function(data){
-      if (!this.providers.hasOwnProperty(data.source)) { return; }
-
-      if (this.providers[data.source].square) {
-        this.$editor.addClass('st-block__editor--with-square-media');
-      } else {
-        this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-      }
-
       var embed_string, self = this;
-      var html = this.providers[data.source].html;
 
       var update_editor = function(embed_string) {
         self.$editor.html(embed_string);
         self.extractSourceInformation();
       };
 
-      if (html instanceof Function) {
+      if (!this.providers.hasOwnProperty(data.source)) {
 
-        html(update_editor, {
-          protocol: window.location.protocol,
-          remote_id: data.remote_id,
-          width: this.$editor.width() // for videos that can't resize automatically like vine
-        });
+        embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+        self.$editor.html(embed_string);
 
       } else {
 
-        embed_string = html
-          .replace('{{protocol}}', window.location.protocol)
-          .replace('{{remote_id}}', data.remote_id)
-          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
-        update_editor();
+        if (this.providers[data.source].square) {
+          this.$editor.addClass('st-block__editor--with-square-media');
+        } else {
+          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+        }
+
+        var html = this.providers[data.source].html;
+
+        if (html instanceof Function) {
+
+          html(update_editor, {
+            protocol: window.location.protocol,
+            remote_id: data.remote_id,
+            width: this.$editor.width() // for videos that can't resize automatically like vine
+          });
+
+        } else {
+
+          embed_string = html
+            .replace('{{protocol}}', window.location.protocol)
+            .replace('{{remote_id}}', data.remote_id)
+            .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+          update_editor();
+        }
       }
     },
 
