@@ -5,7 +5,7 @@
 SirTrevor.Blocks.Definition = (function(){
 
   var template = _.template([
-    '<dl class="st-definition"><dt><label class="st-input-label"> <%= i18n.t("blocks:definition:term") %></label>',
+    '<dl class="st-definition st-block--definition"><dt><label class="st-input-label"> <%= i18n.t("blocks:definition:term") %></label>',
     '<input name="term" placeholder="<%= i18n.t("blocks:definition:term") %>"',
     ' class="st-input-string js-term-input" type="text" /></dt>',
     '<dd class="st-required st-text-block" contenteditable="true" data-placeholder="<%= i18n.t("blocks:definition:description") %>"></dd></dl>'

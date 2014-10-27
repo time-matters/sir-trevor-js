@@ -4,7 +4,7 @@
 
 SirTrevor.Blocks.List = (function() {
 
-  var template = '<div class="st-text-block st-required" contenteditable="true"><ul><li></li></ul></div>';
+  var template = '<div class="st-text-block st-required st-block--list" contenteditable="true"><ul><li></li></ul></div>';
 
   return SirTrevor.Block.extend({
 
