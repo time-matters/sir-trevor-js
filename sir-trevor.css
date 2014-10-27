@@ -383,11 +383,15 @@ ul.st-text-block {
 .st-format-bar {
   position: absolute;
   margin: -3em 0 0 0;
+  background: #4d5358;
   opacity: 0;
   visibility: hidden;
   z-index: 10;
   border-radius: 0.4em;
-  padding: 0.5em 0.9em; }
+  padding: 0.5em 0.9em;
+  -webkit-transition: opacity 0.2s ease-in-out;
+  -moz-transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out; }
 
 .st-format-bar:before {
   content: '';
@@ -414,12 +418,16 @@ ul.st-text-block {
   margin: 0 0.6em 0 0;
   font-size: 1em;
   vertical-align: middle;
-  border-right: 1px solid; }
+  border-right: 1px solid #3e4245; }
 
 .st-format-btn:last-child {
   border-right: none;
   padding-right: 0;
   margin-right: 0; }
+
+.st-format-btn:hover,
+.st-format-btn--is-active {
+  color: #34e0c2; }
 
 .st-format-btn--Italic {
   font-style: italic; }
