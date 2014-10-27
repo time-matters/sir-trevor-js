@@ -4,7 +4,7 @@
 
 SirTrevor.Blocks.Divider = (function() {
 
-  var template = '<div class="st-divider"><hr></div>';
+  var template = '<div class="st-divider st-block--divider"><hr></div>';
 
   return SirTrevor.Block.extend({
 

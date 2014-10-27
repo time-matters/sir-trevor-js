@@ -5,7 +5,7 @@
 SirTrevor.Blocks.ExtendedQuote = (function(){
 
   var template = _.template([
-    '<blockquote class="st-required st-text-block" contenteditable="true"></blockquote>',
+    '<blockquote class="st-required st-text-block st-block--extended-quote" contenteditable="true"></blockquote>',
     '<label class="st-input-label"> <%= i18n.t("blocks:extended_quote:credit_field") %></label>',
     '<input name="cite" placeholder="<%= i18n.t("blocks:extended_quote:credit_field") %>"',
     ' class="st-input-string js-cite-input" type="text" />'

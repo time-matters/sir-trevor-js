@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-24
+ * 2014-10-27
  */
 
 (function ($, _){
@@ -2840,7 +2840,7 @@
   SirTrevor.Blocks.Quote = (function(){
   
     var template = _.template([
-      '<blockquote class="st-required st-text-block" contenteditable="true"></blockquote>',
+      '<blockquote class="st-required st-text-block st-block--quote" contenteditable="true"></blockquote>',
       '<label class="st-input-label"> <%= i18n.t("blocks:quote:credit_field") %></label>',
       '<input maxlength="140" name="cite" placeholder="<%= i18n.t("blocks:quote:credit_field") %>"',
       ' class="st-input-string js-cite-input" type="text" />'
@@ -2878,7 +2878,7 @@
   SirTrevor.Blocks.ExtendedQuote = (function(){
   
     var template = _.template([
-      '<blockquote class="st-required st-text-block" contenteditable="true"></blockquote>',
+      '<blockquote class="st-required st-text-block st-block--extended-quote" contenteditable="true"></blockquote>',
       '<label class="st-input-label"> <%= i18n.t("blocks:extended_quote:credit_field") %></label>',
       '<input name="cite" placeholder="<%= i18n.t("blocks:extended_quote:credit_field") %>"',
       ' class="st-input-string js-cite-input" type="text" />'
@@ -2918,7 +2918,7 @@
   
     title: function(){ return i18n.t('blocks:heading:title'); },
   
-    editorHTML: '<div class="st-required st-text-block st-text-block--heading" contenteditable="true"></div>',
+    editorHTML: '<div class="st-required st-text-block st-block--heading" contenteditable="true"></div>',
   
     icon_name: 'heading',
     changeable: ['text', 'quote'],
@@ -2951,7 +2951,7 @@
   
   SirTrevor.Blocks.List = (function() {
   
-    var template = '<div class="st-text-block st-required" contenteditable="true"><ul><li></li></ul></div>';
+    var template = '<div class="st-text-block st-required st-block--list" contenteditable="true"><ul><li></li></ul></div>';
   
     return SirTrevor.Block.extend({
   
@@ -3014,7 +3014,7 @@
   SirTrevor.Blocks.Definition = (function(){
   
     var template = _.template([
-      '<dl class="st-definition"><dt><label class="st-input-label"> <%= i18n.t("blocks:definition:term") %></label>',
+      '<dl class="st-definition st-block--definition"><dt><label class="st-input-label"> <%= i18n.t("blocks:definition:term") %></label>',
       '<input name="term" placeholder="<%= i18n.t("blocks:definition:term") %>"',
       ' class="st-input-string js-term-input" type="text" /></dt>',
       '<dd class="st-required st-text-block" contenteditable="true" data-placeholder="<%= i18n.t("blocks:definition:description") %>"></dd></dl>'
@@ -3058,7 +3058,7 @@
   
   SirTrevor.Blocks.Divider = (function() {
   
-    var template = '<div class="st-divider"><hr></div>';
+    var template = '<div class="st-divider st-block--divider"><hr></div>';
   
     return SirTrevor.Block.extend({
   
