@@ -272,7 +272,7 @@ SirTrevor.Editor = (function(){
       this._incrementBlockTypeCount(type);
 
       if (focus !== false) {
-        block.focus();
+        !data && block.focus();
       }
 
       SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);

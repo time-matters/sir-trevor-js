@@ -1328,8 +1328,7 @@
   
       this.drop_options = _.extend({}, SirTrevor.DEFAULTS.Block.drop_options, this.drop_options);
   
-      var drop_html = $(_.template(this.drop_options.html,
-                        { block: this }));
+      var drop_html = $(_.template(this.drop_options.html)({ block: this }));
   
       this.$editor.hide();
       this.$inputs.append(drop_html);
@@ -2914,7 +2913,7 @@
   */
   SirTrevor.Blocks.Heading = SirTrevor.Block.extend({
   
-    type: 'Heading',
+    type: 'heading',
   
     title: function(){ return i18n.t('blocks:heading:title'); },
   
@@ -4485,7 +4484,7 @@
         this._incrementBlockTypeCount(type);
   
         if (focus !== false) {
-          block.focus();
+          !data && block.focus();
         }
   
         SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);
