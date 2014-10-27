@@ -1,6 +1,7 @@
 .st-block {
-  padding:0;
+  padding: 0;
   position: relative;
+  min-height: 20px; // also the line height.
 }
 
 .st-block__inner {
