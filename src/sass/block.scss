@@ -159,6 +159,11 @@ ul.st-text-block {
   word-break: break-all;
 }
 
+.st-code {
+  display: block;
+  min-height: 20px;
+}
+
 .st-divider {
   padding-top: 20px;
   padding-bottom: 20px;

@@ -35,6 +35,10 @@ SirTrevor.Locales = {
         'title': "Cite",
         'credit_field': "Credit"
       },
+      code: {
+        'title': "Code",
+        'language_field': "Language"
+      },
       extended_quote: {
         'title': "Extended Cite",
         'credit_field': "Credit"
@@ -119,6 +123,10 @@ SirTrevor.Locales = {
       quote: {
         'title': "Zitat",
         'credit_field': "Quelle"
+      },
+      code: {
+        'title': "Code",
+        'language_field': "Sprache"
       },
       extended_quote: {
         'title': "Erweitertes Zitat",
