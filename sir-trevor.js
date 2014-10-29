@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-27
+ * 2014-10-29
  */
 
 (function ($, _){
