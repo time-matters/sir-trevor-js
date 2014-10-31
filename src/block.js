@@ -44,11 +44,21 @@ SirTrevor.Block = (function(){
 
   _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
 
-    bound: ["_checkArrowKeysUp", "_checkArrowKeysDown", "_checkReturn",
-            "_checkBackspaceAtStartKeyDown", "_checkBackspaceAtStartKeyUp",
-            "_handleContentPaste", "_onFocus", "_onBlur", "onDrop",
-            "onDeleteClick", "clearInsertedStyles",
-            "getSelectionForFormatter", "onBlockRender"],
+    bound: [
+      "_checkArrowKeysDown",
+      "_checkArrowKeysUp",
+      "_checkBackspaceAtStartKeyDown",
+      "_checkBackspaceAtStartKeyUp",
+      "_checkReturn",
+      "_handleContentPaste",
+      "_onBlur",
+      "_onFocus",
+      "clearInsertedStyles",
+      "getSelectionForFormatter",
+      "onBlockRender",
+      "onDeleteClick",
+      "onDrop"
+    ],
 
     className: 'st-block st-icon--add',
 
