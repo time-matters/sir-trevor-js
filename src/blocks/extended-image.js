@@ -50,8 +50,8 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
     var caption = $([
       "<label class='st-input-label'>" + i18n.t('blocks:extended_image:caption_field') +
       "</label>",
-      "<input type='text' name='caption' class='st-input-string js-caption-input'",
-      "placeholder='" + i18n.t("blocks:extended_image:caption_placeholder") + "'></input>"
+      "<textarea name='caption' class='st-input-string js-caption-input'",
+      "placeholder='" + i18n.t("blocks:extended_image:caption_placeholder") + "'></textarea>"
     ].join("\n"));
     figure.append(caption);
 
@@ -60,6 +60,10 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
 
     this.$('.js-copyright-input').val(data.copyright);
     this.$('.js-caption-input').val(data.caption);
+
+    if (jQuery.fn.autosize !== undefined) {
+      figure.find('.js-caption-input').autosize();
+    }
   },
 
   onBlockRender: function(){

@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-27
+ * 2014-10-31
  */
 
 (function ($, _){
@@ -3191,8 +3191,8 @@
       var caption = $([
         "<label class='st-input-label'>" + i18n.t('blocks:extended_image:caption_field') +
         "</label>",
-        "<input type='text' name='caption' class='st-input-string js-caption-input'",
-        "placeholder='" + i18n.t("blocks:extended_image:caption_placeholder") + "'></input>"
+        "<textarea name='caption' class='st-input-string js-caption-input'",
+        "placeholder='" + i18n.t("blocks:extended_image:caption_placeholder") + "'></textarea>"
       ].join("\n"));
       figure.append(caption);
   
@@ -3201,6 +3201,10 @@
   
       this.$('.js-copyright-input').val(data.copyright);
       this.$('.js-caption-input').val(data.caption);
+  
+      if (jQuery.fn.autosize !== undefined) {
+        figure.find('.js-caption-input').autosize();
+      }
     },
   
     onBlockRender: function(){
