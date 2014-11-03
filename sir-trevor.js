@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-31
+ * 2014-11-10
  */
 
 (function ($, _){
@@ -3173,7 +3173,7 @@
       if (source !== undefined) {
         payload= $('<img>', { src: source });
       } else {
-        payload = $('<h1><i class="fa fa-exclamation-triangle"></i></h1>');
+        payload = $('<h1><i class="icon--exclamation-triangle"></i></h1>');
       }
   
       figure.append(picture.append(payload));
@@ -3283,7 +3283,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
   
         } else {
   
@@ -3493,7 +3493,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
   
         } else {
@@ -3583,7 +3583,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           this.$editor.html(embed_string);
   
         } else {
@@ -3688,7 +3688,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
   
         } else {
