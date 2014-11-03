@@ -29,7 +29,7 @@ SirTrevor.Blocks.Infographic = (function(){
 
       if (!this.providers.hasOwnProperty(data.source)) {
 
-        embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+        embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
         this.$editor.html(embed_string);
 
       } else {
