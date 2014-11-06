@@ -3,6 +3,16 @@
   position: absolute;
   bottom: 0;  right: 0;
   opacity: 0;
+
+  left: 100%;
+  right: auto;
+  top: 0;
+  min-width: 15em;
+}
+
+.st-block__ui {
+  margin-left: 20px;
+  border-top: 1px solid $accent-color;
 }
 
 .st-block__control-ui {
@@ -17,6 +27,11 @@
   z-index: 1;
 }
 
+.st-active-block {
+  background-color: white;
+  // border: 1px solid $base-ui-color;
+}
+
 .st-block__inner:not(:hover) div:focus ~ .st-block__ui,
 .st-block__inner:not(:hover) div:focus ~ .st-block__control-ui {
   margin-bottom: -2px;
@@ -25,17 +40,26 @@
 .st-block--delete-active .st-block__ui-delete-controls {
   opacity: 1;
   z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
 }
 
 .st-block__delete-label {
-  display: block;
-  border: 2px solid $error-color;
-  border-bottom: none;
-  border-right: none;
-  text-align: center;
-  background: #fff;
+  //display: block;
   color: $error-color;
   padding: 0.4em 0;
+}
+
+.btn--editor-panel {
+  position: relative;
+  clear: both;
+  float: left;
+  border-bottom: 1px solid $accent-color;
+  width: 15em;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .st-block__ui-delete-controls .btn--editor-panel--delete {
@@ -44,7 +68,7 @@
   line-height: 45px;
   display: block;
   box-sizing: border-box;
-  background: #fff;
+  background-color: #fff;
   border:2px solid;
   float:left;
 }

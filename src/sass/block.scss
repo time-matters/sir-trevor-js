@@ -1,6 +1,9 @@
 .st-block {
-  padding:0;
   position: relative;
+  min-height: 20px; // also the line height.
+  padding: 2px;
+  padding-left: 12px;
+  margin-bottom: 12px;
 }
 
 .st-block__inner {
@@ -156,6 +159,16 @@ ul.st-text-block {
   padding-top: 8px;
   text-align: right;
   word-break: break-all;
+}
+
+.st-code {
+  display: block;
+  min-height: 20px;
+}
+
+.st-block--heading {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .st-divider {

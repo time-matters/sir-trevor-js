@@ -32,7 +32,7 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
     if (source !== undefined) {
       payload= $('<img>', { src: source });
     } else {
-      payload = $('<h1><i class="fa fa-exclamation-triangle"></i></h1>');
+      payload = $('<h1><i class="icon--exclamation-triangle"></i></h1>');
     }
 
     figure.append(picture.append(payload));

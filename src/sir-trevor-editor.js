@@ -271,9 +271,7 @@ SirTrevor.Editor = (function(){
       this.blocks.push(block);
       this._incrementBlockTypeCount(type);
 
-      if (focus !== false) {
-        block.focus();
-      }
+      !data && block.focus();
 
       SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);
       SirTrevor.log("Block created of type " + type);

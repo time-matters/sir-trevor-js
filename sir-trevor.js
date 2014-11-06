@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-31
+ * 2014-11-06
  */
 
 (function ($, _){
@@ -297,6 +297,10 @@
           'title': "Cite",
           'credit_field': "Credit"
         },
+        code: {
+          'title': "Code",
+          'language_field': "Language"
+        },
         extended_quote: {
           'title': "Extended Cite",
           'credit_field': "Credit"
@@ -381,6 +385,10 @@
         quote: {
           'title': "Zitat",
           'credit_field': "Quelle"
+        },
+        code: {
+          'title': "Code",
+          'language_field': "Sprache"
         },
         extended_quote: {
           'title': "Erweitertes Zitat",
@@ -1328,8 +1336,7 @@
   
       this.drop_options = _.extend({}, SirTrevor.DEFAULTS.Block.drop_options, this.drop_options);
   
-      var drop_html = $(_.template(this.drop_options.html,
-                        { block: this }));
+      var drop_html = $(_.template(this.drop_options.html)({ block: this }));
   
       this.$editor.hide();
       this.$inputs.append(drop_html);
@@ -2068,11 +2075,21 @@
   
     _.extend(Block.prototype, SirTrevor.SimpleBlock.fn, SirTrevor.BlockValidations, {
   
-      bound: ["_checkArrowKeysUp", "_checkArrowKeysDown", "_checkReturn",
-              "_checkBackspaceAtStartKeyDown", "_checkBackspaceAtStartKeyUp",
-              "_handleContentPaste", "_onFocus", "_onBlur", "onDrop",
-              "onDeleteClick", "clearInsertedStyles",
-              "getSelectionForFormatter", "onBlockRender"],
+      bound: [
+        "_checkArrowKeysDown",
+        "_checkArrowKeysUp",
+        "_checkBackspaceAtStartKeyDown",
+        "_checkBackspaceAtStartKeyUp",
+        "_checkReturn",
+        "_handleContentPaste",
+        "_onBlur",
+        "_onFocus",
+        "clearInsertedStyles",
+        "getSelectionForFormatter",
+        "onBlockRender",
+        "onDeleteClick",
+        "onDrop"
+      ],
   
       className: 'st-block st-icon--add',
   
@@ -2914,7 +2931,7 @@
   */
   SirTrevor.Blocks.Heading = SirTrevor.Block.extend({
   
-    type: 'Heading',
+    type: 'heading',
   
     title: function(){ return i18n.t('blocks:heading:title'); },
   
@@ -3053,6 +3070,44 @@
   
   })();
   /*
+    Code Block
+  */
+  
+  SirTrevor.Blocks.Code = (function(){
+  
+    var template = _.template([
+      '<code class="st-code st-required st-text-block st-block--code" contenteditable="true"></code>',
+      '<label class="st-input-label"> <%= i18n.t("blocks:code:language_field") %></label>',
+      '<input name="lang" placeholder="<%= i18n.t("blocks:code:language_field") %>"',
+      ' class="st-input-string js-lang-input" type="text" />'
+    ].join("\n"));
+  
+    return SirTrevor.Block.extend({
+  
+      type: "code",
+  
+      title: function() { return i18n.t('blocks:code:title'); },
+  
+      icon_name: 'text',
+      // changeable: ['Heading', 'text'],
+  
+      editorHTML: function() {
+        return template(this);
+      },
+  
+      loadData: function(data){
+        this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
+        this.$('.js-lang-input').val(data.lang);
+      },
+  
+      toMarkdown: function(markdown) {
+        return markdown.replace(/^(.+)$/mg,"    $1");
+      }
+  
+    });
+  
+  })();
+  /*
     Divider
   */
   
@@ -3173,7 +3228,7 @@
       if (source !== undefined) {
         payload= $('<img>', { src: source });
       } else {
-        payload = $('<h1><i class="fa fa-exclamation-triangle"></i></h1>');
+        payload = $('<h1><i class="icon--exclamation-triangle"></i></h1>');
       }
   
       figure.append(picture.append(payload));
@@ -3283,7 +3338,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
   
         } else {
   
@@ -3493,7 +3548,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
   
         } else {
@@ -3583,7 +3638,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           this.$editor.html(embed_string);
   
         } else {
@@ -3688,7 +3743,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="fa fa-exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
   
         } else {
@@ -4488,9 +4543,7 @@
         this.blocks.push(block);
         this._incrementBlockTypeCount(type);
   
-        if (focus !== false) {
-          block.focus();
-        }
+        !data && block.focus();
   
         SirTrevor.EventBus.trigger(data ? "block:create:existing" : "block:create:new", block);
         SirTrevor.log("Block created of type " + type);
