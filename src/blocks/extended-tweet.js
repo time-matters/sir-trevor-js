@@ -34,7 +34,7 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
     droppable: true,
     pastable: true,
 
-    icon_name: 'twitter',
+    icon_name: 'twitter-outline',
 
     extractSourceInformation: function(options) {
       var url = options.remote_id;

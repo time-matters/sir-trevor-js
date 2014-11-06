@@ -722,7 +722,7 @@
     var promptRestoration = function() {
       var warn = $('<div class="st-autoload-info">Dieser Artikel wurde aus dem Zwischenspeicher dieses Browsers geladen. Er wurde zuvor geändert und nicht auf dem Server gesichert. Du kannst die Änderungen beibehalten indem du speicherst oder die Änderungen verwerfen.<br></div>');
       var discard = $('<a href="#" class="st-autoload-discard-button">Verwerfen</a>');
-      var close = $('<a href="#" class="st-icon st-autoload-close-button" data-icon="close"></a>');
+      var close = $('<a href="#" class="st-autoload-close-button"><span class="icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
   
       warn.append(discard);
       warn.append(close);
@@ -2890,7 +2890,7 @@
   
       title: function() { return i18n.t('blocks:extended_quote:title'); },
   
-      icon_name: 'quote',
+      icon_name: 'quote-extended',
       changeable: ['Heading', 'text'],
   
       editorHTML: function() {
@@ -3026,7 +3026,7 @@
   
       title: function() { return i18n.t('blocks:definition:title'); },
   
-      icon_name: 'list',
+      icon_name: 'definition',
       changeable: ['Heading', 'text'],
   
       editorHTML: function() {
@@ -3066,7 +3066,7 @@
   
       title: function() { return i18n.t('blocks:divider:title'); },
   
-      icon_name: 'list',
+      icon_name: 'divider',
   
       editorHTML: function() {
         return _.template(template, this);
@@ -3475,7 +3475,7 @@
       droppable: true,
       pastable: true,
   
-      icon_name: 'twitter',
+      icon_name: 'twitter-outline',
   
       extractSourceInformation: function(options) {
         var url = options.remote_id;
@@ -3570,7 +3570,7 @@
       droppable: true,
       pastable: true,
   
-      icon_name: 'image',
+      icon_name: 'infographic',
   
       extractSourceInformation: function() {
         var url = this.$editor.find('iframe').attr('src');
@@ -3670,7 +3670,7 @@
       droppable: true,
       pastable: true,
   
-      icon_name: 'video',
+      icon_name: 'audio',
   
       extractSourceInformation: function() {
         var url = this.$editor.find('iframe').attr('src');
@@ -3948,7 +3948,7 @@
       },
   
       render: function() {
-        this.$el.html('<span class="st-icon">'+ _.result(this.block_type, 'icon_name') +'</span>' + _.result(this.block_type, 'title'));
+        this.$el.html('<span class="st-icon icon--'+ _.result(this.block_type, 'icon_name') +'" aria-hidden="true"></span>' + _.result(this.block_type, 'title'));
         return this;
       }
     });

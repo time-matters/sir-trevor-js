@@ -17,7 +17,7 @@ SirTrevor.Blocks.ExtendedQuote = (function(){
 
     title: function() { return i18n.t('blocks:extended_quote:title'); },
 
-    icon_name: 'quote',
+    icon_name: 'quote-extended',
     changeable: ['Heading', 'text'],
 
     editorHTML: function() {

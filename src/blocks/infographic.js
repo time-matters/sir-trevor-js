@@ -16,7 +16,7 @@ SirTrevor.Blocks.Infographic = (function(){
     droppable: true,
     pastable: true,
 
-    icon_name: 'image',
+    icon_name: 'infographic',
 
     extractSourceInformation: function() {
       var url = this.$editor.find('iframe').attr('src');
