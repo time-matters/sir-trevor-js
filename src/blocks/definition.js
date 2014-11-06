@@ -17,7 +17,7 @@ SirTrevor.Blocks.Definition = (function(){
 
     title: function() { return i18n.t('blocks:definition:title'); },
 
-    icon_name: 'list',
+    icon_name: 'definition',
     changeable: ['Heading', 'text'],
 
     editorHTML: function() {

@@ -12,7 +12,7 @@ SirTrevor.Blocks.Divider = (function() {
 
     title: function() { return i18n.t('blocks:divider:title'); },
 
-    icon_name: 'list',
+    icon_name: 'divider',
 
     editorHTML: function() {
       return _.template(template, this);

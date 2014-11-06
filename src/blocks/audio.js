@@ -21,7 +21,7 @@ SirTrevor.Blocks.Audio = (function(){
     droppable: true,
     pastable: true,
 
-    icon_name: 'video',
+    icon_name: 'audio',
 
     extractSourceInformation: function() {
       var url = this.$editor.find('iframe').attr('src');

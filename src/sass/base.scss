@@ -1,3 +1,6 @@
+// ST-Icons
+/* Set $use-st-icons to true in _variables.scss if you want to use st-icon font */
+
 @mixin sir-trevor-icons() {
   font-family: 'ST-Icons';
   speak: none;
@@ -12,8 +15,8 @@
   -webkit-font-smoothing: antialiased;
 }
 
-// ST-Icons
-/* Use the following CSS code if you want to use data attributes for inserting your icons */
+@if $use-st-icons == true {
+
 [data-icon]:before,
 [data-icon-after]:after {
   @include sir-trevor-icons;
@@ -36,4 +39,6 @@
 .st-spinner {
   position: absolute!important;
   left: 50%; top: 50%;
+}
+
 }
