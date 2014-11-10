@@ -6,7 +6,14 @@ SirTrevor.Blocks.Infographic = (function(){
     providers: {
       infoactive: {
         regex: /(?:http[s]?:\/\/)?(?:www.)?infoactive.co\/plays\/(.+)/,
-        html: "<iframe width='100%' height='700' src='https://infoactive.co/plays/{{remote_id}}' frameborder='0' allowfullscreen onload='javascript:SirTrevor.Blocks.Infographic.adjustHeight(this);'></iframe>"
+        html: [
+          "<div data-url='https://infoactive.co/plays/{{remote_id}}' id='infoactive-iframe-container-{{remote_id}}'></div>",
+          "<script type='text/javascript'>",
+            "jQuery.getScript('https://dqzzm1bt1bnva.cloudfront.net/assets/pym-7afa305c2065e6ace0f4cb837fc78658.js', function() {",
+              "var iFrameLoader = new pym.Parent('infoactive-iframe-container-{{remote_id}}','https://infoactive.co/plays/{{remote_id}}', {});",
+            "});",
+          "</script>"
+        ].join("\n")
       },
     },
 
@@ -19,7 +26,7 @@ SirTrevor.Blocks.Infographic = (function(){
     icon_name: 'infographic',
 
     extractSourceInformation: function() {
-      var url = this.$editor.find('iframe').attr('src');
+      var url = this.$editor.find('div[data-url]').attr('data-url');
       this.$editor.parents('.st-block').append(
         '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
     },
@@ -35,9 +42,9 @@ SirTrevor.Blocks.Infographic = (function(){
       } else {
 
         embed_string = this.providers[data.source].html
-          .replace('{{protocol}}', window.location.protocol)
-          .replace('{{remote_id}}', data.remote_id)
-          .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+          .replace(/{{protocol}}/g, window.location.protocol)
+          .replace(/{{remote_id}}/g, data.remote_id)
+          .replace(/{{width}}/g, this.$editor.width()); // for videos that can't resize automatically like vine
 
         this.$editor.html(embed_string);
         this.extractSourceInformation();
@@ -76,20 +83,3 @@ SirTrevor.Blocks.Infographic = (function(){
   });
 
 })();
-
-SirTrevor.Blocks.Infographic.adjustHeight = function(frame) {
-
-  // the height has to be set to 0 first for this to work in safari. the
-  // height also has to be stored.
-  var height = frame.style.height;
-  frame.style.height = 0;
-
-  try {
-    frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
-
-  } catch(e) {
-    // there might be a security exception getting the scrollHeight. in
-    // that case, do not leave the height at 0.
-    frame.style.height = height;
-  }
-};
