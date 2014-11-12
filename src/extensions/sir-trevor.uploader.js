@@ -7,10 +7,20 @@ SirTrevor.fileUploader = function(block, file, success, error) {
 
   var uid  = [block.blockID, (new Date()).getTime(), 'raw'].join('-');
   var data = new FormData();
+  var blockData = block.getData();
+  var instance = SirTrevor.getInstance(block.instanceID);
 
   data.append('attachment[name]', file.name);
   data.append('attachment[file]', file);
   data.append('attachment[uid]', uid);
+
+  if (blockData !== undefined) {
+    data.append('block-uuid', blockData.uuid);
+  }
+
+  if (instance.dataStore !== undefined) {
+    data.append('article-uuid', instance.dataStore.uuid);
+  }
 
   block.resetMessages();
 
