@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-11-10
+ * 2014-11-12
  */
 
 (function ($, _){
@@ -4121,7 +4121,6 @@
       bound: ["onFormatButtonClick", "renderBySelection", "hide"],
   
       initialize: function() {
-        console.log("initializing new formatBar");
         var formatName, format, btn;
         var formatters = SirTrevor.Formatters;
         this.$btns = [];
