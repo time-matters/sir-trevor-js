@@ -973,9 +973,12 @@
     if (blockData !== undefined) {
       data.append('block-uuid', blockData.uuid);
     }
-  
     if (instance.dataStore !== undefined) {
       data.append('article-uuid', instance.dataStore.uuid);
+    }
+    if (instance.options !== undefined) {
+      data.append('model-name',  instance.options.modelName);
+      data.append('column-name', instance.options.columnName);
     }
   
     block.resetMessages();
