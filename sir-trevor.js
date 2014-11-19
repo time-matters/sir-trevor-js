@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-11-06
+ * 2014-11-19
  */
 
 (function ($, _){
@@ -971,10 +971,23 @@
   
     var uid  = [block.blockID, (new Date()).getTime(), 'raw'].join('-');
     var data = new FormData();
+    var blockData = block.getData();
+    var instance = SirTrevor.getInstance(block.instanceID);
   
     data.append('attachment[name]', file.name);
     data.append('attachment[file]', file);
     data.append('attachment[uid]', uid);
+  
+    if (blockData !== undefined) {
+      data.append('block-uuid', blockData.uuid);
+    }
+    if (instance.dataStore !== undefined) {
+      data.append('article-uuid', instance.dataStore.uuid);
+    }
+    if (instance.options !== undefined) {
+      data.append('model-name',  instance.options.modelName);
+      data.append('column-name', instance.options.columnName);
+    }
   
     block.resetMessages();
   
@@ -3615,7 +3628,14 @@
       providers: {
         infoactive: {
           regex: /(?:http[s]?:\/\/)?(?:www.)?infoactive.co\/plays\/(.+)/,
-          html: "<iframe width='100%' height='700' src='https://infoactive.co/plays/{{remote_id}}' frameborder='0' allowfullscreen onload='javascript:SirTrevor.Blocks.Infographic.adjustHeight(this);'></iframe>"
+          html: [
+            "<div data-url='https://infoactive.co/plays/{{remote_id}}' id='infoactive-iframe-container-{{remote_id}}'></div>",
+            "<script type='text/javascript'>",
+              "jQuery.getScript('https://dqzzm1bt1bnva.cloudfront.net/assets/pym-7afa305c2065e6ace0f4cb837fc78658.js', function() {",
+                "var iFrameLoader = new pym.Parent('infoactive-iframe-container-{{remote_id}}','https://infoactive.co/plays/{{remote_id}}', {});",
+              "});",
+            "</script>"
+          ].join("\n")
         },
       },
   
@@ -3628,7 +3648,7 @@
       icon_name: 'infographic',
   
       extractSourceInformation: function() {
-        var url = this.$editor.find('iframe').attr('src');
+        var url = this.$editor.find('div[data-url]').attr('data-url');
         this.$editor.parents('.st-block').append(
           '<aside>' + i18n.t('general:source') + ': ' + url + '</aside>');
       },
@@ -3644,9 +3664,9 @@
         } else {
   
           embed_string = this.providers[data.source].html
-            .replace('{{protocol}}', window.location.protocol)
-            .replace('{{remote_id}}', data.remote_id)
-            .replace('{{width}}', this.$editor.width()); // for videos that can't resize automatically like vine
+            .replace(/{{protocol}}/g, window.location.protocol)
+            .replace(/{{remote_id}}/g, data.remote_id)
+            .replace(/{{width}}/g, this.$editor.width()); // for videos that can't resize automatically like vine
   
           this.$editor.html(embed_string);
           this.extractSourceInformation();
@@ -3685,23 +3705,6 @@
     });
   
   })();
-  
-  SirTrevor.Blocks.Infographic.adjustHeight = function(frame) {
-  
-    // the height has to be set to 0 first for this to work in safari. the
-    // height also has to be stored.
-    var height = frame.style.height;
-    frame.style.height = 0;
-  
-    try {
-      frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
-  
-    } catch(e) {
-      // there might be a security exception getting the scrollHeight. in
-      // that case, do not leave the height at 0.
-      frame.style.height = height;
-    }
-  };
   SirTrevor.Blocks.Audio = (function(){
     return SirTrevor.Block.extend({
       providers: {
@@ -4186,7 +4189,6 @@
       bound: ["onFormatButtonClick", "renderBySelection", "hide"],
   
       initialize: function() {
-        console.log("initializing new formatBar");
         var formatName, format, btn;
         var formatters = SirTrevor.Formatters;
         this.$btns = [];
