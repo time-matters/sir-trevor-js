@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-11-12
+ * 2014-11-20
  */
 
 (function ($, _){
@@ -2043,8 +2043,8 @@
   
     var delete_template = [
       "<div class='st-block__ui-delete-controls'>",
-        "<a class='btn--confirm-delete st-icon' data-icon='tick'></a>",
-        "<a class='btn--deny-delete st-icon' data-icon='close'></a>",
+        "<a class='btn--confirm-delete'><span class='icon--tick' aria-hidden='true'></span><span class='visuallyhidden'>Confirm delete</span></a>",
+        "<a class='btn--deny-delete'><span class='icon--cross' aria-hidden='true'></span><span class='visuallyhidden'>Do not delete</span></a>",
         "<label class='st-block__delete-label'>",
         "<%= i18n.t('general:delete') %>",
         "</label>",
