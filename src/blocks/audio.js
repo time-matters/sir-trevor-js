@@ -3,13 +3,21 @@ SirTrevor.Blocks.Audio = (function(){
     providers: {
       soundcloud: {
         regex: /((?:http[s]?:\/\/)?(?:www.)?(:?soundcloud.com\/(.*)))/,
-        html: function(callback, options) {
+        html: function(options, success, error) {
+
+          // Cross site requests will not produce errors that jQuery
+          // could catch. We need a timeout that is cleared when the
+          // request was successful.
+          var fail = window.setTimeout(error, 5000);
+
           $.getJSON('https://soundcloud.com/oembed?callback=?', {
             format: 'js',
             url: options.remote_id,
             iframe: true
-          }, function(data) {
-            callback(data.html);
+          }).done(function(data) {
+            // clear the error timeout.
+            clearTimeout(fail);
+            success(data.html, options);
           });
         }
       }
@@ -35,30 +43,33 @@ SirTrevor.Blocks.Audio = (function(){
       var update_editor = function(embed_string) {
         self.$editor.html(embed_string);
         self.extractSourceInformation();
+        if (self.providers[data.source].square) {
+          self.$editor.addClass('st-block__editor--with-square-media');
+        } else {
+          self.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+        }
+      };
+
+      var display_error = function() {
+        embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+        self.$editor.html(embed_string);
       };
 
       if (!this.providers.hasOwnProperty(data.source)) {
-
-        embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
-        self.$editor.html(embed_string);
+        display_error();
 
       } else {
 
-        if (this.providers[data.source].square) {
-          this.$editor.addClass('st-block__editor--with-square-media');
-        } else {
-          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-        }
 
         var html = this.providers[data.source].html;
 
         if (html instanceof Function) {
 
-          html(update_editor, {
+          html({
             protocol: window.location.protocol,
             remote_id: data.remote_id,
             width: this.$editor.width() // for videos that can't resize automatically like vine
-          });
+          }, update_editor, display_error);
 
         } else {
 

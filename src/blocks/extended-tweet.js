@@ -12,8 +12,15 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
   return SirTrevor.Block.extend({
     providers: {
       soundcloud: {
-        regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*)))/,
-        html: function(callback, options) {
+        //regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*)))/,
+        regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*?)))(:?\?.*)?$/,
+        html: function(options, success, error) {
+
+          // Cross site requests will not produce errors that jQuery
+          // could catch. We need a timeout that is cleared when the
+          // request was successful.
+          var fail = window.setTimeout(error, 5000);
+
           $.getJSON('https://api.twitter.com/1/statuses/oembed.json?callback=?', {
             format: 'js',
             url: options.remote_id,
@@ -21,8 +28,10 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
             maxwidth: 550,
             hide_thread: 1,
             iframe: true
-          }, function(data) {
-            callback(data.html, options);
+          }).done(function(data) {
+            // clear the error timeout.
+            clearTimeout(fail);
+            success(data.html, options);
           });
         }
       }
@@ -50,10 +59,13 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
         self.extractSourceInformation(options);
       };
 
-      if (!this.providers.hasOwnProperty(data.source)) {
-
+      var display_error = function() {
         embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
         self.$editor.html(embed_string);
+      };
+
+      if (!this.providers.hasOwnProperty(data.source)) {
+        display_error();
 
       } else {
 
@@ -62,11 +74,11 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
 
         if (html instanceof Function) {
 
-          html(update_editor, {
+          html({
             protocol: window.location.protocol,
             remote_id: data.remote_id,
             width: this.$editor.width()
-          });
+          }, update_editor, display_error);
 
         } else {
 
