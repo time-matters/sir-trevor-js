@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-11-20
+ * 2014-12-04
  */
 
 (function ($, _){
@@ -3466,8 +3466,15 @@
     return SirTrevor.Block.extend({
       providers: {
         soundcloud: {
-          regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*)))/,
-          html: function(callback, options) {
+          //regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*)))/,
+          regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*?)))(:?\?.*)?$/,
+          html: function(options, success, error) {
+  
+            // Cross site requests will not produce errors that jQuery
+            // could catch. We need a timeout that is cleared when the
+            // request was successful.
+            var fail = window.setTimeout(error, 5000);
+  
             $.getJSON('https://api.twitter.com/1/statuses/oembed.json?callback=?', {
               format: 'js',
               url: options.remote_id,
@@ -3475,8 +3482,10 @@
               maxwidth: 550,
               hide_thread: 1,
               iframe: true
-            }, function(data) {
-              callback(data.html, options);
+            }).done(function(data) {
+              // clear the error timeout.
+              clearTimeout(fail);
+              success(data.html, options);
             });
           }
         }
@@ -3504,10 +3513,13 @@
           self.extractSourceInformation(options);
         };
   
-        if (!this.providers.hasOwnProperty(data.source)) {
-  
+        var display_error = function() {
           embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
+        };
+  
+        if (!this.providers.hasOwnProperty(data.source)) {
+          display_error();
   
         } else {
   
@@ -3516,11 +3528,11 @@
   
           if (html instanceof Function) {
   
-            html(update_editor, {
+            html({
               protocol: window.location.protocol,
               remote_id: data.remote_id,
               width: this.$editor.width()
-            });
+            }, update_editor, display_error);
   
           } else {
   
@@ -3655,13 +3667,21 @@
       providers: {
         soundcloud: {
           regex: /((?:http[s]?:\/\/)?(?:www.)?(:?soundcloud.com\/(.*)))/,
-          html: function(callback, options) {
+          html: function(options, success, error) {
+  
+            // Cross site requests will not produce errors that jQuery
+            // could catch. We need a timeout that is cleared when the
+            // request was successful.
+            var fail = window.setTimeout(error, 5000);
+  
             $.getJSON('https://soundcloud.com/oembed?callback=?', {
               format: 'js',
               url: options.remote_id,
               iframe: true
-            }, function(data) {
-              callback(data.html);
+            }).done(function(data) {
+              // clear the error timeout.
+              clearTimeout(fail);
+              success(data.html, options);
             });
           }
         }
@@ -3687,30 +3707,33 @@
         var update_editor = function(embed_string) {
           self.$editor.html(embed_string);
           self.extractSourceInformation();
+          if (self.providers[data.source].square) {
+            self.$editor.addClass('st-block__editor--with-square-media');
+          } else {
+            self.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+          }
+        };
+  
+        var display_error = function() {
+          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+          self.$editor.html(embed_string);
         };
   
         if (!this.providers.hasOwnProperty(data.source)) {
-  
-          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
-          self.$editor.html(embed_string);
+          display_error();
   
         } else {
   
-          if (this.providers[data.source].square) {
-            this.$editor.addClass('st-block__editor--with-square-media');
-          } else {
-            this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
-          }
   
           var html = this.providers[data.source].html;
   
           if (html instanceof Function) {
   
-            html(update_editor, {
+            html({
               protocol: window.location.protocol,
               remote_id: data.remote_id,
               width: this.$editor.width() // for videos that can't resize automatically like vine
-            });
+            }, update_editor, display_error);
   
           } else {
   
