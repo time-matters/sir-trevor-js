@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-12-04
+ * 2014-12-10
  */
 
 (function ($, _){
@@ -305,6 +305,8 @@
           'title': "Image",
           'caption_field': "Caption",
           'caption_placeholder': "Caption",
+          'target_url_field': "Link target URL",
+          'target_url_placeholder': "Link target URL",
           'copyright_field': "Copyright",
           'copyright_placeholder': "Copyright",
           'upload_error': "There was a problem with your upload",
@@ -390,6 +392,8 @@
           'title': "Bild",
           'caption_field': "Bildunterzeile",
           'caption_placeholder': "Bildunterzeile",
+          'target_url_field': "URL für das Linkziel",
+          'target_url_placeholder': "URL für das Linkziel",
           'copyright_field': "Fotograf",
           'copyright_placeholder': "Fotograf",
           'upload_error': "es gab ein problem beim hochladen",
@@ -3173,6 +3177,11 @@
   
     icon_name: 'image',
   
+    // OFF_STATE: "no",
+    // ON_STATE: "yes",
+  
+    // hiddenLinkInput: undefined,
+  
     loadData: function(data) {
       var editor = this.$editor;
   
@@ -3209,9 +3218,35 @@
       ].join("\n"));
       figure.append(caption);
   
+      // this.hiddenLinkInput = $("<input class='st-input-string js-link_checkbox-input' name='link_checkbox' type='hidden' value='" + "'></input>");
+      // this.link_checkbox = $("<input type='checkbox' name='link_checkbox_proxy' class='st-input-checkbox'></input>")
+      //   .prop('checked', data.link_checkbox === this.ON_STATE);
+      // var link_remainder = $([
+      //   "<label class='st-input-label st-checkbox-label'>" + i18n.t('blocks:extended_image:link_checkbox_field') +
+      //   "</label>",
+      // ].join("\n"));
+      // figure.append(this.hiddenLinkInput);
+      // figure.append(this.link_checkbox);
+      // figure.append(link_remainder);
+  
+      // var self = this;
+      // this.link_checkbox.on('change', function() {
+      //   self.linkCheckboxChange($(this));
+      // });
+  
+      var target_url = $([
+        "<label class='st-input-label'>" + i18n.t('blocks:extended_image:target_url_field') +
+        "</label>",
+        "<input type='text' maxlength='140' name='target_url' class='st-input-string js-target_url-input'",
+        "placeholder='" + i18n.t("blocks:extended_image:target_url_placeholder") + "'></input>"
+      ].join("\n"));
+      figure.append(target_url);
+  
       editor.html("").show();
       editor.append(figure);
   
+      this.$('.js-target_url-input').val(data.target_url);
+      // this.$('.js-link_checkbox-input').val(data.link_checkbox);
       this.$('.js-copyright-input').val(data.copyright);
       this.$('.js-caption-input').val(data.caption);
   
@@ -3219,6 +3254,12 @@
         figure.find('.js-caption-input').autosize();
       }
     },
+  
+    // linkCheckboxChange: function(element) {
+    //   this.hiddenLinkInput.val(
+    //     element.is(':checked') ? this.ON_STATE : this.OFF_STATE
+    //   );
+    // },
   
     onBlockRender: function(){
       /* Setup the upload button */
