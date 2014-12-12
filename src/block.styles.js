@@ -34,9 +34,7 @@ SirTrevor.BlockStyles = (function(){
       this.hiddenInput = $("<input class='st-input-string js-style-input' name='style' type='hidden' value='" + "'></input>");
       this.block.$el.append(this.hiddenInput);
 
-      console.log(data);
-
-      this.$el.find('select').val(data.style)
+      this.$el.find('select').val(data.style);
       this.updateValue(data.style);
     },
 

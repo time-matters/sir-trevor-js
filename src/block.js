@@ -335,7 +335,6 @@ SirTrevor.Block = (function(){
     _previousCaretOffset: undefined,
     _checkArrowKeysDown: function(ev) {
       var target = ev.target;
-      // console.log('down');
 
       // only trigger when an arrow key was hit.
       if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {

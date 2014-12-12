@@ -238,7 +238,6 @@ SirTrevor.editorStore = function(editor, method, options) {
   };
 
   var askUserForConfirmation = function() {
-    console.log('replacing the content');
     return true; // always replace;
     // return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
   };

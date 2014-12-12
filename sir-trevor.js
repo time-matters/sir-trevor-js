@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-12-10
+ * 2014-12-12
  */
 
 (function ($, _){
@@ -718,7 +718,6 @@
     };
   
     var askUserForConfirmation = function() {
-      console.log('replacing the content');
       return true; // always replace;
       // return confirm('Wir haben auf diesem Computer eine zwischengespeicherte Version dieses Artikels gefunden.\nMöchtest du diese Version widerherstellen?');
     };
@@ -1689,9 +1688,7 @@
         this.hiddenInput = $("<input class='st-input-string js-style-input' name='style' type='hidden' value='" + "'></input>");
         this.block.$el.append(this.hiddenInput);
   
-        console.log(data);
-  
-        this.$el.find('select').val(data.style)
+        this.$el.find('select').val(data.style);
         this.updateValue(data.style);
       },
   
@@ -2376,7 +2373,6 @@
       _previousCaretOffset: undefined,
       _checkArrowKeysDown: function(ev) {
         var target = ev.target;
-        // console.log('down');
   
         // only trigger when an arrow key was hit.
         if (ev !== undefined && [37, 38, 39, 40].indexOf(ev.keyCode) !== -1) {
