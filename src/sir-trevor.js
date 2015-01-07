@@ -142,6 +142,7 @@
   //= blocks/video.js
   //= blocks/tweet.js
   //= blocks/extended-tweet.js
+  //= blocks/facebookpost.js
   //= blocks/infographic.js
   //= blocks/audio.js
 

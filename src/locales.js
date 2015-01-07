@@ -73,6 +73,9 @@ SirTrevor.Locales = {
       video: {
         'title': "Video"
       },
+      facebookpost: {
+        'title': "Facebook Post",
+      },
       tweet: {
         'title': "Tweet",
         'fetch_error': "There was a problem fetching your tweet"
@@ -159,6 +162,9 @@ SirTrevor.Locales = {
       },
       video: {
         'title': "Video"
+      },
+      facebookpost: {
+        'title': "Facebook Post",
       },
       tweet: {
         'title': "Tweet",
