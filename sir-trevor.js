@@ -1092,6 +1092,8 @@
     var html = markdown,
         shouldWrap = type === "Text";
   
+    html = $("<div>").text(html).html().replace(/\&gt\;/g,">");
+  
     if(_.isUndefined(shouldWrap)) { shouldWrap = false; }
   
     if (shouldWrap) {
