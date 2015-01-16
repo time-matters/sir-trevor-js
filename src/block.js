@@ -81,6 +81,8 @@ SirTrevor.Block = (function(){
 
     formattable: true,
 
+    removeEmpty: false,
+
     _previousSelection: '',
 
     initialize: function() {},
@@ -119,10 +121,24 @@ SirTrevor.Block = (function(){
       if (this.controllable) { this.withMixin(SirTrevor.BlockMixins.Controllable); }
 
       if (this.formattable) { this._initFormatting(); }
+      if (this.removeEmpty) { this._registerRemoveListener(); }
 
       this._blockPrepare();
 
       return this;
+    },
+
+    _registerRemoveListener: function () {
+      var removeOnOutsideClick = function () {
+        if (this.isEmpty() && !this.spinner) {
+          this.trigger('removeBlock', this.blockID);
+        }
+      }.bind(this);
+
+      $(window).on("click", removeOnOutsideClick);
+      this.listenTo(this, 'removeBlock', function () {
+        $(window).off("click", removeOnOutsideClick);
+      });
     },
 
     remove: function() {

@@ -484,8 +484,20 @@ SirTrevor.Editor = (function(){
       return result;
     },
 
+    findEmptyRemoveBlocks: function () {
+      var instance = this; result = [];
+      this.blocks.forEach(function(block) {
+        instance.saveBlockStateToStore(block);
+        if (block.removeEmpty && block.isEmpty()) {
+          result.push(block);
+        }
+      });
+
+      return result;
+    },
+
     removeEmptyBlocks: function() {
-      var blocksToDelete = this.findEmptyTextBlocks();
+      var blocksToDelete = this.findEmptyTextBlocks().concat(this.findEmptyRemoveBlocks());
       var instance = this;
       blocksToDelete.forEach(function(block) {
         instance.removeBlock(block.blockID);

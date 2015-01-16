@@ -43,6 +43,8 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
     droppable: true,
     pastable: true,
 
+    removeEmpty: true,
+
     icon_name: 'twitter-outline',
 
     extractSourceInformation: function(options) {

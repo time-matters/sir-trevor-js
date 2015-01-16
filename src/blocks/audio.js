@@ -29,6 +29,8 @@ SirTrevor.Blocks.Audio = (function(){
     droppable: true,
     pastable: true,
 
+    removeEmpty: true,
+
     icon_name: 'audio',
 
     extractSourceInformation: function() {

@@ -24,6 +24,8 @@ SirTrevor.Blocks.ExtendedImage = SirTrevor.Blocks.Image.extend({
 
   // hiddenLinkInput: undefined,
 
+  removeEmpty: true,
+
   loadData: function(data) {
     var editor = this.$editor;
 

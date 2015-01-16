@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-07
+ * 2015-01-16
  */
 
 (function ($, _){
@@ -2127,6 +2127,8 @@
   
       formattable: true,
   
+      removeEmpty: false,
+  
       _previousSelection: '',
   
       initialize: function() {},
@@ -2165,10 +2167,24 @@
         if (this.controllable) { this.withMixin(SirTrevor.BlockMixins.Controllable); }
   
         if (this.formattable) { this._initFormatting(); }
+        if (this.removeEmpty) { this._registerRemoveListener(); }
   
         this._blockPrepare();
   
         return this;
+      },
+  
+      _registerRemoveListener: function () {
+        var removeOnOutsideClick = function () {
+          if (this.isEmpty() && !this.spinner) {
+            this.trigger('removeBlock', this.blockID);
+          }
+        }.bind(this);
+  
+        $(window).on("click", removeOnOutsideClick);
+        this.listenTo(this, 'removeBlock', function () {
+          $(window).off("click", removeOnOutsideClick);
+        });
       },
   
       remove: function() {
@@ -3186,6 +3202,8 @@
   
     // hiddenLinkInput: undefined,
   
+    removeEmpty: true,
+  
     loadData: function(data) {
       var editor = this.$editor;
   
@@ -3329,6 +3347,8 @@
         { name: 'Default', value: 'default', className: 'default' },
         { name: 'Full-width', value: 'fullwidth', className: 'default' }
       ],
+  
+      removeEmpty: true,
   
       extractSourceInformation: function() {
         var url = this.$editor.find('iframe').attr('src');
@@ -3542,6 +3562,8 @@
       droppable: true,
       pastable: true,
   
+      removeEmpty: true,
+  
       icon_name: 'twitter-outline',
   
       extractSourceInformation: function(options) {
@@ -3731,6 +3753,8 @@
       droppable: true,
       pastable: true,
   
+      removeEmpty: true,
+  
       icon_name: 'infographic',
   
       extractSourceInformation: function() {
@@ -3821,6 +3845,8 @@
   
       droppable: true,
       pastable: true,
+  
+      removeEmpty: true,
   
       icon_name: 'audio',
   
@@ -4855,8 +4881,20 @@
         return result;
       },
   
+      findEmptyRemoveBlocks: function () {
+        var instance = this; result = [];
+        this.blocks.forEach(function(block) {
+          instance.saveBlockStateToStore(block);
+          if (block.removeEmpty && block.isEmpty()) {
+            result.push(block);
+          }
+        });
+  
+        return result;
+      },
+  
       removeEmptyBlocks: function() {
-        var blocksToDelete = this.findEmptyTextBlocks();
+        var blocksToDelete = this.findEmptyTextBlocks().concat(this.findEmptyRemoveBlocks());
         var instance = this;
         blocksToDelete.forEach(function(block) {
           instance.removeBlock(block.blockID);

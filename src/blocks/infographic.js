@@ -23,6 +23,8 @@ SirTrevor.Blocks.Infographic = (function(){
     droppable: true,
     pastable: true,
 
+    removeEmpty: true,
+
     icon_name: 'infographic',
 
     extractSourceInformation: function() {

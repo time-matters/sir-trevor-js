@@ -28,6 +28,8 @@ SirTrevor.Blocks.Video = (function(){
       { name: 'Full-width', value: 'fullwidth', className: 'default' }
     ],
 
+    removeEmpty: true,
+
     extractSourceInformation: function() {
       var url = this.$editor.find('iframe').attr('src');
       this.$editor.parents('.st-block').append(
