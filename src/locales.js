@@ -189,7 +189,7 @@ if (window.i18n === undefined || window.i18n.init === undefined) {
     t: function(key, options) {
       var parts = key.split(':'), str, obj, part, i;
 
-      obj = SirTrevor.Locales[SirTrevor.LANGUAGE];
+      obj = SirTrevor.Locales[SirTrevorUserLanguage] || SirTrevor.Locales[SirTrevor.LANGUAGE];
 
       for(i = 0; i < parts.length; i++) {
         part = parts[i];
