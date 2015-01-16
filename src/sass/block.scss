@@ -116,6 +116,7 @@ ul.st-text-block {
 .st-block__upload-container {
   margin: 0.4em 0 0 0;
   text-align: center;
+  position: relative;
 }
 
 .st-block__upload-container input[type="file"] {
@@ -125,6 +126,7 @@ ul.st-text-block {
   cursor: pointer;
   left: 0;
   width: 100%;
+  height: 100%;
   padding: 7px 0;
   text-align: center;
 }
