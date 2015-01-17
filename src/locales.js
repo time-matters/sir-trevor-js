@@ -64,6 +64,9 @@ SirTrevor.Locales = {
       divider: {
         'title': "Divider"
       },
+      reward_list: {
+        'title': "Reward List"
+      },
       audio: {
         'title': "Audio"
       },
@@ -153,6 +156,9 @@ SirTrevor.Locales = {
       },
       divider: {
         'title': "Trenner"
+      },
+      reward_list: {
+        'title': "Prämienliste"
       },
       audio: {
         'title': "Audio"

@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-16
+ * 2015-01-17
  */
 
 (function ($, _){
@@ -326,6 +326,9 @@
         divider: {
           'title': "Divider"
         },
+        reward_list: {
+          'title': "Reward List"
+        },
         audio: {
           'title': "Audio"
         },
@@ -415,6 +418,9 @@
         },
         divider: {
           'title': "Trenner"
+        },
+        reward_list: {
+          'title': "Prämienliste"
         },
         audio: {
           'title': "Audio"
@@ -3116,6 +3122,47 @@
       toHTML: function(html) {
         return template;
       },
+  
+      isEmpty: function() {
+        return false;
+      }
+  
+    });
+  
+  })();
+  /*
+    RewardList
+  */
+  
+  SirTrevor.Blocks.RewardList = (function() {
+  
+    var template = [
+      '<div class="st-reward-list st-block--reward-list">',
+      '<h1><i class="icon--money"></i>%s</h1>',
+      '</div>'
+    ].join("\n");
+  
+    debugger;
+  
+    return SirTrevor.Block.extend({
+  
+      type: 'reward_list',
+  
+      title: function() { return i18n.t('blocks:reward_list:title'); },
+  
+      icon_name: 'money',
+  
+      editorHTML: function() {
+        return _.template(template.replace('%s', this.title()), this);
+      },
+  
+      // toMarkdown: function(markdown) {
+      //   return "---------------------------------------";
+      // },
+  
+      // toHTML: function(html) {
+      //   return template;
+      // },
   
       isEmpty: function() {
         return false;

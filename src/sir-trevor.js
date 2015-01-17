@@ -137,6 +137,7 @@
   //= blocks/unordered-list.js
   //= blocks/definition.js
   //= blocks/divider.js
+  //= blocks/reward-list.js
   //= blocks/image.js
   //= blocks/extended-image.js
   //= blocks/video.js
