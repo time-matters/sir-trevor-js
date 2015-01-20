@@ -10,8 +10,6 @@ SirTrevor.Blocks.RewardList = (function() {
     '</div>'
   ].join("\n");
 
-  debugger;
-
   return SirTrevor.Block.extend({
 
     type: 'reward_list',
