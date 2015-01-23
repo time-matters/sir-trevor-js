@@ -589,6 +589,13 @@
     var ensureMetadata = function() {
       ensureUUID();
       ensureVersion();
+      ensureModelName();
+    };
+  
+    var ensureModelName = function() {
+      if (editor.dataStore.modelName === undefined) {
+        editor.dataStore.modelName = editor.options.modelName;
+      }
     };
   
     var ensureUUID = function() {
@@ -623,26 +630,29 @@
       });
     };
   
+    var parseKeyData = function (key) {
+        try {
+          return JSON.parse(localStorage.getItem(key));
+        } catch(e) {
+          return {};
+        }
+    };
+  
+    var getAllKeys = function (prefix) {
+      prefix = prefix || "st-";
+  
+      return _.filter(Object.keys(localStorage), function(key){ 
+        var modelName = parseKeyData(key).modelName || editor.options.modelName;
+        return key.lastIndexOf(prefix) === 0 && modelName === editor.options.modelName;
+      });
+    };
+  
     var getKeysWithoutServerUUID = function() {
       var key, keys = [];
-      var prefix = "st-";
   
-      // find eligible keys
-      for (key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-          if (key.lastIndexOf(prefix) === 0) {
-            try {
-              if (JSON.parse(localStorage.getItem(key)).server_uuid === undefined) {
-                keys.push(key);
-              }
-            } catch(e) {
-              // i hope nobody ever finds this.
-            }
-          }
-        }
-      }
-  
-      return keys.map(getUUIDFromKey);
+      return _.filter(getAllKeys(), function (key) {
+          return parseKeyData(key).server_uuid === undefined;
+      }).map(getUUIDFromKey);
     };
   
     var newestDocumentForUUID = function(uuid) {
@@ -651,20 +661,11 @@
         return {};
       }
   
-      var i, key, keys = [];
+      var i;
       var prefix = "st-" + uuid;
   
-      // find eligible keys
-      for (key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-          if (key.lastIndexOf(prefix) === 0) {
-            keys.push(key);
-          }
-        }
-      }
-  
       // find biggest verison number
-      var versions = keys.map(function(e) {
+      var versions = getAllKeys(prefix).map(function(e) {
         return new Version(/version-(\d+(?:\.\d+)?)/.exec(e)[1]);
       });
       var result = versions[0];
@@ -691,15 +692,7 @@
     var getAllUUIDs = function() {
       var key, keys = [];
   
-      // get all keys
-      for (key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-          if (key.lastIndexOf('st-') === 0) {
-            keys.push(getUUIDFromKey(key));
-          }
-        }
-      }
-      return _.uniq(keys);
+      return _.uniq(getAllKeys().map(getUUIDFromKey));
     };
   
     var removeAllForUUID = function(uuid) {
@@ -721,16 +714,11 @@
   
       var key, keys = [];
   
-      // get all keys
-      for (key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-          if (key.lastIndexOf('st-') === 0) {
-            if ($.inArray(key, keysToKeep) === -1) {
-              localStorage.removeItem(key);
-            }
-          }
+      _.each(getAllKeys(), function (key) {
+        if ($.inArray(key, keysToKeep) === -1) {
+          localStorage.removeItem(key);
         }
-      }
+      });
     };
   
     var askUserForConfirmation = function() {
