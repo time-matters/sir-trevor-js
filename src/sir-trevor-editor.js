@@ -17,7 +17,7 @@ SirTrevor.Editor = (function(){
     bound: ['onFormSubmit', 'showBlockControls', 'hideAllTheThings', 'hideBlockControls',
             'onNewBlockCreated', 'changeBlockPosition', 'onBlockDragStart', 'onBlockDragEnd',
             'removeBlockDragOver', 'onBlockDropped', 'createBlock', 'restoreDefaultType',
-            'autosave'],
+            'autosave', '_checkEscapeKeyPressed'],
 
     events: {
       'block:reorder:down':       'hideBlockControls',
@@ -55,6 +55,7 @@ SirTrevor.Editor = (function(){
 
       this.build();
 
+      $(window).on("keyup", this._checkEscapeKeyPressed);
       SirTrevor.bindFormSubmit(this.$form);
     },
 
@@ -298,6 +299,12 @@ SirTrevor.Editor = (function(){
 
     blockFocus: function(block) {
       this.block_controls.current_container = null;
+    },
+
+    _checkEscapeKeyPressed: function (e) {
+      if (e.keyCode == 27) {
+        this.hideBlockControls();
+      }
     },
 
     hideBlockControls: function() {
