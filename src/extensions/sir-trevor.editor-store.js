@@ -231,8 +231,8 @@ SirTrevor.editorStore = function(editor, method, options) {
   };
 
   var promptRestoration = function() {
-    var warn = $('<div class="st-autoload-info">Dieser Artikel wurde aus dem Zwischenspeicher dieses Browsers geladen. Er wurde zuvor geändert und nicht auf dem Server gesichert. Du kannst die Änderungen beibehalten indem du speicherst oder die Änderungen verwerfen.<br></div>');
-    var discard = $('<a href="#" class="st-autoload-discard-button">Verwerfen</a>');
+    var warn = $('<div class="st-autoload-info">' + i18n.t("autosave:longExplanation") + '<br></div>');
+    var discard = $('<a href="#" class="st-autoload-discard-button">' + i18n.t("autosave:discard") + '</a>');
     var close = $('<a href="#" class="st-autoload-close-button"><span class="icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
 
     warn.append(discard);

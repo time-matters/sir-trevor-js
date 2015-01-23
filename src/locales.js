@@ -24,6 +24,10 @@ SirTrevor.Locales = {
       'required_type_empty': "A required block type __type__ is empty",
       'load_fail': "There was a problem loading the contents of the document"
     },
+    autosave: {
+      'longExplanation': "This article was loaded from your browsers cache. It was changed locally and not saved on the server. You can keep the changes by saving or discard them.",
+      'discard': "Discard changes"
+    },
     blocks: {
       text: {
         'title': "Text"
@@ -116,6 +120,10 @@ SirTrevor.Locales = {
       'type_missing': "Es wird ein Block vom Typ __type__ benötigt",
       'required_type_empty': "Ein benötigter Block vom Typ  __type__ ist leer",
       'load_fail': "Es gab ein Problem beim Laden der Daten für dieses Dokument"
+    },
+    autosave: {
+      'longExplanation': "Dieser Artikel wurde aus dem Zwischenspeicher dieses Browsers geladen. Er wurde zuvor geändert und nicht auf dem Server gesichert. Du kannst die Änderungen beibehalten indem du speicherst oder die Änderungen verwerfen.",
+      'discard': "Verwerfen"
     },
     blocks: {
       text: {
