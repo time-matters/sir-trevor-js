@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-17
+ * 2015-01-23
  */
 
 (function ($, _){
@@ -3145,8 +3145,6 @@
       '<h1><i class="icon--money"></i>%s</h1>',
       '</div>'
     ].join("\n");
-  
-    debugger;
   
     return SirTrevor.Block.extend({
   
