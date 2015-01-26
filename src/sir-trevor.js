@@ -127,6 +127,7 @@
   //= block.store.js
   //= simple-block.js
   //= block.js
+  //= dynamic-block.js
   //= formatter.js
 
   /* Default Blocks */
@@ -146,6 +147,9 @@
   //= blocks/facebookpost.js
   //= blocks/infographic.js
   //= blocks/audio.js
+
+  /* dynamic Blocks */
+  //= dynamic_blocks/remoteSelectableList.js
 
   /* Default Formatters */
   //= formatters

@@ -1,0 +1,3 @@
+SirTrevor.DynamicBlocks = (function(){
+  return {};
+})();
