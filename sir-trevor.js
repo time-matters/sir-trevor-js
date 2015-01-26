@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-23
+ * 2015-01-26
  */
 
 (function ($, _){
@@ -356,6 +356,10 @@
         },
         heading: {
           'title': "Heading"
+        },
+        remoteselectablelist: {
+          'fetch_error': "There was a problem fetching the list!",
+          'maximumselected': "You can not select any more items!"
         }
       }
     },
@@ -453,6 +457,10 @@
         },
         heading: {
           'title': "Überschrift"
+        },
+        remoteselectablelist: {
+          'fetch_error': "Liste konnte nicht geladen werden!",
+          'maximumselected': "Du kannst nicht mehr Elemente auswählen!"
         }
       }
     }
@@ -2809,6 +2817,9 @@
     return Block;
   
   })();
+  SirTrevor.DynamicBlocks = (function(){
+    return {};
+  })();
   SirTrevor.Formatter = (function(){
   
     var Format = function(options){
@@ -3979,6 +3990,163 @@
   
   })();
 
+  /* dynamic Blocks */
+  SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
+    var list_item_template = _.template([
+      "<li>",
+  
+      //parent
+      "<% if (typeof parent_title!='undefined') { %>",
+        "<% if (typeof parent_url!='undefined') { %> <a target='_blank' href='<%=parent_url %>'> <% } %>",
+        "<%= parent_title %>",
+        "<% if (typeof parent_url!='undefined') { %> </a> <% } %>",
+        ":",
+      "<% } %>",
+  
+      //title
+      "<% if (typeof url!='undefined') { %> <a target='_blank' href='<%=url %>'> <% } %>",
+      "<%- title %>",
+      "<% if (typeof url!='undefined') { %> </a> <% } %>",
+  
+      //preview image
+      "<img src='<%= preview_image %>'>",
+      "</li>"
+    ].join("\n"));
+  
+    var list = _.template([
+      "<ul class='st-list st-list--<%= model_name %>'>",
+      "</ul>"
+    ].join("\n"));
+  
+    return function (parameters) {
+      //parameters.title
+      //parameters.model_name
+      //parameters.api_url
+      //parameters.maxSelected
+  
+      return {
+        type: parameters.model_name,
+        fetchable: true,
+  
+        selectedElements: [],
+  
+        title: function() { return parameters.title; },
+  
+        icon_name: parameters.icon,
+  
+        fetchResults: function () {
+          this.loading();
+  
+          var ajaxOptions = {
+            url: parameters.api_url,
+            dataType: "json"
+          };
+  
+          this.onListSuccess({kittens: [
+            {
+              title: "random kitten",
+              preview_image: "http://placekitten.com/g/200/300",
+              url: "http://google.de",
+              parent_title: "KittensProject1",
+              id: 5
+            },
+            {
+              title: "cute kitten",
+              preview_image: "http://placekitten.com/g/300/500",
+              id: 9,
+              parent_title: "KittensProject2",
+              parent_url: "http://google.de"
+            }
+          ]});
+  
+          //this.fetch(ajaxOptions, this.onListSuccess, this.onListFail);
+        },
+  
+        getSelected: function () {
+          return this.getData().selected;
+        },
+  
+        getSelectedIDs: function () {
+          return this.getSelected().map(function (e) {
+            return e.id;
+          });
+        },
+  
+        markSelectedElements: function () {
+          var selectedIDs = this.getSelectedIDs();
+          this.$el.find("li").each(function (i, el) {
+            el = jQuery(el);
+            if (selectedIDs.indexOf(el.data().id) !== -1) {
+              el.addClass("st-list-selected");
+            } else {
+              el.removeClass("st-list-selected");
+            }
+          });
+        },
+  
+        toggleElement: function (element) {
+          this.resetErrors();
+  
+          var selectedElements = this.getSelected().slice();
+          var index = this.getSelectedIDs().indexOf(element.id);
+  
+          if (index === -1) {
+            if (!parameters.maxSelected || parameters.maxSelected > selectedElements.length) {
+              selectedElements.push(element);
+            } else {
+              this.setError(jQuery(), i18n.t("blocks:remoteselectablelist:maximumselected"));
+            }
+          } else {
+            selectedElements.splice(index, 1);
+          }
+  
+          this.setAndLoadData({
+            selected: selectedElements
+          });
+        },
+  
+        editorHTML: function() {
+          return list(parameters);
+        },
+  
+        onBlockRender: function () {
+          if (!this.getData().selected) {
+            this.setData({ selected: [], model_name: parameters.model_name });
+          }
+  
+          this.fetchResults();
+        },
+  
+        loadData: function(data) {
+          this.markSelectedElements();
+        },
+  
+        onListSuccess: function (data) {
+          var that = this;
+          data = data[parameters.model_name];
+  
+          _.each(data, function (e) {
+            var li = jQuery(list_item_template(e));
+            li.data(e);
+            li.click(function () {
+              that.toggleElement(jQuery(this).data());
+            });
+            this.$el.find("ul").append(li);
+          }, this);
+  
+          this.markSelectedElements();
+  
+          this.ready();
+        },
+  
+        onListFail: function () {
+          this.addMessage(i18n.t("blocks:remoteselectablelist:fetch_error"));
+          this.ready();
+        }
+      };
+    };
+  })();
+
   /* Default Formatters */
   /* Our base formatters */
   (function(){
@@ -4487,6 +4655,7 @@
         }
   
         this._setRequired();
+        this._createDynamicBlocks();
         this._setBlocksTypes();
         this._bindFunctions();
         this._setupActiveClass();
@@ -5097,6 +5266,21 @@
         this.$wrapper = this.$outer.find('.st-blocks');
   
         return true;
+      },
+  
+      _createDynamicBlocks: function() {
+        var options = this.options;
+        if (!_.isUndefined(options.dynamicBlocks)) {
+          _.each(options.dynamicBlocks, function (dynamicBlockParams, dynamicBlockName) {
+            //extend SirTrevor.Blocks here with our new dynamic block
+            var dynamicBlock = SirTrevor.DynamicBlocks[dynamicBlockName](dynamicBlockParams);
+            var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
+  
+            dynamicBlock.type = type;
+            SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
+            if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
+          });
+        }
       },
   
       /*

@@ -189,3 +189,15 @@ ul.st-text-block {
     content: attr(data-placeholder);
   }
 }
+
+.st-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  li {
+    width: 300px;
+  }
+  li.st-list-selected {
+    border: 1px solid black;
+  }
+}
