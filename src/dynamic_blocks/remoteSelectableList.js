@@ -5,8 +5,7 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
     //parent
     "<% if (typeof parent_title!='undefined') { %>",
       "<% if (typeof parent_url!='undefined') { %><a target='_blank' href='<%=parent_url %>'><% } %>",
-      "<%= parent_title %>",
-      "<% if (typeof parent_url!='undefined') { %></a><% } %>:",
+      "<%= parent_title %><% if (typeof parent_url!='undefined') { %></a><% } %>:",
     "<% } %>",
 
     //title
