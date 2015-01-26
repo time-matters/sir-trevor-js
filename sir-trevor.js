@@ -5254,13 +5254,15 @@
         var options = this.options;
         if (!_.isUndefined(options.dynamicBlocks)) {
           _.each(options.dynamicBlocks, function (dynamicBlockParams, dynamicBlockName) {
-            //extend SirTrevor.Blocks here with our new dynamic block
-            var dynamicBlock = SirTrevor.DynamicBlocks[dynamicBlockName](dynamicBlockParams);
-            var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
+            _.each(dynamicBlockParams, function (dynamicBlockParam) {
+              //extend SirTrevor.Blocks here with our new dynamic block
+              var dynamicBlock = SirTrevor.DynamicBlocks[dynamicBlockName](dynamicBlockParam);
+              var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
   
-            dynamicBlock.type = type;
-            SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
-            if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
+              dynamicBlock.type = type;
+              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
+              if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
+            });
           });
         }
       },
