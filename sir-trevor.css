@@ -238,8 +238,6 @@ ul.st-text-block {
   margin: 0; }
   .st-list li {
     width: 300px; }
-  .st-list img {
-    max-width: 100%; }
   .st-list li.st-list-selected {
     border: 1px solid black; }
 

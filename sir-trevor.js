@@ -3997,10 +3997,9 @@
   
       //parent
       "<% if (typeof parent_title!='undefined') { %>",
-        "<% if (typeof parent_url!='undefined') { %> <a target='_blank' href='<%=parent_url %>'> <% } %>",
+        "<% if (typeof parent_url!='undefined') { %><a target='_blank' href='<%=parent_url %>'><% } %>",
         "<%= parent_title %>",
-        "<% if (typeof parent_url!='undefined') { %> </a> <% } %>",
-        ":",
+        "<% if (typeof parent_url!='undefined') { %></a><% } %>:",
       "<% } %>",
   
       //title
@@ -4042,24 +4041,7 @@
             dataType: "json"
           };
   
-          this.onListSuccess({kittens: [
-            {
-              title: "random kitten",
-              preview_image: "http://placekitten.com/g/200/300",
-              url: "http://google.de",
-              parent_title: "KittensProject1",
-              id: 5
-            },
-            {
-              title: "cute kitten",
-              preview_image: "http://placekitten.com/g/300/500",
-              id: 9,
-              parent_title: "KittensProject2",
-              parent_url: "http://google.de"
-            }
-          ]});
-  
-          //this.fetch(ajaxOptions, this.onListSuccess, this.onListFail);
+          this.fetch(ajaxOptions, this.onListSuccess, this.onListFail);
         },
   
         getSelected: function () {
