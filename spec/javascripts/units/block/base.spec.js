@@ -31,7 +31,7 @@ describe("Block", function(){
   });
 
   it("has a title", function(){
-    expect(block.title()).toBe("Text");
+    expect(block.title()).toBe("Lauftext");
   });
 
   it("correctly titleizes underscored types", function(){

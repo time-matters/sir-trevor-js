@@ -129,9 +129,9 @@ describe("Editor", function(){
       editor = new SirTrevor.Editor({ el: element, required: ['Text'] });
     });
 
-    it("correctly sets the English text as default", function(){
+    it("correctly sets the german text as default", function(){
         editor.validateBlockTypesExist(true);
-        expect(editor.errors).toEqual([{text: "You must have a block of type Text"}]);
+        expect(editor.errors).toEqual([{text: "Es wird ein Block vom Typ Text benötigt"}]);
     });
   });
 });
