@@ -4036,9 +4036,11 @@
         },
   
         onBlockRender: function () {
-          this.loading();
-  
-          parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
+          if (!this.getData().selected) {
+            this.loading();
+            
+            parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
+          }
         },
   
         loadData: function(data) {

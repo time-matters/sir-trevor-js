@@ -43,9 +43,11 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
       },
 
       onBlockRender: function () {
-        this.loading();
+        if (!this.getData().selected) {
+          this.loading();
 
-        parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
+          parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
+        }
       },
 
       loadData: function(data) {
