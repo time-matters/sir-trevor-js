@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-26
+ * 2015-01-27
  */
 
 (function ($, _){
@@ -357,7 +357,7 @@
         heading: {
           'title': "Heading"
         },
-        remoteselectablelist: {
+        remote_list: {
           'fetch_error': "There was a problem fetching the list!",
           'maximumselected': "You can not select any more items!"
         }
@@ -458,7 +458,7 @@
         heading: {
           'title': "Überschrift"
         },
-        remoteselectablelist: {
+        remote_list: {
           'fetch_error': "Liste konnte nicht geladen werden!",
           'maximumselected': "Du kannst nicht mehr Elemente auswählen!"
         }
@@ -4017,10 +4017,9 @@
     ].join("\n"));
   
     return function (parameters) {
-      //parameters.title
+      //parameters.callback
       //parameters.model_name
       //parameters.api_url
-      //parameters.maxSelected
   
       return {
         type: parameters.model_name,
@@ -4028,100 +4027,47 @@
   
         selectedElements: [],
   
-        title: function() { return parameters.title; },
+        title: function() { return i18n.t("blocks:remote_list:" + parameters.model_name + ":title"); },
   
         icon_name: parameters.icon,
-  
-        fetchResults: function () {
-          this.loading();
-  
-          var ajaxOptions = {
-            url: parameters.api_url,
-            dataType: "json"
-          };
-  
-          this.fetch(ajaxOptions, this.onListSuccess, this.onListFail);
-        },
-  
-        getSelected: function () {
-          return this.getData().selected;
-        },
-  
-        getSelectedIDs: function () {
-          return this.getSelected().map(function (e) {
-            return e.id;
-          });
-        },
-  
-        markSelectedElements: function () {
-          var selectedIDs = this.getSelectedIDs();
-          this.$el.find("li").each(function (i, el) {
-            el = jQuery(el);
-            if (selectedIDs.indexOf(el.data().id) !== -1) {
-              el.addClass("st-list-selected");
-            } else {
-              el.removeClass("st-list-selected");
-            }
-          });
-        },
-  
-        toggleElement: function (element) {
-          this.resetErrors();
-  
-          var selectedElements = this.getSelected().slice();
-          var index = this.getSelectedIDs().indexOf(element.id);
-  
-          if (index === -1) {
-            if (!parameters.maxSelected || parameters.maxSelected > selectedElements.length) {
-              selectedElements.push(element);
-            } else {
-              this.setError(jQuery(), i18n.t("blocks:remoteselectablelist:maximumselected"));
-            }
-          } else {
-            selectedElements.splice(index, 1);
-          }
-  
-          this.setAndLoadData({
-            selected: selectedElements
-          });
-        },
   
         editorHTML: function() {
           return list(parameters);
         },
   
         onBlockRender: function () {
-          if (!this.getData().selected) {
-            this.setData({ selected: [], model_name: parameters.model_name });
-          }
+          this.loading();
   
-          this.fetchResults();
+          parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
         },
   
         loadData: function(data) {
-          this.markSelectedElements();
+          this.ready();
+  
+          this.renderSelected(data.selected);
+        },
+  
+        renderSelected: function (selected) {
+          _.each(selected, function (e) {
+            var li = jQuery(list_item_template(e));
+            this.$el.find("ul").append(li);
+          }, this);
         },
   
         onListSuccess: function (data) {
           var that = this;
           data = data[parameters.model_name];
   
-          _.each(data, function (e) {
-            var li = jQuery(list_item_template(e));
-            li.data(e);
-            li.click(function () {
-              that.toggleElement(jQuery(this).data());
-            });
-            this.$el.find("ul").append(li);
-          }, this);
-  
-          this.markSelectedElements();
+          this.setAndLoadData({
+            selected: data,
+            model_name: parameters.model_name
+          });
   
           this.ready();
         },
   
         onListFail: function () {
-          this.addMessage(i18n.t("blocks:remoteselectablelist:fetch_error"));
+          this.addMessage(i18n.t("blocks:remote_list:fetch_error"));
           this.ready();
         }
       };
@@ -4635,6 +4581,7 @@
           this.onEditorRender = this.options.onEditorRender;
         }
   
+        this._extendLocales();
         this._setRequired();
         this._createDynamicBlocks();
         this._setBlocksTypes();
@@ -5280,6 +5227,23 @@
           this.required = this.options.required;
         } else {
           this.required = false;
+        }
+      },
+  
+      _extendLocales: function() {
+        function deepObjectExtend(target, source) {
+          _.each(source, function (value, key) {
+              if (target.hasOwnProperty(key))
+                  deepObjectExtend(target[key], value);
+              else
+                  target[key] = value;
+          });
+  
+          return target;
+        }
+  
+        if (_.isObject(this.options.locales)) {
+          deepObjectExtend(SirTrevor.Locales, this.options.locales);
         }
       }
     });
