@@ -46,12 +46,22 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
         if (!this.getData().selected) {
           this.loading();
 
+          this.setData({
+            selected: [],
+            model_name: parameters.model_name
+          });
+
           parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
         }
       },
 
       loadData: function(data) {
         this.ready();
+
+        if (!_.isArray(data.selected) || data.selected.length === 0) {
+          this.destroy();
+          return;
+        }
 
         this.renderSelected(data.selected);
       },
@@ -65,7 +75,6 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
 
       onListSuccess: function (data) {
         var that = this;
-        data = data[parameters.model_name];
 
         this.setAndLoadData({
           selected: data,

@@ -4038,13 +4038,23 @@
         onBlockRender: function () {
           if (!this.getData().selected) {
             this.loading();
-            
+  
+            this.setData({
+              selected: [],
+              model_name: parameters.model_name
+            });
+  
             parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
           }
         },
   
         loadData: function(data) {
           this.ready();
+  
+          if (!_.isArray(data.selected) || data.selected.length === 0) {
+            this.destroy();
+            return;
+          }
   
           this.renderSelected(data.selected);
         },
@@ -4058,7 +4068,6 @@
   
         onListSuccess: function (data) {
           var that = this;
-          data = data[parameters.model_name];
   
           this.setAndLoadData({
             selected: data,
@@ -5235,7 +5244,7 @@
       _extendLocales: function() {
         function deepObjectExtend(target, source) {
           _.each(source, function (value, key) {
-              if (target.hasOwnProperty(key))
+              if (target.hasOwnProperty(key) && typeof target === "object")
                   deepObjectExtend(target[key], value);
               else
                   target[key] = value;

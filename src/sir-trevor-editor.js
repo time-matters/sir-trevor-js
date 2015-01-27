@@ -696,7 +696,7 @@ SirTrevor.Editor = (function(){
     _extendLocales: function() {
       function deepObjectExtend(target, source) {
         _.each(source, function (value, key) {
-            if (target.hasOwnProperty(key))
+            if (target.hasOwnProperty(key) && typeof target === "object")
                 deepObjectExtend(target[key], value);
             else
                 target[key] = value;
