@@ -35,7 +35,7 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
 
       selectedElements: [],
 
-      title: function() { return parameters.title; },
+      title: function() { return i18n.t("blocks:remote_list:" + parameters.model_name + ":title"); },
 
       icon_name: parameters.icon,
 
@@ -82,7 +82,7 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
           if (!parameters.maxSelected || parameters.maxSelected > selectedElements.length) {
             selectedElements.push(element);
           } else {
-            this.setError(jQuery(), i18n.t("blocks:remoteselectablelist:maximumselected"));
+            this.setError(jQuery(), i18n.t("blocks:remote_list:maximumselected"));
           }
         } else {
           selectedElements.splice(index, 1);
@@ -128,7 +128,7 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
       },
 
       onListFail: function () {
-        this.addMessage(i18n.t("blocks:remoteselectablelist:fetch_error"));
+        this.addMessage(i18n.t("blocks:remote_list:fetch_error"));
         this.ready();
       }
     };

@@ -44,6 +44,7 @@ SirTrevor.Editor = (function(){
         this.onEditorRender = this.options.onEditorRender;
       }
 
+      this._extendLocales();
       this._setRequired();
       this._createDynamicBlocks();
       this._setBlocksTypes();
@@ -689,6 +690,23 @@ SirTrevor.Editor = (function(){
         this.required = this.options.required;
       } else {
         this.required = false;
+      }
+    },
+
+    _extendLocales: function() {
+      function deepObjectExtend(target, source) {
+        _.each(source, function (value, key) {
+            if (target.hasOwnProperty(key))
+                deepObjectExtend(target[key], value);
+            else
+                target[key] = value;
+        });
+
+        return target;
+      }
+
+      if (_.isObject(this.options.locales)) {
+        deepObjectExtend(SirTrevor.Locales, this.options.locales);
       }
     }
   });

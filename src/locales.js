@@ -95,7 +95,7 @@ SirTrevor.Locales = {
       heading: {
         'title': "Heading"
       },
-      remoteselectablelist: {
+      remote_list: {
         'fetch_error': "There was a problem fetching the list!",
         'maximumselected': "You can not select any more items!"
       }
@@ -196,7 +196,7 @@ SirTrevor.Locales = {
       heading: {
         'title': "Überschrift"
       },
-      remoteselectablelist: {
+      remote_list: {
         'fetch_error': "Liste konnte nicht geladen werden!",
         'maximumselected': "Du kannst nicht mehr Elemente auswählen!"
       }
