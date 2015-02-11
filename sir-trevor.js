@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-27
+ * 2015-02-11
  */
 
 (function ($, _){
@@ -3149,7 +3149,7 @@
   
     var template = [
       '<div class="st-reward-list st-block--reward-list">',
-      '<h1><i class="icon--money"></i>%s</h1>',
+      '<h1><i class="icon--reward"></i>%s</h1>',
       '</div>'
     ].join("\n");
   
@@ -3159,7 +3159,7 @@
   
       title: function() { return i18n.t('blocks:reward_list:title'); },
   
-      icon_name: 'money',
+      icon_name: 'reward',
   
       editorHTML: function() {
         return _.template(template.replace('%s', this.title()), this);

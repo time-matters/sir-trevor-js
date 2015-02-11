@@ -6,7 +6,7 @@ SirTrevor.Blocks.RewardList = (function() {
 
   var template = [
     '<div class="st-reward-list st-block--reward-list">',
-    '<h1><i class="icon--money"></i>%s</h1>',
+    '<h1><i class="icon--reward"></i>%s</h1>',
     '</div>'
   ].join("\n");
 
@@ -16,7 +16,7 @@ SirTrevor.Blocks.RewardList = (function() {
 
     title: function() { return i18n.t('blocks:reward_list:title'); },
 
-    icon_name: 'money',
+    icon_name: 'reward',
 
     editorHTML: function() {
       return _.template(template.replace('%s', this.title()), this);
