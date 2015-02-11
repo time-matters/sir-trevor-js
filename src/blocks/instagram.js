@@ -39,7 +39,7 @@ SirTrevor.Blocks.Instagram = (function(){
 
     removeEmpty: true,
 
-    icon_name: 'twitter-outline',
+    icon_name: 'instagram-outline',
 
     extractSourceInformation: function(options) {
       var url = options.remote_id;

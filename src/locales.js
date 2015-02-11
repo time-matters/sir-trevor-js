@@ -102,6 +102,9 @@ SirTrevor.Locales = {
       html: {
         'title': "Html"
       },
+      instagram: {
+        'title': "Instagram"
+      }
     }
   },
   de: {
@@ -206,6 +209,9 @@ SirTrevor.Locales = {
       html: {
         'title': "Html"
       },
+      instagram: {
+        'title': "Instagram"
+      }
     }
   }
 };
