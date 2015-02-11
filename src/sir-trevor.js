@@ -148,6 +148,7 @@
   //= blocks/infographic.js
   //= blocks/audio.js
   //= blocks/html.js
+  //= blocks/instagram.js
 
   /* dynamic Blocks */
   //= dynamic_blocks/remoteSelectableList.js

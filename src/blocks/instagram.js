@@ -1,10 +1,10 @@
-SirTrevor.Blocks.ExtendedTweet = (function(){
+SirTrevor.Blocks.Instagram = (function(){
 
   return SirTrevor.Block.extend({
     providers: {
-      soundcloud: {
-        //regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*)))/,
-        regex: /((?:http[s]?:\/\/)?(?:www.)?(:?twitter.com\/.*\/status\/(.*?)))(:?\?.*)?$/,
+      instagram: {
+        // http://instagram.com/p/bNd86MSFv6/
+        regex: /((?:http[s]?:\/\/)?(?:www.)?(:?instagr.*\/p\/(.*?)))(:?\?.*)?$/,
         html: function(options, success, error) {
 
           // Cross site requests will not produce errors that jQuery
@@ -12,13 +12,16 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
           // request was successful.
           var fail = window.setTimeout(error, 5000);
 
-          $.getJSON('https://api.twitter.com/1/statuses/oembed.json?callback=?', {
-            format: 'js',
-            url: options.remote_id,
-            align: 'center',
-            maxwidth: 550,
-            hide_thread: 1,
-            iframe: true
+          // Using YQL and JSONP
+          $.ajax({
+            url: "http://api.instagram.com/oembed",
+            data: {
+              maxwidth: 550,
+              url: options.remote_id
+            },
+            // The name of the callback parameter, as specified by the YQL service
+            jsonp: "callback",
+            dataType: "jsonp"
           }).done(function(data) {
             // clear the error timeout.
             clearTimeout(fail);
@@ -28,8 +31,8 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
       }
     },
 
-    type: 'extended_tweet',
-    title: function() { return i18n.t('blocks:tweet:title'); },
+    type: 'instagram',
+    title: function() { return i18n.t('blocks:instagram:title'); },
 
     droppable: true,
     pastable: true,
@@ -57,31 +60,12 @@ SirTrevor.Blocks.ExtendedTweet = (function(){
         self.$editor.html(embed_string);
       };
 
-      if (!this.providers.hasOwnProperty(data.source)) {
-        display_error();
-
-      } else {
-
-        var html = this.providers[data.source].html;
-
-
-        if (html instanceof Function) {
-
-          html({
-            protocol: window.location.protocol,
-            remote_id: data.remote_id,
-            width: this.$editor.width()
-          }, update_editor, display_error);
-
-        } else {
-
-          embed_string = html
-            .replace('{{protocol}}', window.location.protocol)
-            .replace('{{remote_id}}', data.remote_id)
-            .replace('{{width}}', this.$editor.width());
-          update_editor();
-        }
-      }
+      var html = this.providers[data.source].html;
+      html({
+        protocol: window.location.protocol,
+        remote_id: data.remote_id,
+        width: this.$editor.width()
+      }, update_editor, display_error);
     },
 
     onContentPasted: function(event){
