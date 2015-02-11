@@ -53,7 +53,7 @@ SirTrevor.toMarkdown = function(content, type) {
   }
 
   markdown = markdown.replace(/<(\w+)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>\s*<\/\1>/gim, '') //Empty elements
-                      .replace(/\n/mg,"")
+                      .replace(/\n/mg," ")
                       .replace(/<a.*?href=[""'](.*?)[""'].*?>(\s*)(.*?)(\s*)<\/a>/gim, replaceHyperlinks) // Hyperlinks
                       .replace(/<strong>(\s*)(.*?)(\s)*?<\/strong>/gim, replaceBolds)
                       .replace(/<b>(\s*)(.*?)(\s*)?<\/b>/gim, replaceBolds)
