@@ -4156,8 +4156,16 @@
       text : "link",
   
       onClick: function() {
+        var selectionLink = "";
   
-        var link = prompt(i18n.t("general:link")),
+        try {
+          var sel = document.getSelection();
+          if (sel.rangeCount) {
+            selectionLink = sel.getRangeAt(0).commonAncestorContainer.parentElement.href || "";
+          }
+        } catch (e) {}
+  
+        var link = prompt(i18n.t("general:link"), selectionLink),
             link_regex = /((ftp|http|https):\/\/.)|mailto(?=\:[-\.\w]+@)/;
   
         if(link && link.length > 0) {
