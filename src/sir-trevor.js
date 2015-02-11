@@ -147,6 +147,7 @@
   //= blocks/facebookpost.js
   //= blocks/infographic.js
   //= blocks/audio.js
+  //= blocks/html.js
 
   /* dynamic Blocks */
   //= dynamic_blocks/remoteSelectableList.js

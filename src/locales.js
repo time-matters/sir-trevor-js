@@ -98,7 +98,10 @@ SirTrevor.Locales = {
       remote_list: {
         'fetch_error': "There was a problem fetching the list!",
         'maximumselected': "You can not select any more items!"
-      }
+      },
+      html: {
+        'title': "Html"
+      },
     }
   },
   de: {
@@ -199,7 +202,10 @@ SirTrevor.Locales = {
       remote_list: {
         'fetch_error': "Liste konnte nicht geladen werden!",
         'maximumselected': "Du kannst nicht mehr Elemente auswählen!"
-      }
+      },
+      html: {
+        'title': "Html"
+      },
     }
   }
 };
