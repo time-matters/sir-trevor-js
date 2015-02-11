@@ -364,6 +364,9 @@
         html: {
           'title': "Html"
         },
+        instagram: {
+          'title': "Instagram"
+        }
       }
     },
     de: {
@@ -468,6 +471,9 @@
         html: {
           'title': "Html"
         },
+        instagram: {
+          'title': "Instagram"
+        }
       }
     }
   };
@@ -4066,7 +4072,7 @@
   
       removeEmpty: true,
   
-      icon_name: 'twitter-outline',
+      icon_name: 'instagram-outline',
   
       extractSourceInformation: function(options) {
         var url = options.remote_id;
