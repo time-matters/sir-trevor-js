@@ -1,28 +1,4 @@
 SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
-  var list_item_template = _.template([
-    "<li>",
-
-    //parent
-    "<% if (typeof parent_title!='undefined') { %>",
-      "<% if (typeof parent_url!='undefined') { %><a target='_blank' href='<%=parent_url %>'><% } %>",
-      "<%= parent_title %><% if (typeof parent_url!='undefined') { %></a><% } %>:",
-    "<% } %>",
-
-    //title
-    "<% if (typeof url!='undefined') { %> <a target='_blank' href='<%=url %>'> <% } %>",
-    "<%- title %>",
-    "<% if (typeof url!='undefined') { %> </a> <% } %>",
-
-    //preview image
-    "<img src='<%= preview_image %>'>",
-    "</li>"
-  ].join("\n"));
-
-  var list = _.template([
-    "<ul class='st-list st-list--<%= model_name %>'>",
-    "</ul>"
-  ].join("\n"));
-
   return function (parameters) {
     //parameters.callback
     //parameters.model_name
@@ -39,7 +15,7 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
       icon_name: parameters.icon,
 
       editorHTML: function() {
-        return list(parameters);
+        return "";
       },
 
       onBlockRender: function () {
@@ -51,13 +27,11 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
             model_name: parameters.model_name
           });
 
-          parameters.callback(this.onListSuccess.bind(this), this.onListFail.bind(this));
+          parameters.callback(this.onListSuccess.bind(this), this.onGetFail.bind(this));
         }
       },
 
       loadData: function(data) {
-        this.ready();
-
         if (!_.isArray(data.selected) || data.selected.length === 0) {
           this.destroy();
           return;
@@ -67,10 +41,14 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
       },
 
       renderSelected: function (selected) {
-        _.each(selected, function (e) {
-          var li = jQuery(list_item_template(e));
-          this.$el.find("ul").append(li);
-        }, this);
+        var data = JSON.stringify({ model_name: parameters.model_name, selected: selected });
+
+        $.get(parameters.render_endpoint, { content: data }, this.onGetRenderSuccess.bind(this)).fail(this.onGetFail.bind(this));
+      },
+
+      onGetRenderSuccess: function (data) {
+        this.ready();
+        this.$el.append(data);
       },
 
       onListSuccess: function (data) {
@@ -84,7 +62,7 @@ SirTrevor.DynamicBlocks.RemoteSelectableList = (function(){
         this.ready();
       },
 
-      onListFail: function () {
+      onGetFail: function () {
         this.addMessage(i18n.t("blocks:remote_list:fetch_error"));
         this.ready();
       }
