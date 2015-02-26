@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-02-12
+ * 2015-02-26
  */
 
 (function ($, _){
@@ -1117,8 +1117,6 @@
   
     var html = markdown,
         shouldWrap = type === "Text";
-  
-    html = $("<div>").text(html).html().replace(/\&gt\;/g,">");
   
     if(_.isUndefined(shouldWrap)) { shouldWrap = false; }
   
