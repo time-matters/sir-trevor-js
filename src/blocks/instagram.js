@@ -14,7 +14,7 @@ SirTrevor.Blocks.Instagram = (function(){
 
           // Using YQL and JSONP
           $.ajax({
-            url: "http://api.instagram.com/oembed",
+            url: "//api.instagram.com/oembed",
             data: {
               maxwidth: 550,
               url: options.remote_id

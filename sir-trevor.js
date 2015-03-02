@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-02-26
+ * 2015-03-02
  */
 
 (function ($, _){
@@ -3729,7 +3729,11 @@
       '<div class="fb-post" data-href="<%= url %>" data-width="<%= width %>"></div>'
     ].join("\n"));
   
-    var facebookPostRegex = /((?:http[s]?:\/\/)?(?:www.)?(:?facebook.com\/.*\/posts\/(.*?)))(:?\?.*)?$/;
+    // https://www.facebook.com/video.php?v=932260686798181
+    // https://www.facebook.com/mehrbasketball/posts/789246717829360
+    // https://www.facebook.com/BuschmannFrank/photos/a.646326722058247.1073741825.117176518306606/935661633124753/?type=1
+    // https://www.facebook.com/photo.php?fbid=923923527651763&set=a.340340156010106.85330.100001023720602&type=1
+    var facebookPostRegex = /((?:http[s]?:\/\/)?(?:www.)?(:?facebook.com\/(video\.php|photo\.php|(.*\/(posts|photos)\/))(.*?)))(:?\?.*)?$/;
   
     return SirTrevor.Block.extend({
   
@@ -4045,7 +4049,7 @@
   
             // Using YQL and JSONP
             $.ajax({
-              url: "http://api.instagram.com/oembed",
+              url: "//api.instagram.com/oembed",
               data: {
                 maxwidth: 550,
                 url: options.remote_id
