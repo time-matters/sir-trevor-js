@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-02-12
+ * 2015-03-02
  */
 
 (function ($, _){
@@ -4047,7 +4047,7 @@
   
             // Using YQL and JSONP
             $.ajax({
-              url: "http://api.instagram.com/oembed",
+              url: "//api.instagram.com/oembed",
               data: {
                 maxwidth: 550,
                 url: options.remote_id
