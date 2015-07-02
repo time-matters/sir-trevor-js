@@ -5356,7 +5356,7 @@
               var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
   
               dynamicBlock.type = type;
-              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock);
+              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
               if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
             });
           });
