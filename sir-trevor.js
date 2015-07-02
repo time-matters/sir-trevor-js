@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-03-02
+ * 2015-07-02
  */
 
 (function ($, _){
@@ -51,7 +51,8 @@
     errorsContainer: undefined,
     toMarkdown: {
       aggresiveHTMLStrip: false
-    }
+    },
+    escapeHTML: false
   };
 
   SirTrevor.BlockMixins = {};
@@ -1118,7 +1119,11 @@
     var html = markdown,
         shouldWrap = type === "Text";
   
-    html = $("<div>").text(html).html().replace(/\&gt\;/g,">");
+    var options = SirTrevor.getInstance().options;
+  
+    if (options && options.escapeHTML) {
+      html = $("<div>").text(html).html().replace(/\&gt\;/g,">");
+    }
   
     if(_.isUndefined(shouldWrap)) { shouldWrap = false; }
   
@@ -5351,7 +5356,7 @@
               var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
   
               dynamicBlock.type = type;
-              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
+              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock);
               if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
             });
           });
