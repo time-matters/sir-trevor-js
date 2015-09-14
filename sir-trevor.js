@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-03-02
+ * 2015-09-14
  */
 
 (function ($, _){
@@ -4015,8 +4015,11 @@
     toData: function () {
       SirTrevor.log("toData for " + this.blockID);
   
+      var uuid = this.getData().uuid || SirTrevor.generateUUID();
       var bl = this.$el,
-          dataObj = {};
+          dataObj = {
+            uuid: uuid
+          };
   
       var content = this.getBlock().text();
       if (content.length > 0) {

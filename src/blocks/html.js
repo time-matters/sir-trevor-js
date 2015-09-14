@@ -19,8 +19,11 @@ SirTrevor.Blocks.Html = SirTrevor.Block.extend({
   toData: function () {
     SirTrevor.log("toData for " + this.blockID);
 
+    var uuid = this.getData().uuid || SirTrevor.generateUUID();
     var bl = this.$el,
-        dataObj = {};
+        dataObj = {
+          uuid: uuid
+        };
 
     var content = this.getBlock().text();
     if (content.length > 0) {
