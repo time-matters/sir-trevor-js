@@ -2,7 +2,7 @@
 $block-control-gutter: $ui-gutter !default;
 
 .st-block-controls__top {
-  display: none;
+  display: none!important
 }
 
 .st-block-controls {
@@ -13,6 +13,10 @@ $block-control-gutter: $ui-gutter !default;
   justify-content: flex-start;
   align-items: stretch;
   text-align: center;
+
+  &::after  {
+    display: none
+  }
 }
 
 .st-block-controls--active {

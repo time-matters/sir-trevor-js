@@ -4,7 +4,7 @@ SirTrevor.BlockMixins.Controllable = {
 
   initializeControllable: function() {
     SirTrevor.log("Adding controllable to block " + this.blockID);
-    this.$control_ui = $('<div>', {'class': 'st-block__control-ui'});
+    this.$control_ui = $('<div>', {'class': 'ui show--on-active-block st-block__control-ui'});
     _.each(
       this.controls,
       function(handler, cmd) {
@@ -19,7 +19,7 @@ SirTrevor.BlockMixins.Controllable = {
   getControlTemplate: function(cmd) {
     return $("<a>",
       { 'data-icon': cmd,
-        'class': 'st-icon st-block-control-ui-btn st-block-control-ui-btn--' + cmd
+        'class': 'st-btn st-block-control-ui-btn--' + cmd
       });
   },
 

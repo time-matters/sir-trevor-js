@@ -15,12 +15,12 @@ SirTrevor.BlockReorder = (function(){
 
     bound: ['onMouseDown', 'onClick', 'onDragStart', 'onDragEnd', 'onDrag', 'onDrop'],
 
-    className: 'btn--editor-panel btn--with-rocker',
+    className: 'st-btn st-btn--editor-panel st-btn--with-rocker',
     tagName: 'div',
 
     attributes: function() {
       return {
-        'html': '<span class="btn--rocker"><button type="button" class="btn--rocker__up"><span class="icon--dropup"></span></button><button type="button" class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">'+i18n.t('general:position')+'</span>',
+        'html': '<span class="st-btn st-btn--rocker"><button type="button" class="st-btn--rocker__up"><span class="st-icon st-icon--dropup"></span></button><button type="button" class="st-btn--rocker__down"><span class="st-icon st-icon--dropdown"></span></button></span><span class="st-btn__label">'+i18n.t('general:position')+'</span>',
         'draggable': 'true'
       };
     },
@@ -93,10 +93,10 @@ SirTrevor.BlockReorder = (function(){
       $target = $(event.target).closest('button');
       idx  = this.$block.index('.st-block');
 
-      if ($target.hasClass('btn--rocker__up')) {
+      if ($target.hasClass('st-btn--rocker__up')) {
         SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx, ('before'));
       }
-      else if ($target.hasClass('btn--rocker__down')) {
+      else if ($target.hasClass('st-btn--rocker__down')) {
         SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx + 2, ('before'));
       }
     },

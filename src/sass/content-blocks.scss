@@ -2,19 +2,18 @@
   min-height: $text-line-height
 }
 
-.st-definition {
-  dt {
-    padding-left: 16px;
-    input {
-      font-weight: bold;
-      font-style: normal;
-    }
+.st-definition  {
+  dt  {
+    padding-left: 0;
+    padding-right: 0;
+    font-weight: bold;
+    font-style: normal;
   }
-  dd {
+
+  dd  {
+    padding: $half-unit;
     font-weight: normal;
     font-style: normal;
-    padding-left: 32px;
-    padding-right: 32px;
   }
 }
 
@@ -22,10 +21,12 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
+
   li {
     width: 300px;
   }
-  li.st-list-selected {
+
+  .st-list-selected {
     border: 1px solid black;
   }
 }

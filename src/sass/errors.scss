@@ -30,6 +30,10 @@
   .st-block--with-errors &  {
     border: $ui-gutter solid $c-negative
   }
+
+  &.is-visible{
+    display: block;
+  }
 }
 
 .st-block--with-errors,
@@ -40,11 +44,6 @@
     background: mix($c-negative, $c-white, 20%);
     border: 1px solid $c-negative;
   }
-}
-
-
-.st-block__messages--is-visible {
-  display: block;
 }
 
 .st-msg--error {

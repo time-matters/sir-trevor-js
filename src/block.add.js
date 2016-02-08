@@ -11,9 +11,9 @@ SirTrevor.BlockAdd = (function(){
   _.extend(BlockAdd.prototype, FunctionBind, Renderable, SirTrevor.Events, {
 
     tagName: 'a',
-    className: 'btn--editor-panel',
+    className: 'st-btn st-btn--editor-panel',
     attributes: {
-      html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:add')+'</span>'
+      html: '<span class="st-icon st-icon--plus" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:add')+'</span>'
     },
 
     bound: ['create'],

@@ -1,13 +1,11 @@
-.st-block__ui,
-.st-block__ui-delete-controls,
-.st-block__control-ui {
+.st-ui {
   position: absolute;
   bottom: 0;
   right: 0;
   opacity: 0;
 }
 
-.st-block__ui-delete-controls {
+.st-ui--delete-controls {
   left: 0;
   top: 0;
   display: flex;
@@ -32,16 +30,20 @@
     }
   }
 
-  [class^='icon--'] {
+  .st-icon {
     display: block;
     margin: 0 auto .2em;
     font-size: 4rem;
   }
+}
 
-  .st-block--delete-active &  {
-    opacity: 1;
-    z-index: 2;
-  }
+.st-ui__label {
+  flex: 1 0 100%;
+  order: 1;
+  margin: $base-unit 0;
+  color: $c-white;
+  cursor: default;
+  text-align: center;
 }
 
 .st-block__ui  {
@@ -58,21 +60,16 @@
   left: 0;
 }
 
-.st-block__ui,
-.st-block__control-ui {
-  .st-active-block & {
-    margin-bottom: 0;
-    margin-right:  0;
+.show-on--active-delete {
+  .has--active-delete &  {
     opacity: 1;
-    z-index: 1;
+    z-index: 2;
   }
 }
 
-.st-block__delete-label {
-  flex: 1 0 100%;
-  order: 1;
-  margin: $base-unit 0;
-  color: $c-white;
-  cursor: default;
-  text-align: center;
+.show-on--active-block  {
+  .is--active-block & {
+    opacity: 1;
+    z-index: 1;
+  }
 }

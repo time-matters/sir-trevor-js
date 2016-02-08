@@ -16,9 +16,9 @@ SirTrevor.BlockStyles = (function(){
   _.extend(BlockStyles.prototype, FunctionBind, Renderable, SirTrevor.Events, {
 
     tagName: 'a',
-    className: 'btn--editor-panel',
+    className: 'st-btn st-btn--editor-panel',
     attributes: {
-      html: ' <span class="btn__label">'+i18n.t('general:style')+'</span>'
+      html: ' <span class="st-btn__label">'+i18n.t('general:style')+'</span>'
     },
 
     bound: ['updateValue', 'onSelectChange'],

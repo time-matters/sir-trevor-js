@@ -6,6 +6,7 @@
 .st-block input[type="text"],
 .st-text-block,
 .st-block textarea  {
+  box-sizing: border-box;
   width: 100%;
   padding: $half-unit;
   margin: 0 0 $ui-gutter;
@@ -20,8 +21,8 @@
   }
 }
 
-*[data-placeholder]:not(:focus):not([data-hide-placeholder]) {
-  &:before {
+*[data-placeholder]:empty:not(:focus):not([data-hide-placeholder])  {
+  &::before {
     color: $c-gray-dark;
     font-style: normal;
     content: attr(data-placeholder);

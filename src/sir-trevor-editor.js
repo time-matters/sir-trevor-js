@@ -63,7 +63,7 @@ SirTrevor.Editor = (function(){
 
     _setupActiveClass: function() {
       var root = $('#' + this.ID);
-      var className = 'st-active-block';
+      var className = 'is--active-block';
       var focus, current, timeout;
 
       var resetActive = function() {
@@ -669,7 +669,7 @@ SirTrevor.Editor = (function(){
             var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
 
             dynamicBlock.type = type;
-            SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
+            SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock);
             if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
           });
         });

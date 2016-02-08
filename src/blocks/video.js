@@ -41,7 +41,7 @@ SirTrevor.Blocks.Video = (function(){
 
       if (!this.providers.hasOwnProperty(data.source)) {
 
-        embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+        embed_string = '<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>';
 
       } else {
 

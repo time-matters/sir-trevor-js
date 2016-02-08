@@ -670,7 +670,7 @@
     var getAllKeys = function (prefix) {
       prefix = prefix || "st-";
   
-      return _.filter(Object.keys(localStorage), function(key){ 
+      return _.filter(Object.keys(localStorage), function(key){
         var modelName = parseKeyData(key).modelName || editor.options.modelName;
         return key.lastIndexOf(prefix) === 0 && modelName === editor.options.modelName;
       });
@@ -758,7 +758,7 @@
     var promptRestoration = function() {
       var warn = $('<div class="st-autoload-info">' + i18n.t("autosave:longExplanation") + '<br></div>');
       var discard = $('<a href="#" class="st-autoload-discard-button">' + i18n.t("autosave:discard") + '</a>');
-      var close = $('<a href="#" class="st-autoload-close-button"><span class="icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
+      var close = $('<a href="#" class="st-autoload-close-button"><span class="st-icon st-icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
   
       warn.append(discard);
       warn.append(close);
@@ -1347,7 +1347,7 @@
   
     initializeControllable: function() {
       SirTrevor.log("Adding controllable to block " + this.blockID);
-      this.$control_ui = $('<div>', {'class': 'st-block__control-ui'});
+      this.$control_ui = $('<div>', {'class': 'ui show--on-active-block st-block__control-ui'});
       _.each(
         this.controls,
         function(handler, cmd) {
@@ -1362,7 +1362,7 @@
     getControlTemplate: function(cmd) {
       return $("<a>",
         { 'data-icon': cmd,
-          'class': 'st-icon st-block-control-ui-btn st-block-control-ui-btn--' + cmd
+          'class': 'st-btn st-block-control-ui-btn--' + cmd
         });
     },
   
@@ -1506,11 +1506,11 @@
       bound: ["toggle"],
   
       notesClassName: 'st-block-is-note',
-      className: 'btn--editor-panel',
+      className: 'st-btn st-btn--editor-panel',
       visibleClass: 'st-block-notes--is-visible',
   
       attributes: {
-        html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:note')+'</span>'
+        html: '<span class="st-icon st-icon--note" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:note')+'</span>'
       },
   
       OFF_STATE: "no",
@@ -1563,12 +1563,12 @@
   
       bound: ['onMouseDown', 'onClick', 'onDragStart', 'onDragEnd', 'onDrag', 'onDrop'],
   
-      className: 'btn--editor-panel btn--with-rocker',
+      className: 'st-btn st-btn--editor-panel st-btn--with-rocker',
       tagName: 'div',
   
       attributes: function() {
         return {
-          'html': '<span class="btn--rocker"><button type="button" class="btn--rocker__up"><span class="icon--dropup"></span></button><button type="button" class="btn--rocker__down"><span class="icon--dropdown"></span></button></span><span class="btn__label">'+i18n.t('general:position')+'</span>',
+          'html': '<span class="st-btn st-btn--rocker"><button type="button" class="st-btn--rocker__up"><span class="st-icon st-icon--dropup"></span></button><button type="button" class="st-btn--rocker__down"><span class="st-icon st-icon--dropdown"></span></button></span><span class="st-btn__label">'+i18n.t('general:position')+'</span>',
           'draggable': 'true'
         };
       },
@@ -1641,10 +1641,10 @@
         $target = $(event.target).closest('button');
         idx  = this.$block.index('.st-block');
   
-        if ($target.hasClass('btn--rocker__up')) {
+        if ($target.hasClass('st-btn--rocker__up')) {
           SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx, ('before'));
         }
-        else if ($target.hasClass('btn--rocker__down')) {
+        else if ($target.hasClass('st-btn--rocker__down')) {
           SirTrevor.EventBus.trigger(this.instanceID + ":blocks:change_position", this.$block, idx + 2, ('before'));
         }
       },
@@ -1671,9 +1671,9 @@
     _.extend(BlockAdd.prototype, FunctionBind, Renderable, SirTrevor.Events, {
   
       tagName: 'a',
-      className: 'btn--editor-panel',
+      className: 'st-btn st-btn--editor-panel',
       attributes: {
-        html: '<span class="icon--plus" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:add')+'</span>'
+        html: '<span class="st-icon st-icon--plus" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:add')+'</span>'
       },
   
       bound: ['create'],
@@ -1709,9 +1709,9 @@
     _.extend(BlockStyles.prototype, FunctionBind, Renderable, SirTrevor.Events, {
   
       tagName: 'a',
-      className: 'btn--editor-panel',
+      className: 'st-btn st-btn--editor-panel',
       attributes: {
-        html: ' <span class="btn__label">'+i18n.t('general:style')+'</span>'
+        html: ' <span class="st-btn__label">'+i18n.t('general:style')+'</span>'
       },
   
       bound: ['updateValue', 'onSelectChange'],
@@ -1795,10 +1795,10 @@
     _.extend(BlockDeletion.prototype, FunctionBind, Renderable, {
   
       tagName: 'a',
-      className: 'btn--editor-panel btn--editor-panel--delete',
+      className: 'st-btn st-btn--editor-panel st-btn--editor-panel--delete',
   
       attributes: {
-        html: '<span class="icon--bin" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:deleteElement')+'</span>'
+        html: '<span class="st-icon st-icon--bin" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:deleteElement')+'</span>'
       }
   
     });
@@ -2038,7 +2038,7 @@
       },
   
       _initUI : function() {
-        var ui_element = $("<div>", { 'class': 'st-block__ui' });
+        var ui_element = $("<div>", { 'class': 'st-ui show-on--active-block st-block__ui' });
         this.$inner.append(ui_element);
         this.$ui = ui_element;
         this._initUIComponents();
@@ -2053,13 +2053,13 @@
       addMessage: function(msg, additionalClass) {
         var $msg = $("<span>", { html: msg, 'class': "st-msg " + additionalClass });
         this.$messages.append($msg)
-                      .addClass('st-block__messages--is-visible');
+                      .addClass('is-visible');
         return $msg;
       },
   
       resetMessages: function() {
         this.$messages.html('')
-                      .removeClass('st-block__messages--is-visible');
+                      .removeClass('is-visible');
       },
   
       _initUIComponents: function() {
@@ -2082,10 +2082,10 @@
     };
   
     var delete_template = [
-      "<div class='st-block__ui-delete-controls'>",
-        "<a class='btn--confirm-delete'><span class='icon--tick' aria-hidden='true'></span><span class='visuallyhidden'>Confirm delete</span></a>",
-        "<a class='btn--deny-delete'><span class='icon--cross' aria-hidden='true'></span><span class='visuallyhidden'>Do not delete</span></a>",
-        "<label class='st-block__delete-label'>",
+      "<div class='st-ui st-ui--delete-controls show-on--active-delete'>",
+        "<a class='st-btn st-btn--confirm'><span class='st-icon st-icon--tick' aria-hidden='true'></span><span class='visuallyhidden'>Confirm delete</span></a>",
+        "<a class='st-btn st-btn--deny'><span class='st-icon st-icon--cross' aria-hidden='true'></span><span class='visuallyhidden'>Do not delete</span></a>",
+        "<label class='st-ui__label'>",
         "<%= i18n.t('general:delete') %>",
         "</label>",
       "</div>"
@@ -2127,7 +2127,7 @@
               "onDeleteClick", "clearInsertedStyles",
               "getSelectionForFormatter", "onBlockRender"],
   
-      className: 'st-block st-icon--add',
+      className: 'st-block',
   
       attributes: function() {
         return _.extend(SirTrevor.SimpleBlock.fn.attributes.call(this), {
@@ -2315,7 +2315,7 @@
   
         var onDeleteDeny = function(e) {
           e.preventDefault();
-          this.$el.removeClass('st-block--delete-active');
+          this.$el.removeClass('has--active-delete');
           $delete_el.remove();
         };
   
@@ -2324,14 +2324,14 @@
           return;
         }
   
-        this.$inner.find('.btn--editor-panel--delete').append(_.template(delete_template));
-        this.$el.addClass('st-block--delete-active');
+        this.$inner.find('.st-btn--editor-panel--delete').append(_.template(delete_template));
+        this.$el.addClass('has--active-delete');
   
-        var $delete_el = this.$inner.find('.st-block__ui-delete-controls');
+        var $delete_el = this.$inner.find('.st-ui--delete-controls');
   
-        this.$inner.on('click', '.btn--confirm-delete',
+        this.$inner.on('click', '.st-btn--confirm',
                         _.bind(onDeleteConfirm, this))
-                   .on('click', '.btn--deny-delete',
+                   .on('click', '.st-btn--deny',
                         _.bind(onDeleteDeny, this));
       },
   
@@ -2384,7 +2384,7 @@
         );
   
         this._withUIComponent(
-          new SirTrevor.BlockDeletion(), '.btn--editor-panel--delete', this.onDeleteClick
+          new SirTrevor.BlockDeletion(), '.st-btn--editor-panel--delete', this.onDeleteClick
         );
   
         this._withUIComponent(
@@ -3171,7 +3171,7 @@
   
     var template = [
       '<div class="st-reward-list st-block--reward-list">',
-      '<h1><i class="icon--reward"></i>%s</h1>',
+      '<h1><i class="st-icon st-icon--reward"></i>%s</h1>',
       '</div>'
     ].join("\n");
   
@@ -3295,7 +3295,7 @@
       if (source !== undefined) {
         payload= $('<img>', { src: source });
       } else {
-        payload = $('<h1><i class="icon--exclamation-triangle"></i></h1>');
+        payload = $('<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>');
       }
   
       figure.append(picture.append(payload));
@@ -3439,7 +3439,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>';
   
         } else {
   
@@ -3650,7 +3650,7 @@
         };
   
         var display_error = function() {
-          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
         };
   
@@ -3841,7 +3841,7 @@
   
         if (!this.providers.hasOwnProperty(data.source)) {
   
-          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>';
           this.$editor.html(embed_string);
   
         } else {
@@ -3943,7 +3943,7 @@
         };
   
         var display_error = function() {
-          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
         };
   
@@ -4106,7 +4106,7 @@
         };
   
         var display_error = function() {
-          embed_string = '<h1><i class="icon--exclamation-triangle"></i></h1>';
+          embed_string = '<h1><i class="st-icon st-icon--exclamation-triangle"></i></h1>';
           self.$editor.html(embed_string);
         };
   
@@ -4427,7 +4427,7 @@
       },
   
       render: function() {
-        this.$el.html('<span class="st-icon icon--'+ _.result(this.block_type, 'icon_name') +'" aria-hidden="true"></span>' + _.result(this.block_type, 'title'));
+        this.$el.html('<span class="st-icon st-icon--'+ _.result(this.block_type, 'icon_name') +'" aria-hidden="true"></span>' + _.result(this.block_type, 'title'));
         return this;
       }
     });
@@ -4758,7 +4758,7 @@
   
       _setupActiveClass: function() {
         var root = $('#' + this.ID);
-        var className = 'st-active-block';
+        var className = 'is--active-block';
         var focus, current, timeout;
   
         var resetActive = function() {
@@ -5364,7 +5364,7 @@
               var type = _.classify("DynamicBlock" + dynamicBlockName + dynamicBlock.type);
   
               dynamicBlock.type = type;
-              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock); 
+              SirTrevor.Blocks[type] = SirTrevor.Block.extend(dynamicBlock);
               if (!_.isUndefined(options.blockTypes)) options.blockTypes.push(type);
             });
           });

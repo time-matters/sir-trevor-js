@@ -98,7 +98,7 @@ SirTrevor.SimpleBlock = (function(){
     },
 
     _initUI : function() {
-      var ui_element = $("<div>", { 'class': 'st-block__ui' });
+      var ui_element = $("<div>", { 'class': 'st-ui show-on--active-block st-block__ui' });
       this.$inner.append(ui_element);
       this.$ui = ui_element;
       this._initUIComponents();
@@ -113,13 +113,13 @@ SirTrevor.SimpleBlock = (function(){
     addMessage: function(msg, additionalClass) {
       var $msg = $("<span>", { html: msg, 'class': "st-msg " + additionalClass });
       this.$messages.append($msg)
-                    .addClass('st-block__messages--is-visible');
+                    .addClass('is-visible');
       return $msg;
     },
 
     resetMessages: function() {
       this.$messages.html('')
-                    .removeClass('st-block__messages--is-visible');
+                    .removeClass('is-visible');
     },
 
     _initUIComponents: function() {

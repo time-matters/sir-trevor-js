@@ -17,11 +17,11 @@ SirTrevor.BlockNotes = (function(){
     bound: ["toggle"],
 
     notesClassName: 'st-block-is-note',
-    className: 'btn--editor-panel',
+    className: 'st-btn st-btn--editor-panel',
     visibleClass: 'st-block-notes--is-visible',
 
     attributes: {
-      html: '<span class="icon--note" aria-hidden="true"></span><span class="btn__label">'+i18n.t('general:note')+'</span>'
+      html: '<span class="st-icon st-icon--note" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:note')+'</span>'
     },
 
     OFF_STATE: "no",

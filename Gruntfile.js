@@ -110,7 +110,9 @@ module.exports = function(grunt) {
         ]
       },
       dist: {
-        src: 'sir-trevor.css'
+        files:  {
+          'sir-trevor.css': 'sir-trevor.css'
+        }
       }
     }
 
@@ -121,9 +123,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('travis', ['rig', 'jasmine']);
 
-  grunt.registerTask('default', ['postcss', 'rig', 'uglify', 'jasmine']);
+  grunt.registerTask('default', ['sass', 'postcss', 'rig', 'uglify', 'jasmine']);
 
-  grunt.registerTask('build', ['postcss', 'rig', 'uglify']);
+  grunt.registerTask('build', ['sass','postcss', 'rig', 'uglify']);
 
   grunt.registerTask('jasmine-browser', ['server','watch']);
 

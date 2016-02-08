@@ -5,10 +5,10 @@ SirTrevor.Block = (function(){
   };
 
   var delete_template = [
-    "<div class='st-block__ui-delete-controls'>",
-      "<a class='btn--confirm-delete'><span class='icon--tick' aria-hidden='true'></span><span class='visuallyhidden'>Confirm delete</span></a>",
-      "<a class='btn--deny-delete'><span class='icon--cross' aria-hidden='true'></span><span class='visuallyhidden'>Do not delete</span></a>",
-      "<label class='st-block__delete-label'>",
+    "<div class='st-ui st-ui--delete-controls show-on--active-delete'>",
+      "<a class='st-btn st-btn--confirm'><span class='st-icon st-icon--tick' aria-hidden='true'></span><span class='visuallyhidden'>Confirm delete</span></a>",
+      "<a class='st-btn st-btn--deny'><span class='st-icon st-icon--cross' aria-hidden='true'></span><span class='visuallyhidden'>Do not delete</span></a>",
+      "<label class='st-ui__label'>",
       "<%= i18n.t('general:delete') %>",
       "</label>",
     "</div>"
@@ -50,7 +50,7 @@ SirTrevor.Block = (function(){
             "onDeleteClick", "clearInsertedStyles",
             "getSelectionForFormatter", "onBlockRender"],
 
-    className: 'st-block st-icon--add',
+    className: 'st-block',
 
     attributes: function() {
       return _.extend(SirTrevor.SimpleBlock.fn.attributes.call(this), {
@@ -238,7 +238,7 @@ SirTrevor.Block = (function(){
 
       var onDeleteDeny = function(e) {
         e.preventDefault();
-        this.$el.removeClass('st-block--delete-active');
+        this.$el.removeClass('has--active-delete');
         $delete_el.remove();
       };
 
@@ -247,14 +247,14 @@ SirTrevor.Block = (function(){
         return;
       }
 
-      this.$inner.find('.btn--editor-panel--delete').append(_.template(delete_template));
-      this.$el.addClass('st-block--delete-active');
+      this.$inner.find('.st-btn--editor-panel--delete').append(_.template(delete_template));
+      this.$el.addClass('has--active-delete');
 
-      var $delete_el = this.$inner.find('.st-block__ui-delete-controls');
+      var $delete_el = this.$inner.find('.st-ui--delete-controls');
 
-      this.$inner.on('click', '.btn--confirm-delete',
+      this.$inner.on('click', '.st-btn--confirm',
                       _.bind(onDeleteConfirm, this))
-                 .on('click', '.btn--deny-delete',
+                 .on('click', '.st-btn--deny',
                       _.bind(onDeleteDeny, this));
     },
 
@@ -307,7 +307,7 @@ SirTrevor.Block = (function(){
       );
 
       this._withUIComponent(
-        new SirTrevor.BlockDeletion(), '.btn--editor-panel--delete', this.onDeleteClick
+        new SirTrevor.BlockDeletion(), '.st-btn--editor-panel--delete', this.onDeleteClick
       );
 
       this._withUIComponent(

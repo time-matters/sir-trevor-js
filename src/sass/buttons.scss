@@ -1,10 +1,8 @@
 %button {
   display: inline-block;
   box-sizing: border-box;
-  position: relative;
   padding: $half-unit;
   overflow: visible;
-  background-color: $c-highlight;
   color: $c-white;
   text-align: center;
   text-decoration: none;
@@ -14,14 +12,20 @@
   transition: $base-button-transition;
   touch-action: manipulation;
   user-select: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+
 }
 
-[class^='btn--']  {
+.st-btn  {
   @extend %button
 }
 
-.btn--editor-panel,
-.btn--editor-panel--delete  {
+.st-btn--editor-panel  {
   $border-width: 1px;
 
   display: block;
@@ -31,13 +35,13 @@
   text-align: left;
   border-bottom: $border-width solid $c-base-ui;
 
-  [class^='icon--'] {
+  .st-icon {
     margin-right: $half-unit;
     min-width: 1em;
     font-size: 1.4em;
   }
 
-  &:not(.btn--with-rocker)  {
+  &:not(.st-btn--with-rocker)  {
     &:hover,
     &:active  {
       z-index: 10;
@@ -48,7 +52,7 @@
   }
 }
 
-.btn--with-rocker {
+.st-btn--with-rocker {
   padding: 0 $half-unit 0 0;
 
   &:hover,
@@ -59,7 +63,7 @@
   }
 }
 
-.btn--rocker  {
+.st-btn--rocker  {
   display: inline-block;
   padding: 0;
   margin-right: 0.9em;
@@ -71,18 +75,18 @@
     border-color: transparent;
   }
 
-  [class^='icon--']   {
+  .st-icon   {
     margin: 0;
     line-height: 1;
   }
 
-  .btn__label {
+  .st-btn__label {
     @extend %visuallyhidden
   }
 }
 
-.btn--rocker__up,
-.btn--rocker__down  {
+.st-btn--rocker__up,
+.st-btn--rocker__down  {
   display: block;
   padding: 0 2px;
   height: 1.5em;
@@ -102,6 +106,6 @@
   }
 }
 
-.btn--rocker__down  {
+.st-btn--rocker__down  {
   margin-bottom: 0;
 }

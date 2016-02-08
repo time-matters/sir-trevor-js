@@ -6,7 +6,7 @@ SirTrevor.Blocks.RewardList = (function() {
 
   var template = [
     '<div class="st-reward-list st-block--reward-list">',
-    '<h1><i class="icon--reward"></i>%s</h1>',
+    '<h1><i class="st-icon st-icon--reward"></i>%s</h1>',
     '</div>'
   ].join("\n");
 
