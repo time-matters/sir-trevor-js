@@ -1,15 +1,30 @@
-$text-block-font-size: 1.275em;
+// Colours
+$c-white: #fff;
+$c-text: #333;
+$c-smoke: #f2f2f2;
+$c-gray-medium: #ddd;
+$c-gray-dark: #b2b2b2;
 
-$text-block-font-color: #282D31;
-$accent-color: #34E0C2;
-$base-ui-color: #42474B;
-$light-ui-color: #CCCCCC;
-$blocks-control-bg-color: #F3F3F3;
-$error-color: #d70014;
+$c-base-ui: $c-smoke !default;
+$c-negative: #d70014 !default;
+$c-highlight: #f99 !default;
+$c-annotation: #ffc !default;
 
-$inner-block-padding: 30px 30px 48px 30px;
+// Typography
+$font-weight-normal: 500;
+$font-weight-bold: 700;
 
-$block-controls-height: 164px;
-$block-add-height: 40px;
+// Units
+$base-unit: 1.25rem !default;
+$half-unit: $base-unit / 2;
+$quarter-unit: $base-unit / 4;
+$ui-gutter: 0.125rem !default;
+$text-line-height: 2rem;
 
-$use-st-icons: false;
+// Animations
+$transition-easing: cubic-bezier(.19,1,.22,1) !default;
+$transition-duration: .15s !default;
+$base-button-transition: background-color $transition-duration $transition-easing, color $transition-duration $transition-easing !default;
+
+// Switches
+$use-st-icons: true !default;

@@ -1,22 +1,23 @@
 .st-format-bar {
   position: absolute;
   margin: -3em 0 0 0;
-  opacity: 0; visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
   z-index: 10;
-  border-radius: 0.4em;
-  padding: 0.5em 0.9em;
-}
+  border-radius: .4em;
+  padding: .5em .9em;
 
-.st-format-bar:before {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 50%; top: 2.12em;
-  width: 0; height: 0;
-  border-left: 0.625em solid transparent;
-  border-right: 0.625em solid transparent;
-  border-top: 0.625em solid #4d5358;
-  margin-left: -0.625em;
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%; top: 2.12em;
+    width: 0; height: 0;
+    border-left: .625em solid transparent;
+    border-right: .625em solid transparent;
+    border-top: .625em solid $c-gray-dark;
+    margin-left: -.625em;
+  }
 }
 
 .st-format-bar--is-ready {
@@ -25,24 +26,31 @@
 }
 
 .st-format-btn {
+  min-width: $base-unit * 1.7;
+  min-height: $base-unit * 1.7;
+  padding: 0 .6em 0 0;
+  margin: 0 .6em 0 0;
   background: transparent;
   border: 0;
-  color: #fff;
-  padding: 0 0.6em 0 0;
-  margin: 0 0.6em 0 0;
-  font-size: 1em;
+  color: $c-white;
   vertical-align: middle;
-  border-right: 1px solid;
+  border-right: 1px solid $c-gray-dark;
+
+  &:last-child {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+  }
 }
 
-.st-format-btn:last-child {
-  border-right: none;
-  padding-right: 0;
-  margin-right: 0;
+.st-format-btn:hover,
+.st-format-btn:focus,
+.st-format-btn--is-active {
+  color: $c-highlight
 }
 
 .st-format-btn--Italic {
-  font-style:italic;
+  font-style: italic;
 }
 
 .st-format-btn--Unlink {

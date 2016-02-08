@@ -1,20 +1,61 @@
 .st-errors {
-  background-color: lighten($error-color, 52%);
-  padding: 2em;
-  color: $error-color;
+  margin-bottom: $base-unit;
+  padding: $base-unit;
+  color: $c-negative;
+  background-color: $c-smoke;
+
+  ul,
+  p  {
+    margin: 0
+  }
+
+  li  {
+    margin-bottom: 0
+  }
 }
 
-.st-errors p,
-.st-errors ul {
-  margin: 0;
+.st-block__messages {
+  display: none;
+  position: relative;
+  max-width: 100%;
+  padding: $half-unit $base-unit;
+  color: $c-negative;
+  background: $c-base-ui;
+  text-align: center;
+
+  span  {
+    display: block
+  }
+
+  .st-block--with-errors &  {
+    border: $ui-gutter solid $c-negative
+  }
 }
 
-.st-errors ul {
-  padding-left: 1em;
+.st-block--with-errors,
+.st-block--delete-active  {
+  input[type="text"],
+  .st-text-block,
+  textarea {
+    background: mix($c-negative, $c-white, 20%);
+    border: 1px solid $c-negative;
+  }
 }
 
-.st-errors p {
-  margin-bottom: 0.5em;
-  font-weight: 700;
+
+.st-block__messages--is-visible {
+  display: block;
 }
 
+.st-msg--error {
+  color: $c-negative;
+}
+
+.st--block-limit-reached  {
+  .st-block--with-plus,
+  .st-icon--add {
+    &::after  {
+      display: none;
+    }
+  }
+}

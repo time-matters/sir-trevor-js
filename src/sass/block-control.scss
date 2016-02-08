@@ -1,4 +1,5 @@
 // Block Control
+$block-control-gutter: $ui-gutter !default;
 
 .st-block-controls__top {
   display: none;
@@ -6,22 +7,36 @@
 
 .st-block-controls {
   display: none;
-  width: 100%;
+  padding: $half-unit 0 0;
+  margin: $base-unit 0;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
   text-align: center;
 }
 
 .st-block-controls--active {
-  display:block;
+  display: flex;
 }
 
 .st-block-control {
-  display: inline-block;
-  cursor: pointer;
-  margin: 0 1em 0 0;
-}
+  @extend %button;
+  flex: 1 1 auto;
+  font-size: 1rem;
+  margin: 0 $block-control-gutter $block-control-gutter 0;
+  padding: $half-unit;
+  background: $c-smoke;
+  color: $c-text;
 
-.st-block-control .st-icon {
-  font-size: 2.25em;
-  margin: 0 0 .2em 0;
-  display: block;
+  &:hover,
+  &:focus {
+    background-color: $c-highlight;
+    color: $c-white;
+  }
+
+  .st-icon {
+    display: block;
+    margin: 0 auto .2em;
+    font-size: 4em;
+  }
 }

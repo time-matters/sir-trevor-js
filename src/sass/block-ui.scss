@@ -1,50 +1,78 @@
 .st-block__ui,
-.st-block__ui-delete-controls {
+.st-block__ui-delete-controls,
+.st-block__control-ui {
   position: absolute;
-  bottom: 0;  right: 0;
+  bottom: 0;
+  right: 0;
   opacity: 0;
+}
+
+.st-block__ui-delete-controls {
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  background-color: $c-negative;
+  cursor: default;
+  opacity: 0;
+
+  [class^='btn']  {
+    flex: 50%;
+    padding: $half-unit 0;
+    border-radius: 0;
+    border: 0;
+    text-align: center;
+    color: mix($c-white, $c-negative, 60%);
+
+    &:hover,
+    &:focus  {
+      background-color: none;
+      color: $c-white;
+    }
+  }
+
+  [class^='icon--'] {
+    display: block;
+    margin: 0 auto .2em;
+    font-size: 4rem;
+  }
+
+  .st-block--delete-active &  {
+    opacity: 1;
+    z-index: 2;
+  }
+}
+
+.st-block__ui  {
+  left: 101%;
+  right: auto;
+  bottom: auto;
+  top: 0;
+  min-width: 15em;
+  background-color: $c-base-ui;
 }
 
 .st-block__control-ui {
-  position: absolute;
-  bottom: 0; left: 0;
-  opacity: 0;
+  right: auto;
+  left: 0;
 }
 
-.st-active-block .st-block__ui,
-.st-active-block .st-block__control-ui {
-  opacity: 1;
-  z-index: 1;
-}
-
-.st-block__inner:not(:hover) div:focus ~ .st-block__ui,
-.st-block__inner:not(:hover) div:focus ~ .st-block__control-ui {
-  margin-bottom: -2px;
-}
-
-.st-block--delete-active .st-block__ui-delete-controls {
-  opacity: 1;
-  z-index: 2;
+.st-block__ui,
+.st-block__control-ui {
+  .st-active-block & {
+    margin-bottom: 0;
+    margin-right:  0;
+    opacity: 1;
+    z-index: 1;
+  }
 }
 
 .st-block__delete-label {
-  display: block;
-  border: 2px solid $error-color;
-  border-bottom: none;
-  border-right: none;
+  flex: 1 0 100%;
+  order: 1;
+  margin: $base-unit 0;
+  color: $c-white;
+  cursor: default;
   text-align: center;
-  background: #fff;
-  color: $error-color;
-  padding: 0.4em 0;
-}
-
-.st-block__ui-delete-controls .btn--editor-panel--delete {
-  width: 50%;
-  min-height:40px;
-  line-height: 45px;
-  display: block;
-  box-sizing: border-box;
-  background: #fff;
-  border:2px solid;
-  float:left;
 }

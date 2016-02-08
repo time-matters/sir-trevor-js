@@ -1,0 +1,108 @@
+%button {
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+  padding: $half-unit;
+  overflow: visible;
+  background-color: $c-highlight;
+  color: $c-white;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0;
+  font-weight: $font-weight-normal;
+  white-space: nowrap;
+  transition: $base-button-transition;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+[class^='btn--']  {
+  @extend %button
+}
+
+.btn--editor-panel,
+.btn--editor-panel--delete  {
+  $border-width: 1px;
+
+  display: block;
+  margin-bottom: -$border-width;
+  padding-left: $half-unit;
+  color: $c-text;
+  border-radius: 0;
+  text-align: left;
+  border-bottom: $border-width solid $c-base-ui;
+
+  [class^='icon--'] {
+    margin-right: $half-unit;
+    min-width: 1em;
+    font-size: 1.4em;
+  }
+
+  &:not(.btn--with-rocker)  {
+    &:hover,
+    &:active  {
+      z-index: 10;
+      color: $c-white;
+      background-color: $c-highlight;
+      border-bottom-color: $c-highlight;
+    }
+  }
+}
+
+.btn--with-rocker {
+  padding: 0 $half-unit 0 0;
+
+  &:hover,
+  &:focus {
+    background: transparent;
+    color: $c-text;
+    cursor: default;
+  }
+}
+
+.btn--rocker  {
+  display: inline-block;
+  padding: 0;
+  margin-right: 0.9em;
+  border: 0;
+
+  &:hover,
+  &:active  {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  [class^='icon--']   {
+    margin: 0;
+    line-height: 1;
+  }
+
+  .btn__label {
+    @extend %visuallyhidden
+  }
+}
+
+.btn--rocker__up,
+.btn--rocker__down  {
+  display: block;
+  padding: 0 2px;
+  height: 1.5em;
+  margin-bottom: 1px;
+  margin-right: .2em;
+  color: $c-white;
+  background: $c-gray-medium;
+  text-align: center;
+  border: none;
+  line-height: 1.5;
+  border-radius: 0;
+
+  &:hover,
+  &:focus {
+    background: $c-highlight;
+    color: $c-white;
+  }
+}
+
+.btn--rocker__down  {
+  margin-bottom: 0;
+}

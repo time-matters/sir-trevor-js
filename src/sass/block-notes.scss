@@ -1,12 +1,7 @@
-.st-block-notes-wrapper {
-  display: inline-block;
-  float: left;
-}
-
-.st-block.st-block-is-note .st-block__inner {
-  position: relative;
-  top: 5px;
-  margin: 40px;
-  background: #ffc;
-  padding: 20px;
+.st-block-is-note {
+  .st-block__inner {
+    margin: 0;
+    padding: 0;
+    background: $c-annotation;
+  }
 }

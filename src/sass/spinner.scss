@@ -1,0 +1,6 @@
+.st-spinner {
+  position: absolute!important; // !important because there’s inline css screwing this
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+}

@@ -1,39 +1,29 @@
-// Reset all our input styles
 .st-input-label {
-  display: block;
-  margin-bottom: 0.3em;
+  @extend %visuallyhidden;
+  margin-bottom: $ui-gutter;
 }
 
-// Generic styles
-.st-text-block,
 .st-block input[type="text"],
-.st-block textarea {
+.st-text-block,
+.st-block textarea  {
+  width: 100%;
+  padding: $half-unit;
+  margin: 0 0 $ui-gutter;
+  border: 1px solid $c-smoke;
+  background-color: $c-smoke;
   font-size: inherit;
-  margin: 0; padding: 0.3em 0;
+
+  &:active,
+  &:focus {
+    border: 1px solid $c-gray-medium;
+    outline: none;
+  }
 }
 
-// Focus / Active styles
-.st-text-block,
-.st-text-block:active,
-.st-text-block:focus,
-.st-block [contenteditable="true"],
-.st-block [contenteditable="true"]:active,
-.st-block [contenteditable="true"]:focus,
-.st-block input[type="text"],
-.st-block input[type="text"]:active,
-.st-block input[type="text"]:focus,
-.st-block textarea,
-.st-block textarea:hover,
-.st-block textarea:active {
-  outline: none;
-  border: none;
-}
-
-.st-block input[type="text"],
-.st-block input[type="text"]:active,
-.st-block input[type="text"]:focus {
-  // width: 100%;
-  color: #42474b;
-  border: 0.1em solid;
-  padding:.6em;
+*[data-placeholder]:not(:focus):not([data-hide-placeholder]) {
+  &:before {
+    color: $c-gray-dark;
+    font-style: normal;
+    content: attr(data-placeholder);
+  }
 }

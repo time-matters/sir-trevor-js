@@ -1,20 +1,26 @@
+// Setup
 @import 'bourbon/bourbon';
-
 @import '_variables.scss';
 
-@import 'base.scss';
-@import 'inputs.scss';
+// Base
+@import 'visuallyhidden.scss';
 
+// Objects
+@import 'buttons.scss';
+@import 'icons.scss';
+@import 'inputs.scss';
 @import 'errors.scss';
+@import 'spinner.scss';
 
 // Block Controls
 @import 'block-control.scss';
+@import 'dropzone.scss';
 
 // Blocks
 @import 'block.scss';
-@import 'block-positioner.scss';
 @import 'block-notes.scss';
 @import 'block-ui.scss';
+@import 'content-blocks.scss';
 
 // Format Bar
 @import 'format-bar.scss';
