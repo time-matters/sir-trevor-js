@@ -16,6 +16,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-postcss');
 
   grunt.initConfig({
 
@@ -93,6 +94,24 @@ module.exports = function(grunt) {
           'sir-trevor.css': 'src/sass/main.scss'
         }
       }
+    },
+
+    postcss: {
+      options: {
+        map: {
+          inline: false, // save all sourcemaps as separate files...
+          annotation: './' // ...to the specified directory
+        },
+
+        processors: [
+          require('pixrem')(), // add fallbacks for rem units
+          require('autoprefixer')({browsers: ['last 2 versions', 'Firefox ESR', '> 2%', 'Explorer >= 9', 'Android >= 4.0']}), // add vendor prefixes
+          require('cssnano')() // minify the result
+        ]
+      },
+      dist: {
+        src: 'sir-trevor.css'
+      }
     }
 
   });
@@ -102,7 +121,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('travis', ['rig', 'jasmine']);
 
-  grunt.registerTask('default', ['sass', 'rig', 'uglify', 'jasmine']);
+  grunt.registerTask('default', ['postcss', 'rig', 'uglify', 'jasmine']);
+
+  grunt.registerTask('build', ['postcss', 'rig', 'uglify']);
 
   grunt.registerTask('jasmine-browser', ['server','watch']);
 
