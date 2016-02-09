@@ -3124,7 +3124,7 @@
         target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
         this.getTextBlock().caretToEnd();
       }
-
+  
     });
   
   })();

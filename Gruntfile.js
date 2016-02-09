@@ -16,6 +16,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.initConfig({
 
@@ -25,11 +26,11 @@ module.exports = function(grunt) {
       'sir-trevor': {
         src : 'sir-trevor.js',
         options: {
+          specs: ['spec/javascripts/units/**/*.js'],
+          helpers : ['spec/javascripts/helpers/*.js'],
           vendor: ['bower_components/jquery/jquery.js',
                    'bower_components/underscore/underscore.js',
-                   'bower_components/Eventable/eventable.js'],
-          specs : 'spec/javascripts/**/*.spec.js',
-          helpers : 'spec/javascripts/helpers/*.js'
+                   'bower_components/Eventable/eventable.js']
         }
       }
     },
@@ -96,9 +97,6 @@ module.exports = function(grunt) {
     }
 
   });
-
-  // Default task.
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('travis', ['rig', 'jasmine']);
 

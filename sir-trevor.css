@@ -109,14 +109,14 @@ ul.st-text-block {
 
 .st-block__dropzone .st-icon {
   font-size: 4em;
-  color: #42474B;
+  color: #42474b;
   display: block;
   text-align: center;
   margin: 0 auto 0.2em; }
 
 .st-block__dropzone p {
   text-align: center;
-  color: #42474B;
+  color: #42474b;
   font-size: 1.2em;
   margin: 0; }
 
@@ -134,7 +134,7 @@ ul.st-text-block {
 
 .st-upload-btn {
   border: 0;
-  background: #42474B;
+  background: #42474b;
   border-radius: 0.2em;
   padding: 0.35em 1em;
   font-size: 1.125em;
@@ -263,7 +263,7 @@ ul.st-text-block {
   right: -0.3em;
   bottom: 0.6em;
   z-index: 1;
-  border: 0.125em solid #34E0C2;
+  border: 0.125em solid #34e0c2;
   background: #fff;
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
@@ -389,5 +389,3 @@ ul.st-text-block {
 
 .st-format-btn--Unlink {
   text-decoration: line-through; }
-
-/*# sourceMappingURL=sir-trevor.css.map */
