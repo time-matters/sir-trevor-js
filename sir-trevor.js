@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-07-02
+ * 2016-02-09
  */
 
 (function ($, _){
@@ -3120,6 +3120,11 @@
         this.$('.js-term-input').val(data.term);
       },
   
+      onContentPasted: function(event, target){
+        target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
+        this.getTextBlock().caretToEnd();
+      }
+
     });
   
   })();
@@ -4022,8 +4027,11 @@
     toData: function () {
       SirTrevor.log("toData for " + this.blockID);
   
+      var uuid = this.getData().uuid || SirTrevor.generateUUID();
       var bl = this.$el,
-          dataObj = {};
+          dataObj = {
+            uuid: uuid
+          };
   
       var content = this.getBlock().text();
       if (content.length > 0) {
