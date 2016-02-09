@@ -40,6 +40,11 @@ SirTrevor.Blocks.Definition = (function(){
       this.$('.js-term-input').val(data.term);
     },
 
+    onContentPasted: function(event, target){
+      target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
+      this.getTextBlock().caretToEnd();
+    }
+
   });
 
 })();
