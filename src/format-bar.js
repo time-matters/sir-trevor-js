@@ -30,7 +30,7 @@ SirTrevor.FormatBar = (function(){
         if (SirTrevor.Formatters.hasOwnProperty(formatName)) {
           format = SirTrevor.Formatters[formatName];
           btn = $("<button>", {
-                  'class': 'st-format-btn st-format-btn--' + formatName + ' ' + (format.iconName ? 'st-icon' : ''),
+                  'class': 'st-btn st-btn--format st-format--' + formatName + ' ' + (format.iconName ? 'st-icon' : ''),
                   'text': format.text,
                   'data-type': formatName,
                   'data-cmd': format.cmd

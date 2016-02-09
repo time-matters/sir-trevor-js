@@ -232,8 +232,8 @@ SirTrevor.editorStore = function(editor, method, options) {
 
   var promptRestoration = function() {
     var warn = $('<div class="st-autoload-info">' + i18n.t("autosave:longExplanation") + '<br></div>');
-    var discard = $('<a href="#" class="st-autoload-discard-button">' + i18n.t("autosave:discard") + '</a>');
-    var close = $('<a href="#" class="st-autoload-close-button"><span class="st-icon st-icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
+    var discard = $('<a href="#" class="st-btn st-btn--discard">' + i18n.t("autosave:discard") + '</a>');
+    var close = $('<a href="#" class="st-btn st-btn--close"><span class="st-icon st-icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
 
     warn.append(discard);
     warn.append(close);

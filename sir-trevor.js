@@ -757,8 +757,8 @@
   
     var promptRestoration = function() {
       var warn = $('<div class="st-autoload-info">' + i18n.t("autosave:longExplanation") + '<br></div>');
-      var discard = $('<a href="#" class="st-autoload-discard-button">' + i18n.t("autosave:discard") + '</a>');
-      var close = $('<a href="#" class="st-autoload-close-button"><span class="st-icon st-icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
+      var discard = $('<a href="#" class="st-btn st-btn--discard">' + i18n.t("autosave:discard") + '</a>');
+      var close = $('<a href="#" class="st-btn st-btn--close"><span class="st-icon st-icon--close" aria-hidden="true"></span><span class="visuallyhidden>close</span></a>');
   
       warn.append(discard);
       warn.append(close);
@@ -4618,7 +4618,7 @@
           if (SirTrevor.Formatters.hasOwnProperty(formatName)) {
             format = SirTrevor.Formatters[formatName];
             btn = $("<button>", {
-                    'class': 'st-format-btn st-format-btn--' + formatName + ' ' + (format.iconName ? 'st-icon' : ''),
+                    'class': 'st-btn st-btn--format st-format--' + formatName + ' ' + (format.iconName ? 'st-icon' : ''),
                     'text': format.text,
                     'data-type': formatName,
                     'data-cmd': format.cmd

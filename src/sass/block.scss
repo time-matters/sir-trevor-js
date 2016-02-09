@@ -6,20 +6,12 @@
     width: 100%;
     height: auto;
   }
-
-  &.is-reordering  {
-    .st-block,
-    .st-drag-over  {
-      &::after  {
-        display: block;
-      }
-    }
-  }
 }
 
 .st-block,
 .st-drag-over  {
   &::after  {
+    display: none;
     padding: $half-unit 0;
     height: $base-unit;
     background: $c-white;
@@ -28,6 +20,10 @@
     font-family: inherit;
     content: "Drop block here";
     text-align: center;
+  }
+
+  .is-reordering &  {
+    display: block;
   }
 }
 

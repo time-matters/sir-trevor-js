@@ -29,7 +29,7 @@ $format-bar-gutter: .625em;
   }
 }
 
-.st-format-btn {
+.st-btn--format {
   min-width: $base-unit * 1.7;
   min-height: $base-unit * 1.7;
   padding: 0 $format-bar-gutter 0 0;
@@ -53,10 +53,10 @@ $format-bar-gutter: .625em;
   }
 }
 
-.st-format-btn--Italic {
+.st-format--Italic {
   font-style: italic;
 }
 
-.st-format-btn--Unlink {
+.st-format--Unlink {
   text-decoration: line-through;
 }
