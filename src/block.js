@@ -155,11 +155,11 @@ SirTrevor.Block = (function(){
       this.spinner = new Spinner(SirTrevor.DEFAULTS.spinner);
       this.spinner.spin(this.$el[0]);
 
-      this.$el.addClass('st--is-loading');
+      this.$el.addClass('is-loading');
     },
 
     ready: function() {
-      this.$el.removeClass('st--is-loading');
+      this.$el.removeClass('is-loading');
       if (!_.isUndefined(this.spinner)) {
         this.spinner.stop();
         delete this.spinner;

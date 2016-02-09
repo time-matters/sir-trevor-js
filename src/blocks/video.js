@@ -46,9 +46,9 @@ SirTrevor.Blocks.Video = (function(){
       } else {
 
         if (this.providers[data.source].square) {
-          this.$editor.addClass('st-block__editor--with-square-media');
+          this.$editor.addClass('intrinsic-ratio');
         } else {
-          this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+          this.$editor.addClass('intrinsic-ratio intrinsic-ratio--16-9');
         }
 
         embed_string = this.providers[data.source].html

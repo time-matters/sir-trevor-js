@@ -1,35 +1,39 @@
+$format-bar-gutter: .625em;
+
 .st-format-bar {
   position: absolute;
   margin: -3em 0 0 0;
   opacity: 0;
   visibility: hidden;
   z-index: 10;
-  border-radius: .4em;
-  padding: .5em .9em;
+  border-radius: $quarter-unit;
+  padding: $quarter-unit $half-unit;
 
   &::before {
     content: '';
     display: block;
     position: absolute;
-    left: 50%; top: 2.12em;
-    width: 0; height: 0;
-    border-left: .625em solid transparent;
-    border-right: .625em solid transparent;
-    border-top: .625em solid $c-gray-dark;
-    margin-left: -.625em;
+    left: 50%;
+    top: 2.12em;
+    width: 0;
+    height: 0;
+    border-left: $format-bar-gutter solid transparent;
+    border-right: $format-bar-gutter solid transparent;
+    border-top: $format-bar-gutter solid $c-gray-dark;
+    margin-left: -$format-bar-gutter;
   }
-}
 
-.st-format-bar--is-ready {
-  visibility: visible;
-  opacity: 1;
+  .is-ready {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 .st-format-btn {
   min-width: $base-unit * 1.7;
   min-height: $base-unit * 1.7;
-  padding: 0 .6em 0 0;
-  margin: 0 .6em 0 0;
+  padding: 0 $format-bar-gutter 0 0;
+  margin: 0 $format-bar-gutter 0 0;
   background: transparent;
   border: 0;
   color: $c-white;
@@ -41,12 +45,12 @@
     padding-right: 0;
     margin-right: 0;
   }
-}
 
-.st-format-btn:hover,
-.st-format-btn:focus,
-.st-format-btn--is-active {
-  color: $c-highlight
+  &:hover,
+  &:focus,
+  &.is-active  {
+    color: $c-highlight
+  }
 }
 
 .st-format-btn--Italic {

@@ -1507,7 +1507,7 @@
   
       notesClassName: 'st-block-is-note',
       className: 'st-btn st-btn--editor-panel',
-      visibleClass: 'st-block-notes--is-visible',
+      visibleClass: 'is-visible',
   
       attributes: {
         html: '<span class="st-icon st-icon--note" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:note')+'</span>'
@@ -1870,7 +1870,7 @@
         error.msg.remove();
       });
   
-      this.$messages.removeClass("st-block__messages--is-visible");
+      this.$messages.removeClass("is-visible");
       this.errors = [];
     }
   
@@ -2232,11 +2232,11 @@
         this.spinner = new Spinner(SirTrevor.DEFAULTS.spinner);
         this.spinner.spin(this.$el[0]);
   
-        this.$el.addClass('st--is-loading');
+        this.$el.addClass('is-loading');
       },
   
       ready: function() {
-        this.$el.removeClass('st--is-loading');
+        this.$el.removeClass('is-loading');
         if (!_.isUndefined(this.spinner)) {
           this.spinner.stop();
           delete this.spinner;
@@ -3444,9 +3444,9 @@
         } else {
   
           if (this.providers[data.source].square) {
-            this.$editor.addClass('st-block__editor--with-square-media');
+            this.$editor.addClass('intrinsic-ratio');
           } else {
-            this.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+            this.$editor.addClass('intrinsic-ratio intrinsic-ratio--16-9');
           }
   
           embed_string = this.providers[data.source].html
@@ -3936,9 +3936,9 @@
           self.$editor.html(embed_string);
           self.extractSourceInformation();
           if (self.providers[data.source].square) {
-            self.$editor.addClass('st-block__editor--with-square-media');
+            self.$editor.addClass('intrinsic-ratio');
           } else {
-            self.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+            self.$editor.addClass('intrinsic-ratio intrinsic-ratio--16-9');
           }
         };
   
@@ -4634,11 +4634,11 @@
       },
   
       hide: function() {
-        this.$el.removeClass('st-format-bar--is-ready');
+        this.$el.removeClass('is-ready');
       },
   
       show: function() {
-        this.$el.addClass('st-format-bar--is-ready');
+        this.$el.addClass('is-ready');
       },
   
       remove: function(){ this.$el.remove(); },
@@ -4663,7 +4663,7 @@
         var formatter;
         _.each(this.$btns, function($btn) {
           formatter = SirTrevor.Formatters[$btn.attr('data-type')];
-          $btn.toggleClass("st-format-btn--is-active",
+          $btn.toggleClass("is-active",
                            formatter.isActive());
         }, this);
       },
@@ -5071,12 +5071,12 @@
   
       onBlockDragStart: function() {
         this.hideBlockControls();
-        this.$wrapper.addClass("st-outer--is-reordering");
+        this.$wrapper.addClass("is-reordering");
       },
   
       onBlockDragEnd: function() {
         this.removeBlockDragOver();
-        this.$wrapper.removeClass("st-outer--is-reordering");
+        this.$wrapper.removeClass("is-reordering");
       },
   
       _renderInPosition: function(block) {

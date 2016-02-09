@@ -11,15 +11,15 @@ $c-highlight: #f99 !default;
 $c-annotation: #ffc !default;
 
 // Typography
-$font-weight-normal: 500;
+$font-weight-normal: 400;
 $font-weight-bold: 700;
 
 // Units
-$base-unit: 1.25rem !default;
+$base-unit: 20px !default;
 $half-unit: $base-unit / 2;
 $quarter-unit: $base-unit / 4;
-$ui-gutter: 0.125rem !default;
-$text-line-height: 2rem;
+$ui-gutter: 2px !default;
+$text-line-height: 32px;
 
 // Animations
 $transition-easing: cubic-bezier(.19,1,.22,1) !default;

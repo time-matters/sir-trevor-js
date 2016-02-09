@@ -18,7 +18,7 @@ SirTrevor.BlockNotes = (function(){
 
     notesClassName: 'st-block-is-note',
     className: 'st-btn st-btn--editor-panel',
-    visibleClass: 'st-block-notes--is-visible',
+    visibleClass: 'is-visible',
 
     attributes: {
       html: '<span class="st-icon st-icon--note" aria-hidden="true"></span><span class="st-btn__label">'+i18n.t('general:note')+'</span>'

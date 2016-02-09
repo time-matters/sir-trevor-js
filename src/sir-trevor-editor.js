@@ -376,12 +376,12 @@ SirTrevor.Editor = (function(){
 
     onBlockDragStart: function() {
       this.hideBlockControls();
-      this.$wrapper.addClass("st-outer--is-reordering");
+      this.$wrapper.addClass("is-reordering");
     },
 
     onBlockDragEnd: function() {
       this.removeBlockDragOver();
-      this.$wrapper.removeClass("st-outer--is-reordering");
+      this.$wrapper.removeClass("is-reordering");
     },
 
     _renderInPosition: function(block) {

@@ -46,9 +46,9 @@ SirTrevor.Blocks.Audio = (function(){
         self.$editor.html(embed_string);
         self.extractSourceInformation();
         if (self.providers[data.source].square) {
-          self.$editor.addClass('st-block__editor--with-square-media');
+          self.$editor.addClass('intrinsic-ratio');
         } else {
-          self.$editor.addClass('st-block__editor--with-sixteen-by-nine-media');
+          self.$editor.addClass('intrinsic-ratio intrinsic-ratio--16-9');
         }
       };
 

@@ -46,11 +46,11 @@ SirTrevor.FormatBar = (function(){
     },
 
     hide: function() {
-      this.$el.removeClass('st-format-bar--is-ready');
+      this.$el.removeClass('is-ready');
     },
 
     show: function() {
-      this.$el.addClass('st-format-bar--is-ready');
+      this.$el.addClass('is-ready');
     },
 
     remove: function(){ this.$el.remove(); },
@@ -75,7 +75,7 @@ SirTrevor.FormatBar = (function(){
       var formatter;
       _.each(this.$btns, function($btn) {
         formatter = SirTrevor.Formatters[$btn.attr('data-type')];
-        $btn.toggleClass("st-format-btn--is-active",
+        $btn.toggleClass("is-active",
                          formatter.isActive());
       }, this);
     },

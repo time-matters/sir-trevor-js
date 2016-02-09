@@ -1,6 +1,5 @@
-.st-block__editor--with-square-media,
-.st-block__editor--with-sixteen-by-nine-media {
-  padding-top: 100%;
+.intrinsic-ratio  {
+  padding-top: 100%; // square
   height: 0;
   position: relative;
   width: 100%;
@@ -15,6 +14,6 @@
   }
 }
 
-.st-block__editor--with-sixteen-by-nine-media {
+.intrinsic-ratio--19-9 {
   padding-top: 56.25%;
 }

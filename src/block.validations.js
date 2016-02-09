@@ -62,7 +62,7 @@ SirTrevor.BlockValidations = {
       error.msg.remove();
     });
 
-    this.$messages.removeClass("st-block__messages--is-visible");
+    this.$messages.removeClass("is-visible");
     this.errors = [];
   }
 

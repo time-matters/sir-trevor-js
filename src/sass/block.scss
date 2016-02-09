@@ -6,6 +6,29 @@
     width: 100%;
     height: auto;
   }
+
+  &.is-reordering  {
+    .st-block,
+    .st-drag-over  {
+      &::after  {
+        display: block;
+      }
+    }
+  }
+}
+
+.st-block,
+.st-drag-over  {
+  &::after  {
+    padding: $half-unit 0;
+    height: $base-unit;
+    background: $c-white;
+    color: $c-highlight;
+    font-size: x-small;
+    font-family: inherit;
+    content: "Drop block here";
+    text-align: center;
+  }
 }
 
 .st-block {
@@ -44,23 +67,6 @@
   }
 }
 
-.st-outer--is-reordering  {
-  .st-block,
-  .st-drag-over  {
-    &::after  {
-      display: block;
-      padding: $half-unit 0;
-      height: $base-unit;
-      background: $c-white;
-      color: $c-highlight;
-      font-size: x-small;
-      font-family: inherit;
-      content: "Drop block here";
-      text-align: center;
-    }
-  }
-}
-
 .st-block__inputs {
   padding: 1.6em 0 1em;
   border-radius: .2em;
@@ -83,7 +89,7 @@
 
 .st-upload-btn {
   position: relative;
-  padding: .35em 1em;
+  padding: $quarter-unit 1em;
   border: 0;
   background: $c-base-ui;
   color: $c-white;
@@ -99,7 +105,7 @@
 }
 
 .st-block__upload-container {
-  margin: .4em 0 0 0;
+  margin: $quarter-unit 0 0;
   text-align: center;
   position: relative;
 

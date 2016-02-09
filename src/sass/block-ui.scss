@@ -15,7 +15,7 @@
   cursor: default;
   opacity: 0;
 
-  [class^='btn']  {
+  .st-btn  {
     flex: 50%;
     padding: $half-unit 0;
     border-radius: 0;
