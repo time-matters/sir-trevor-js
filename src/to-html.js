@@ -5,12 +5,6 @@ SirTrevor.toHTML = function(markdown, type) {
   var html = markdown,
       shouldWrap = type === "Text";
 
-  var options = SirTrevor.getInstance().options;
-
-  if (options && options.escapeHTML) {
-    html = $("<div>").text(html).html().replace(/\&gt\;/g,">");
-  }
-
   if(_.isUndefined(shouldWrap)) { shouldWrap = false; }
 
   if (shouldWrap) {

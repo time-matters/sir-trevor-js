@@ -42,8 +42,7 @@
     errorsContainer: undefined,
     toMarkdown: {
       aggresiveHTMLStrip: false
-    },
-    escapeHTML: false
+    }
   };
 
   SirTrevor.BlockMixins = {};
