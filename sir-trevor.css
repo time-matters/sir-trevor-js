@@ -112,14 +112,14 @@ ul.st-text-block {
 
 .st-block__dropzone .st-icon {
   font-size: 4em;
-  color: #42474b;
+  color: #42474B;
   display: block;
   text-align: center;
   margin: 0 auto 0.2em; }
 
 .st-block__dropzone p {
   text-align: center;
-  color: #42474b;
+  color: #42474B;
   font-size: 1.2em;
   margin: 0; }
 
@@ -137,7 +137,7 @@ ul.st-text-block {
 
 .st-upload-btn {
   border: 0;
-  background: #42474b;
+  background: #42474B;
   border-radius: 0.2em;
   padding: 0.35em 1em;
   font-size: 1.125em;
@@ -263,7 +263,7 @@ ul.st-text-block {
   right: -0.3em;
   bottom: 0.6em;
   z-index: 1;
-  border: 0.125em solid #34e0c2;
+  border: 0.125em solid #34E0C2;
   background: #fff;
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
@@ -310,7 +310,7 @@ ul.st-text-block {
 
 .st-block__ui {
   margin-left: 20px;
-  border-top: 1px solid #34e0c2; }
+  border-top: 1px solid #34E0C2; }
 
 .st-block__control-ui {
   position: absolute;
@@ -346,7 +346,7 @@ ul.st-text-block {
   position: relative;
   clear: both;
   float: left;
-  border-bottom: 1px solid #34e0c2;
+  border-bottom: 1px solid #34E0C2;
   width: 15em;
   padding-top: 8px;
   padding-bottom: 8px; }
@@ -408,10 +408,12 @@ ul.st-text-block {
 
 .st-format-btn:hover,
 .st-format-btn--is-active {
-  color: #34e0c2; }
+  color: #34E0C2; }
 
 .st-format-btn--Italic {
   font-style: italic; }
 
 .st-format-btn--Unlink {
   text-decoration: line-through; }
+
+/*# sourceMappingURL=sir-trevor.css.map */
