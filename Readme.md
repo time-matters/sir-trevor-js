@@ -1,3 +1,7 @@
+
+# Deprecation Notice
+This fork is discontinued and not be used anymore. This repository is now archived and will be deleted on th 17th of August 2018.
+
 # Sir Trevor
 
 [![Build Status](https://travis-ci.org/madebymany/sir-trevor-js.png?branch=master)](https://travis-ci.org/madebymany/sir-trevor-js/)
